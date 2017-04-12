@@ -29,6 +29,17 @@ func (chain *FilterChain) addFilter(filter Filter) *FilterChain {
 
 func (filter *Filter) IsApplicable(method string, path string) bool {
 
-	return filter.Path == "/**"
+	_valid := false;
+
+	for _, verb := range filter.Methods {
+
+		if(verb == method) {
+
+			_valid = true;
+			break;
+		}
+	}
+
+	return  _valid // TODO: Path Validation && filter.Path == "/**"
 }
 

@@ -1,20 +1,24 @@
 @startuml
-:Main Admin: as Admin
-(Use the application) as (Use)
+skinparam handwritten true
+:User: as User
+(Add Containers) as (UC1)
+(List Containers) as (UC2)
 
-User -> (Start)
-User --> (Use)
+(Maintain Container) as (UC3)
+(Update Container) as (UC3a)
+(Read Container) as (UC3b)
+(Delete Container) as (UC3c)
 
-Admin ---> (Use)
+(Refresh Container Report) as (UC4)
+(View Container Report) as (UC5)
 
-note right of Admin : This is an example.
+User -> (UC1)
+User -> (UC2)
+User --> (UC3)
+User ---> (UC4)
+User ---> (UC5)
 
-note right of (Use)
-A note can also
-be on several lines
-end note
-
-note "This note is connected\nto several objects." as N2
-(Start) .. N2
-N2 .. (Use)
+(UC3) ..> (UC3a) :<<includes>>
+(UC3) ..> (UC3b) :<<includes>>
+(UC3) ..> (UC3c) :<<includes>>
 @enduml

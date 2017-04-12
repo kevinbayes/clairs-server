@@ -42,6 +42,46 @@ func (m *Middleware) GET(path string, handler httprouter.Handle) *Middleware {
 	return m
 }
 
+func (m *Middleware) POST(path string, handler httprouter.Handle) *Middleware {
+
+	for _, h := range m.filterChain.filters {
+
+		if(h.IsApplicable("POST", path)) {
+			handler = h.Handler(handler)
+		}
+	}
+
+	m.router.POST(path, handler)
+	return m
+}
+
+func (m *Middleware) PUT(path string, handler httprouter.Handle) *Middleware {
+
+	for _, h := range m.filterChain.filters {
+
+		if(h.IsApplicable("POST", path)) {
+			handler = h.Handler(handler)
+		}
+	}
+
+	m.router.POST(path, handler)
+	return m
+}
+
+
+func (m *Middleware) DELETE(path string, handler httprouter.Handle) *Middleware {
+
+	for _, h := range m.filterChain.filters {
+
+		if(h.IsApplicable("POST", path)) {
+			handler = h.Handler(handler)
+		}
+	}
+
+	m.router.POST(path, handler)
+	return m
+}
+
 func (m *Middleware) Router() *httprouter.Router {
 
 	return m.router;
