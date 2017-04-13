@@ -16,6 +16,7 @@ package repository
 import (
 	"fmt"
 	"../model"
+	"log"
 )
 
 type RegistryRepository struct {
@@ -34,7 +35,7 @@ func InstanceRegistryRepository() *RegistryRepository {
 	return registryRepositoryInstance
 }
 
-func (r *RegistryRepository) CreateRepository(repository *model.Registry) (error) {
+func (r *RegistryRepository) Save(registry *model.Registry) (error) {
 
 	db, err := Connect()
 	if(err != nil) {
@@ -47,7 +48,7 @@ func (r *RegistryRepository) CreateRepository(repository *model.Registry) (error
 		return err
 	}
 
-	res, err := stmt.Exec(repository.Name, repository.Description, repository.Uri, repository.Credentials.Username, repository.Credentials.Password)
+	res, err := stmt.Exec(registry.Name, registry.Description, registry.Uri, registry.Credentials.Username, registry.Credentials.Password)
 	if(err != nil) {
 		return err
 	}
@@ -57,8 +58,62 @@ func (r *RegistryRepository) CreateRepository(repository *model.Registry) (error
 		return err
 	}
 
-	repository.Id = id
+	registry.Id = id
 	fmt.Printf("Created new id %d\n", id)
 
 	return nil
+}
+
+
+func (r *RegistryRepository) FindOne(_id int64) (*model.Registry, error) {
+
+	var (
+		id int64
+		name string
+		description string
+		uri string
+		username string
+		password string
+		version int
+	)
+
+	db, err := Connect()
+	if(err != nil) {
+
+		return nil, err
+	}
+
+	// read one
+	rows, err := db.Query("select id, name, description, uri, username, password, version from registries where id = $1", _id)
+	if(err != nil) {
+
+		log.Fatal(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	if(rows.Next()) {
+
+		err := rows.Scan(&id, &name, &description, &uri, &username, &password, &version)
+		if err != nil {
+
+			log.Fatal(err)
+			return nil, err
+		}
+
+		_result := &model.Registry{
+			Id: id,
+			Name: name,
+			Description: description,
+			Uri: uri,
+			Credentials: model.Credentials{
+				Username: username,
+				Password: password,
+			},
+		}
+
+		return _result, nil
+	}
+
+	return nil, nil
 }

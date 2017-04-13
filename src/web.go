@@ -25,9 +25,7 @@ import (
 
 func main() {
 
-	fmt.Println(config.GetConfig().Header)
-
-	repository.Connect()
+	defer repository.Connect()
 
 	_config := config.GetConfig()
 
@@ -37,6 +35,7 @@ func main() {
 	_middleware.RegisterFilter(middleware.NewCorsFilter());
 
 	api.RegisterActuatorsHandlers(_middleware)
+	api.RegisterRegistriesHandlers(_middleware)
 	api.RegisterContainersHandlers(_middleware)
 
 	http.ListenAndServe(fmt.Sprintf("%s:%s", _config.Server.Host, _config.Server.Port), _middleware.Router())

@@ -15,8 +15,9 @@ package repository
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq"
 	"fmt"
+
+	_ "github.com/lib/pq"
 
 	"../config"
 )
@@ -35,6 +36,8 @@ var definitions = []string{
 		"  version integer not null" +
 		") ",
 };
+
+
 
 func Connect() (*sql.DB, error) {
 
@@ -85,11 +88,15 @@ func createTable(definition string) {
 		panic(err)
 	}
 
-	_, err2 := stmt.Exec()
+	result, err2 := stmt.Exec()
 	if(err2 != nil) {
 
 		panic(err2)
 	}
+
+	rows, _ := result.RowsAffected()
+
+	println(rows)
 }
 
 
