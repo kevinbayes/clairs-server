@@ -9,7 +9,7 @@ import (
 
 func RegisterContainersHandlers(router *middleware.Middleware) {
 
-	fmt.Printf("Registering party handlers")
+	fmt.Printf("Registering containers handlers")
 
 	//Containers
 	router.POST("/api/containers", createContainerHandler)

@@ -64,7 +64,7 @@ func (m *Middleware) PUT(path string, handler httprouter.Handle) *Middleware {
 		}
 	}
 
-	m.router.POST(path, handler)
+	m.router.PUT(path, handler)
 	return m
 }
 
@@ -78,7 +78,7 @@ func (m *Middleware) DELETE(path string, handler httprouter.Handle) *Middleware 
 		}
 	}
 
-	m.router.POST(path, handler)
+	m.router.DELETE(path, handler)
 	return m
 }
 
