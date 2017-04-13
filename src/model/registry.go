@@ -11,6 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package gateway
+package model
 
-type DockerClient struct { }
+type Registry struct {
+
+	Id int64 `Id of the repository`
+	Name string `Name of the repository`
+	Description string `Description of the repository`
+	Uri string `Uri to the repostory`
+
+	Credentials Credentials
+}

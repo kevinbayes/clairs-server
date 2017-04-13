@@ -1,0 +1,12 @@
+header: "ClairUI"
+server:
+  host: ""
+  port: "18080"
+database:
+  vendor: "postgres"
+  database: "clair"
+  host: "localhost"
+  port: "5432"
+  schema: "ui"
+  username: "postgres"
+  password: "password"
