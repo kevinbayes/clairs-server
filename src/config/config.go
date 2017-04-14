@@ -12,6 +12,7 @@ type Config struct {
 	Server struct {
 		Host string
 		Port string
+		Filepath string
 	}
 	Database struct {
 		  Vendor string
@@ -31,7 +32,7 @@ func GetConfig() *Config {
 
 	if(config == nil) {
 
-		configFile := flag.String("config", "./default.yml", "Location of the config file.")
+		configFile := flag.String("config", "./src/default.yml", "Location of the config file.")
 
 		fmt.Println("Loading config from " + *configFile)
 

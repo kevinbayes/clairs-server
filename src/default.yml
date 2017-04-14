@@ -2,6 +2,7 @@ header: "ClairUI"
 server:
   host: ""
   port: "18080"
+  filepath: "src/public"
 database:
   vendor: "postgres"
   database: "clair"

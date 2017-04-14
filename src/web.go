@@ -26,9 +26,9 @@ import (
 
 func main() {
 
-	defer repository.Connect()
-
 	_config := config.GetConfig()
+
+	defer repository.Connect()
 
 	_middleware := middleware.New();
 
@@ -40,6 +40,7 @@ func main() {
 	api.RegisterContainersHandlers(_middleware)
 
 	web.RegisterWebsiteHandlers(_middleware)
+
 
 	http.ListenAndServe(fmt.Sprintf("%s:%s", _config.Server.Host, _config.Server.Port), _middleware.Router())
 }

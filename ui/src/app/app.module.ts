@@ -7,8 +7,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MaterialModule } from './shared/material.module';
 
+import { appRoutingProviders, AppRoutingModule } from './app.routes';
+
+import { ContainersModule } from './content/containers/containers.module'
+
 import { AppComponent } from './app.component';
-import { ContainersComponent } from './content/containers/containers.component';
+
 import { HeaderComponent } from './content/shared/header/header.component';
 import { SidemenuComponent } from './content/shared/sidemenu/sidemenu.component';
 import { environment } from '../environments/environment';
@@ -16,7 +20,6 @@ import { environment } from '../environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
-    ContainersComponent,
     HeaderComponent,
     SidemenuComponent
   ],
@@ -26,8 +29,15 @@ import { environment } from '../environments/environment';
     FormsModule,
     HttpModule,
     MaterialModule,
+
+    AppRoutingModule,
+
+    ContainersModule,
   ],
-  providers: [{provide: APP_BASE_HREF, useValue: ((environment.production) ? '/' : '/ui/')}],
+  providers: [
+    appRoutingProviders,
+    {provide: APP_BASE_HREF, useValue: ((environment.production) ? '/' : '/ui/')}
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
