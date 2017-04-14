@@ -1,0 +1,9 @@
+{
+  "name": "Private",
+  "description": "Self Hosted",
+  "uri": "localhost",
+  "credentials" : {
+    "username" : "username",
+    "password" : "password"
+  }
+}

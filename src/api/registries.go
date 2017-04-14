@@ -19,6 +19,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	middleware "../http"
 	"../service"
+	"./dto"
 	"encoding/json"
 	"strconv"
 )
@@ -45,8 +46,28 @@ func RegisterRegistriesHandlers(router *middleware.Middleware) {
 
 func createRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("{\"status\":\"UP\"}"))
+	decoder := json.NewDecoder(r.Body)
+
+	var _body dto.NewRegistry
+	err := decoder.Decode(&_body)
+	if err != nil {
+		panic(err)
+	}
+	defer r.Body.Close()
+
+	_service := &service.RegistryService{}
+
+	res, err := _service.CreateRegistry(&_body)
+
+	if(err != nil) {
+
+		http.Error(w, err.Error(), 401)
+	} else {
+
+		w.Header().Set("Location", fmt.Sprintf("/api/registries/%d", res.Id))
+		w.WriteHeader(http.StatusCreated)
+		w.Write([]byte(""))
+	}
 }
 
 func readRegistriesHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

@@ -17,6 +17,7 @@ import (
 	"fmt"
 	"../model"
 	"log"
+	"time"
 )
 
 type RegistryRepository struct {
@@ -43,23 +44,14 @@ func (r *RegistryRepository) Save(registry *model.Registry) (error) {
 	}
 
 	// insert
-	stmt, err := db.Prepare("INSERT registries SET name=?,description=?,uri=?,username=?,password=?,version=0")
+	var lastInsertId int64 = 0
+	err = db.QueryRow("INSERT INTO registries(name, description, uri, username, password, created_on, version) VALUES ($1, $2, $3, $4, $5, $6, 0) RETURNING id", registry.Name, registry.Description, registry.Uri, registry.Credentials.Username, registry.Credentials.Password, time.Now()).Scan(&lastInsertId)
 	if(err != nil) {
 		return err
 	}
 
-	res, err := stmt.Exec(registry.Name, registry.Description, registry.Uri, registry.Credentials.Username, registry.Credentials.Password)
-	if(err != nil) {
-		return err
-	}
-
-	id, err := res.LastInsertId()
-	if(err != nil) {
-		return err
-	}
-
-	registry.Id = id
-	fmt.Printf("Created new id %d\n", id)
+	registry.Id = lastInsertId
+	fmt.Printf("Created new id %d\n", lastInsertId)
 
 	return nil
 }
