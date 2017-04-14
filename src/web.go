@@ -17,6 +17,7 @@ import (
 	"net/http"
 	middleware "./http"
 	"./api"
+	"./web"
 	"./config"
 	"./repository"
 	"fmt"
@@ -37,6 +38,8 @@ func main() {
 	api.RegisterActuatorsHandlers(_middleware)
 	api.RegisterRegistriesHandlers(_middleware)
 	api.RegisterContainersHandlers(_middleware)
+
+	web.RegisterWebsiteHandlers(_middleware)
 
 	http.ListenAndServe(fmt.Sprintf("%s:%s", _config.Server.Host, _config.Server.Port), _middleware.Router())
 }
