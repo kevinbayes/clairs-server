@@ -76,6 +76,24 @@ func (r *RegistryRepository) Update(registry *model.Registry) (error) {
 	return nil
 }
 
+func (r *RegistryRepository) Delete(registry *model.Registry) (error) {
+
+	db, err := Connect()
+	if(err != nil) {
+		return err
+	}
+
+	stmt, err := db.Prepare("DELETE FROM registries WHERE id = $1")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(registry.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func (r *RegistryRepository) FindOne(_id int64) (*model.Registry, error) {
 

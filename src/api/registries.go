@@ -25,6 +25,8 @@ import (
 	"strconv"
 )
 
+var registryService = &service.RegistryService{}
+
 func RegisterRegistriesHandlers(router *middleware.Middleware) {
 
 	fmt.Printf("Registering registries handlers\n")
@@ -56,11 +58,9 @@ func createRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 	defer r.Body.Close()
 
-	_service := &service.RegistryService{}
-
 	if(r.URL.Query().Get("dryrun") == "true") {
 
-		err := _service.TestNewRegistryCredentials(&_body)
+		err := registryService.TestNewRegistryCredentials(&_body)
 
 		if(err != nil) {
 
@@ -73,7 +73,7 @@ func createRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	} else {
 
-		res, err := _service.CreateRegistry(&_body)
+		res, err := registryService.CreateRegistry(&_body)
 
 		if (err != nil) {
 
@@ -213,8 +213,25 @@ func updateRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 func deleteRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("{\"status\":\"UP\"}"))
+	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
+	if err != nil {
+		panic(err)
+	}
+
+	res, err := registryService.DeleteRegistry(id)
+
+	_response := middleware.MakeHateos(res, make([]middleware.Link, 0))
+
+	response, err := json.Marshal(_response)
+
+	if (err != nil) {
+
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else {
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(response)
+	}
 }
 
 func createRegistryContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

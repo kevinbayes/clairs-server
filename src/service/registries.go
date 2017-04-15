@@ -81,3 +81,22 @@ func (s *RegistryService) ReadRegistries() ([]*model.Registry, error) {
 
 	return repository.InstanceRegistryRepository().Find()
 }
+
+func (s *RegistryService) DeleteRegistry(id int64) (*model.Registry, error) {
+
+	reg, err := s.ReadRegistry(id)
+
+	if(err != nil) {
+
+		return nil, err
+	}
+
+	err = repository.InstanceRegistryRepository().Delete(reg)
+
+	if(err != nil) {
+
+		return nil, err
+	}
+
+	return reg, nil
+}
