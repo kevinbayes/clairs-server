@@ -1,6 +1,7 @@
 package service
 
 import (
+	"../gateway"
 	"../model"
 	"../repository"
 	"../api/dto"
@@ -8,9 +9,33 @@ import (
 
 type RegistryService struct { }
 
+func (s *RegistryService) TestRegistryCredentials(body *dto.NewRegistry) (error) {
+
+	_registry := s.convertRequest(body)
+
+	return s.testRegistryCredentials(_registry)
+}
+
 func (s *RegistryService) CreateRegistry(body *dto.NewRegistry) (*model.Registry, error) {
 
-	_registry := &model.Registry{
+	_registry := s.convertRequest(body)
+
+	validationError := s.testRegistryCredentials(_registry)
+
+	if(validationError != nil) {
+
+		return nil, validationError
+	}
+
+	err := repository.InstanceRegistryRepository().Save(_registry)
+
+	return _registry, err
+}
+
+
+func (s *RegistryService) convertRequest(body *dto.NewRegistry) (*model.Registry) {
+
+	return &model.Registry{
 		Name: body.Name,
 		Description: body.Description,
 		Uri: body.Uri,
@@ -19,10 +44,13 @@ func (s *RegistryService) CreateRegistry(body *dto.NewRegistry) (*model.Registry
 			Password: body.Credentials.Password,
 		},
 	}
+}
 
-	err := repository.InstanceRegistryRepository().Save(_registry)
+func (s *RegistryService) testRegistryCredentials(registry *model.Registry) (error) {
 
-	return _registry, err
+	validationError := gateway.DockerClientInstance().ValidateLogin(registry)
+
+	return validationError
 }
 
 func (s *RegistryService) ReadRegistry(id int64) (*model.Registry, error) {

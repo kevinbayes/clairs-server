@@ -13,4 +13,48 @@
 // limitations under the License.
 package gateway
 
+import (
+	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/client"
+	"context"
+	"../model"
+	"log"
+)
+
 type DockerClient struct { }
+
+func DockerClientInstance() *DockerClient {
+
+	return &DockerClient{}
+}
+
+/**
+ * Validate that with the given credentials that the remote repository can be accessed.
+ */
+func (d *DockerClient) ValidateLogin(registry *model.Registry) (error) {
+
+	client, err := client.NewEnvClient()
+
+	if(err != nil) {
+
+		return err
+	}
+
+	auth := types.AuthConfig{
+		Username: registry.Credentials.Username,
+		ServerAddress: registry.Uri,
+		Password: registry.Credentials.Password,
+	}
+
+
+	res, err2 := client.RegistryLogin(context.Background(), auth)
+
+	log.Printf("Received auth response status [%s].", res.Status)
+
+	if(err2 != nil) {
+
+		return err2
+	}
+
+	return nil
+}

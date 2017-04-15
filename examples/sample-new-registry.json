@@ -1,9 +1,9 @@
 {
-  "name": "Private",
-  "description": "Self Hosted",
-  "uri": "localhost",
+  "name": "Private Docker Hub",
+  "description": "Docker hub private repository.",
+  "uri": "dscontainerregistrytest.azurecr.io",
   "credentials" : {
-    "username" : "username",
-    "password" : "password"
+    "username" : "dscontainerregistrytest",
+    "password" : "vo=CQdC2UVxYR5HJRX9/m8kDy3S6qyF4"
   }
 }

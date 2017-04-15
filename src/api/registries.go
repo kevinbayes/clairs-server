@@ -57,16 +57,32 @@ func createRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	_service := &service.RegistryService{}
 
-	res, err := _service.CreateRegistry(&_body)
+	if(r.URL.Query().Get("dryrun") == "true") {
 
-	if(err != nil) {
+		err := _service.TestRegistryCredentials(&_body)
 
-		http.Error(w, err.Error(), 401)
+		if(err != nil) {
+
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+
+			w.WriteHeader(http.StatusNoContent)
+			w.Write([]byte(""))
+		}
+
 	} else {
 
-		w.Header().Set("Location", fmt.Sprintf("/api/registries/%d", res.Id))
-		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte(""))
+		res, err := _service.CreateRegistry(&_body)
+
+		if (err != nil) {
+
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+
+			w.Header().Set("Location", fmt.Sprintf("/api/registries/%d", res.Id))
+			w.WriteHeader(http.StatusCreated)
+			w.Write([]byte(""))
+		}
 	}
 }
 
@@ -82,7 +98,7 @@ func readRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.P
 
 	if(err != nil) {
 
-		http.Error(w, err.Error(), 401)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 	} else {
 
 		repo := &service.RegistryService{}
@@ -91,7 +107,7 @@ func readRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.P
 
 		if (err != nil) {
 
-			http.Error(w, err.Error(), 401)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 		} else if (model == nil) {
 
 			http.NotFound(w, r)
@@ -101,7 +117,7 @@ func readRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.P
 
 			if (err != nil) {
 
-				http.Error(w, err.Error(), 401)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 			} else {
 
 				w.Header().Set("Content-Type", "application/json")

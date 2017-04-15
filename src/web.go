@@ -41,6 +41,5 @@ func main() {
 
 	web.RegisterWebsiteHandlers(_middleware)
 
-
 	http.ListenAndServe(fmt.Sprintf("%s:%s", _config.Server.Host, _config.Server.Port), _middleware.Router())
 }
