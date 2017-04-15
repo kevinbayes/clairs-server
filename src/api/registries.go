@@ -20,6 +20,7 @@ import (
 	middleware "../http"
 	"../service"
 	"./dto"
+	"../model"
 	"encoding/json"
 	"strconv"
 )
@@ -59,7 +60,7 @@ func createRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	if(r.URL.Query().Get("dryrun") == "true") {
 
-		err := _service.TestRegistryCredentials(&_body)
+		err := _service.TestNewRegistryCredentials(&_body)
 
 		if(err != nil) {
 
@@ -154,8 +155,60 @@ func readRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.P
 
 func updateRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("{\"status\":\"UP\"}"))
+	decoder := json.NewDecoder(r.Body)
+
+	var _body model.Registry
+	err := decoder.Decode(&_body)
+	if err != nil {
+		panic(err)
+	}
+	defer r.Body.Close()
+
+	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
+	if err != nil {
+		panic(err)
+	}
+
+	_body.Id = id
+
+	_service := &service.RegistryService{}
+
+	if(r.URL.Query().Get("dryrun") == "true") {
+
+		err := _service.TestRegistryCredentials(&_body)
+
+		if(err != nil) {
+
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+
+			w.WriteHeader(http.StatusNoContent)
+			w.Write([]byte(""))
+		}
+
+	} else {
+
+		_, err := _service.UpdateRegistry(&_body)
+
+		if (err != nil) {
+
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+
+			_response := middleware.MakeHateos(_body, make([]middleware.Link, 0))
+
+			response, err := json.Marshal(_response)
+
+			if (err != nil) {
+
+				http.Error(w, err.Error(), http.StatusBadRequest)
+			} else {
+
+				w.Header().Set("Content-Type", "application/json")
+				w.Write(response)
+			}
+		}
+	}
 }
 
 func deleteRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

@@ -1,0 +1,9 @@
+{
+  "Name": "Docker Hub",
+  "Description": "Default Public Repository",
+  "Uri": "",
+  "Credentials": {
+    "Username": "test",
+    "Password": "test"
+  }
+}

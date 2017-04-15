@@ -57,6 +57,26 @@ func (r *RegistryRepository) Save(registry *model.Registry) (error) {
 }
 
 
+func (r *RegistryRepository) Update(registry *model.Registry) (error) {
+
+	db, err := Connect()
+	if(err != nil) {
+		return err
+	}
+
+	stmt, err := db.Prepare("UPDATE registries SET name=$1, description=$2, uri=$3, username=$4, password=$5, version= version + 1 WHERE id = $6")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(registry.Name, registry.Description, registry.Uri, registry.Credentials.Username, registry.Credentials.Password, registry.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+
 func (r *RegistryRepository) FindOne(_id int64) (*model.Registry, error) {
 
 	var (

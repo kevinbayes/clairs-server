@@ -9,9 +9,14 @@ import (
 
 type RegistryService struct { }
 
-func (s *RegistryService) TestRegistryCredentials(body *dto.NewRegistry) (error) {
+func (s *RegistryService) TestNewRegistryCredentials(body *dto.NewRegistry) (error) {
 
 	_registry := s.convertRequest(body)
+
+	return s.testRegistryCredentials(_registry)
+}
+
+func (s *RegistryService) TestRegistryCredentials(_registry *model.Registry) (error) {
 
 	return s.testRegistryCredentials(_registry)
 }
@@ -56,6 +61,20 @@ func (s *RegistryService) testRegistryCredentials(registry *model.Registry) (err
 func (s *RegistryService) ReadRegistry(id int64) (*model.Registry, error) {
 
 	return repository.InstanceRegistryRepository().FindOne(id)
+}
+
+func (s *RegistryService) UpdateRegistry(_registry *model.Registry) (*model.Registry, error) {
+
+	validationError := s.testRegistryCredentials(_registry)
+
+	if(validationError != nil) {
+
+		return nil, validationError
+	}
+
+	err := repository.InstanceRegistryRepository().Update(_registry)
+
+	return _registry, err
 }
 
 func (s *RegistryService) ReadRegistries() ([]*model.Registry, error) {
