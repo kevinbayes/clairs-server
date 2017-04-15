@@ -88,8 +88,31 @@ func createRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 func readRegistriesHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("{\"status\":\"UP\"}"))
+	repo := &service.RegistryService{}
+
+	model, err := repo.ReadRegistries()
+
+	if (err != nil) {
+
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else if (model == nil) {
+
+		http.NotFound(w, r)
+	} else {
+
+		_response := middleware.MakeSearchResult(len(model), 0, 0, model, make([]middleware.Link, 0))
+
+		response, err := json.Marshal(_response)
+
+		if (err != nil) {
+
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(response)
+		}
+	}
 }
 
 func readRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -113,7 +136,9 @@ func readRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.P
 			http.NotFound(w, r)
 		} else {
 
-			response, err := json.Marshal(model)
+			_response := middleware.MakeHateos(model, make([]middleware.Link, 0))
+
+			response, err := json.Marshal(_response)
 
 			if (err != nil) {
 

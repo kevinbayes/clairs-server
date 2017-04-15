@@ -57,3 +57,8 @@ func (s *RegistryService) ReadRegistry(id int64) (*model.Registry, error) {
 
 	return repository.InstanceRegistryRepository().FindOne(id)
 }
+
+func (s *RegistryService) ReadRegistries() ([]*model.Registry, error) {
+
+	return repository.InstanceRegistryRepository().Find()
+}

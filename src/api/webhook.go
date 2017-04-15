@@ -18,45 +18,17 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	middleware "../http"
-	"time"
-	"encoding/json"
 )
 
-type Metrics struct {
+func RegisterWebhookHandlers(router *middleware.Middleware) {
 
-	StartTime time.Time
+	fmt.Printf("Registering webhook handlers")
+
+	router.POST("/api/webhooks/_publish", postNotificationHandler)
 }
 
-var metrics = &Metrics{
-
-	StartTime: time.Now(),
-}
-
-func RegisterActuatorsHandlers(router *middleware.Middleware) {
-
-	fmt.Printf("Registering party handlers")
-
-	router.GET("/health", readHealthHandler)
-	router.GET("/metrics", readMetricsHandler)
-}
-
-func readHealthHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func postNotificationHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("{\"status\":\"UP\"}"))
-}
-
-
-func readMetricsHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-
-	response, err := json.Marshal(metrics)
-
-	if (err != nil) {
-
-		http.Error(w, err.Error(), http.StatusBadRequest)
-	} else {
-
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(response)
-	}
 }

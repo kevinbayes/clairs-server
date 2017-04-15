@@ -109,3 +109,59 @@ func (r *RegistryRepository) FindOne(_id int64) (*model.Registry, error) {
 
 	return nil, nil
 }
+
+
+func (r *RegistryRepository) Find() ([]*model.Registry, error) {
+
+	var (
+		id int64
+		name string
+		description string
+		uri string
+		username string
+		password string
+		version int
+	)
+
+	db, err := Connect()
+	if(err != nil) {
+
+		return nil, err
+	}
+
+	// read one
+	rows, err := db.Query("select id, name, description, uri, username, password, version from registries")
+	if(err != nil) {
+
+		log.Fatal(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var result []*model.Registry
+
+	for rows.Next() {
+
+		err := rows.Scan(&id, &name, &description, &uri, &username, &password, &version)
+		if err != nil {
+
+			log.Fatal(err)
+			return nil, err
+		}
+
+		_row := &model.Registry{
+			Id: id,
+			Name: name,
+			Description: description,
+			Uri: uri,
+			Credentials: model.Credentials{
+				Username: username,
+				Password: password,
+			},
+		}
+
+		result = append(result, _row)
+	}
+
+	return result, nil
+}
