@@ -11,4 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package api
+package model
+
+type Text struct {
+	Value string
+	Width int
+	X int
+}
+
+type Shield struct {
+	Subject Text
+	Status Text
+	Colour string
+	Template string
+	Width int
+}

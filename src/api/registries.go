@@ -23,13 +23,14 @@ import (
 	"../model"
 	"encoding/json"
 	"strconv"
+	"log"
 )
 
 var registryService = &service.RegistryService{}
 
 func RegisterRegistriesHandlers(router *middleware.Middleware) {
 
-	fmt.Printf("Registering registries handlers\n")
+	log.Printf("Registering registries handlers")
 
 	//Registries
 	router.POST("/api/registries", createRegistryHandler)
@@ -236,8 +237,33 @@ func deleteRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 func createRegistryContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("{\"status\":\"UP\"}"))
+	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
+	if err != nil {
+		panic(err)
+	}
+
+	decoder := json.NewDecoder(r.Body)
+
+	var _body dto.NewContainer
+	err = decoder.Decode(&_body)
+	if err != nil {
+		panic(err)
+	}
+	defer r.Body.Close()
+
+	_body.Registry = id
+
+	res, err := containerService.CreateNewContainer(&_body)
+
+	if (err != nil) {
+
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else {
+
+		w.Header().Set("Location", fmt.Sprintf("/api/containers/%d", res.Id))
+		w.WriteHeader(http.StatusCreated)
+		w.Write([]byte(""))
+	}
 }
 
 func readRegistryContainersHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

@@ -15,14 +15,20 @@ package api
 
 import (
 	"net/http"
-	"fmt"
 	"github.com/julienschmidt/httprouter"
 	middleware "../http"
+	"log"
+	"../service"
+	"./dto"
+	"encoding/json"
+	"fmt"
 )
+
+var containerService = &service.ContainerService{}
 
 func RegisterContainersHandlers(router *middleware.Middleware) {
 
-	fmt.Printf("Registering containers handlers")
+	log.Printf("Registering containers handlers")
 
 	//Containers
 	router.POST("/api/containers", createContainerHandler)
@@ -45,14 +51,53 @@ func RegisterContainersHandlers(router *middleware.Middleware) {
 
 func createContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("{\"status\":\"UP\"}"))
+	decoder := json.NewDecoder(r.Body)
+
+	var _body dto.NewContainer
+	err := decoder.Decode(&_body)
+	if err != nil {
+		panic(err)
+	}
+	defer r.Body.Close()
+
+	res, err := containerService.CreateNewContainer(&_body)
+
+	if (err != nil) {
+
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else {
+
+		w.Header().Set("Location", fmt.Sprintf("/api/containers/%d", res.Id))
+		w.WriteHeader(http.StatusCreated)
+		w.Write([]byte(""))
+	}
 }
 
 func readContainersHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("{\"status\":\"UP\"}"))
+	model, err := containerService.ReadContainers()
+
+	if (err != nil) {
+
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else if (model == nil) {
+
+		http.NotFound(w, r)
+	} else {
+
+		_response := middleware.MakeSearchResult(len(model), 0, 0, model, make([]middleware.Link, 0))
+
+		response, err := json.Marshal(_response)
+
+		if (err != nil) {
+
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(response)
+		}
+	}
 }
 
 func readContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

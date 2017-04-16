@@ -15,14 +15,14 @@ package api
 
 import (
 	"net/http"
-	"fmt"
 	"github.com/julienschmidt/httprouter"
 	middleware "../http"
+	"log"
 )
 
 func RegisterWebhookHandlers(router *middleware.Middleware) {
 
-	fmt.Printf("Registering webhook handlers")
+	log.Printf("Registering webhook handlers")
 
 	router.POST("/api/webhooks/_publish", postNotificationHandler)
 }

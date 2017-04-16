@@ -13,6 +13,11 @@
 // limitations under the License.
 package model
 
+const (
+	STATE_REQUESTED = "requested"
+	STATE_ACTIVE = "active"
+	STATE_DEACTIVATED = "deactivated"
+)
 
 type Credentials struct {
 

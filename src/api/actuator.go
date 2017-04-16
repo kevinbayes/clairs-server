@@ -15,11 +15,11 @@ package api
 
 import (
 	"net/http"
-	"fmt"
 	"github.com/julienschmidt/httprouter"
 	middleware "../http"
 	"time"
 	"encoding/json"
+	"log"
 )
 
 type Metrics struct {
@@ -34,7 +34,7 @@ var metrics = &Metrics{
 
 func RegisterActuatorsHandlers(router *middleware.Middleware) {
 
-	fmt.Printf("Registering party handlers")
+	log.Printf("Registering actuator handlers")
 
 	router.GET("/health", readHealthHandler)
 	router.GET("/metrics", readMetricsHandler)

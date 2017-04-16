@@ -12,3 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 package api
+
+import (
+	"net/http"
+	"github.com/julienschmidt/httprouter"
+	middleware "../http"
+	"../service"
+	"log"
+)
+
+func RegisterShieldsHandlers(router *middleware.Middleware) {
+
+	log.Printf("Registering shields handlers")
+
+	router.GET("/api/containers/:id/shield", readShieldHandler)
+}
+
+func readShieldHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+
+	buf, err := service.ShieldsServiceInstance().GetShield(0)
+
+	if(err != nil) {
+
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else {
+
+		w.Header().Set("Content-Type", "image/svg+xml")
+		w.Write(buf.Bytes())
+	}
+}

@@ -28,7 +28,7 @@ var registryRepositoryInstance *RegistryRepository = nil;
 
 func InstanceRegistryRepository() *RegistryRepository {
 
-	if(db == nil) {
+	if(registryRepositoryInstance == nil) {
 
 		registryRepositoryInstance = &RegistryRepository{}
 	}

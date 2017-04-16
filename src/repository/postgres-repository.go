@@ -35,6 +35,16 @@ var definitions = []string{
 		"  created_on TIMESTAMP not null," +
 		"  version integer not null" +
 		") ",
+	"CREATE TABLE IF NOT EXISTS containers " +
+		"( id serial primary key," +
+		"  image VARCHAR(255) not null," +
+		"  registry_id BIGINT not null," +
+		"  state VARCHAR(15) not null," +
+		"  shield VARCHAR(1000) not null," +
+		"  DateUpdated TIMESTAMP," +
+		"  created_on TIMESTAMP not null," +
+		"  version integer not null" +
+		") ",
 };
 
 

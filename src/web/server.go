@@ -1,16 +1,16 @@
 package web
 
 import (
-	"fmt"
 	middleware "../http"
 	"../config"
 	"net/http"
 	"github.com/julienschmidt/httprouter"
+	"log"
 )
 
 func RegisterWebsiteHandlers(router *middleware.Middleware) {
 
-	fmt.Printf("Registering containers handlers")
+	log.Printf("Registering ui handlers")
 
 	_config := config.GetConfig()
 

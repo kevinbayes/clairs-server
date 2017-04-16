@@ -12,3 +12,99 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 package repository
+
+import (
+	"fmt"
+	"../model"
+	"log"
+	"time"
+)
+
+type ContainerRepository struct {
+}
+
+
+var containerRepositoryInstance *ContainerRepository = nil;
+
+func InstanceContainerRepository() *ContainerRepository {
+
+	if(containerRepositoryInstance == nil) {
+
+		containerRepositoryInstance = &ContainerRepository{}
+	}
+
+	return containerRepositoryInstance
+}
+
+func (r *ContainerRepository) Save(container *model.Container) (error) {
+
+	db, err := Connect()
+	if(err != nil) {
+		return err
+	}
+
+	// insert
+	var lastInsertId int64 = 0
+	err = db.QueryRow("INSERT INTO containers(image, registry_id, state, shield, created_on, version) " +
+		"VALUES ($1, $2, $3, $4, $5, 0) RETURNING id", container.Image, container.Registry,
+		container.State, container.Shield, time.Now()).Scan(&lastInsertId)
+	if(err != nil) {
+		return err
+	}
+
+	container.Id = lastInsertId
+	fmt.Printf("Created new id %d\n", lastInsertId)
+
+	return nil
+}
+
+
+func (r *ContainerRepository) Find() ([]*model.Container, error) {
+
+	var (
+		id int64
+		registryId int64
+		image string
+		state string
+		shield string
+		version int
+	)
+
+	db, err := Connect()
+	if(err != nil) {
+
+		return nil, err
+	}
+
+	// read one
+	rows, err := db.Query("select id, image, registry_id, state, shield, version from containers")
+	if(err != nil) {
+
+		log.Fatal(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var result []*model.Container
+
+	for rows.Next() {
+
+		err := rows.Scan(&id, &image, &registryId, &state, &shield, &version)
+		if err != nil {
+
+			log.Fatal(err)
+			return nil, err
+		}
+
+		_row := &model.Container{
+			Id: id,
+			Image: image,
+			Registry: registryId,
+			State: state,
+		}
+
+		result = append(result, _row)
+	}
+
+	return result, nil
+}

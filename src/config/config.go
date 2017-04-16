@@ -2,9 +2,9 @@ package config
 
 import (
 	"io/ioutil"
-	"fmt"
 	"gopkg.in/yaml.v2"
 	"flag"
+	"log"
 )
 
 type Config struct {
@@ -34,24 +34,24 @@ func GetConfig() *Config {
 
 		configFile := flag.String("config", "./src/default.yml", "Location of the config file.")
 
-		fmt.Println("Loading config from " + *configFile)
+		log.Printf("Loading config from " + *configFile)
 
 		data, err := ioutil.ReadFile(*configFile);
 
 		if (err != nil) {
 
-			fmt.Printf("Could not load config: %s \n", err)
+			log.Panic("Could not load config: %s \n", err)
 			panic(err);
 		}
 
-		fmt.Println("Loaded file data:" + string(data[:]))
+		log.Printf("Loaded file data:" + string(data[:]))
 
 		_config := &Config{}
 
 		parseErr := yaml.Unmarshal(data, _config)
 
 		if (parseErr != nil) {
-			fmt.Printf("Could not parse config: %s \n", parseErr)
+			log.Panic("Could not parse config: %s \n", parseErr)
 			panic(err);
 		}
 
