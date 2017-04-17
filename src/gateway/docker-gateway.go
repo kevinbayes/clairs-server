@@ -101,8 +101,27 @@ func (d *DockerClient) PullImage(registry *model.Registry, container *model.Cont
 	return nil
 }
 
+func (d *DockerClient) ImageLayerId(container *model.Container) (string, error) {
 
-func (d *DockerClient) ListImages() (error) {
+	client, err := client.NewEnvClient()
+
+	if (err != nil) {
+
+		return "", err
+	}
+
+	inspect, _, err2 :=  client.ImageInspectWithRaw(context.Background(), container.Image)
+
+	if(err2 != nil) {
+
+		return "", err2
+	}
+
+	return inspect.ID, err2
+}
+
+
+	func (d *DockerClient) ListImages() (error) {
 
 	client, err := client.NewEnvClient()
 

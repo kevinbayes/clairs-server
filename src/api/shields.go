@@ -30,7 +30,7 @@ func RegisterShieldsHandlers(router *middleware.Middleware) {
 
 func readShieldHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	buf, err := service.ShieldsServiceInstance().GetShield(0)
+	buf, err := service.ShieldsServiceSingleton().GetShield(0)
 
 	if(err != nil) {
 

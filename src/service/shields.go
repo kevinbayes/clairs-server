@@ -26,9 +26,16 @@ import (
 
 type ShieldsService struct { }
 
-func ShieldsServiceInstance() *ShieldsService {
+var _shieldsService *ShieldsService
 
-	return &ShieldsService{}
+func ShieldsServiceSingleton() *ShieldsService {
+
+	if(_shieldsService == nil) {
+
+		_shieldsService = &ShieldsService{}
+	}
+
+	return _shieldsService
 }
 
 

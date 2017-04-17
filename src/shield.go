@@ -7,7 +7,7 @@ import (
 
 func main() {
 
-	_service := &service.ShieldsService{}
+	_service := service.ShieldsServiceSingleton()
 
 	output, err := _service.GetShield(1)
 

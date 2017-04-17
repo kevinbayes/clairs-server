@@ -24,4 +24,6 @@ type ChannelRegistry struct {
 	Items []ChannelRegistryItem
 }
 
-func (r *ChannelRegistry) close()
+func (r *ChannelRegistry) Close() {
+
+}

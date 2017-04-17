@@ -3,23 +3,18 @@ package main
 import (
 	"./gateway"
 	"./model"
+	"log"
 )
 
 func main() {
-
-	registry := &model.Registry{
-		Credentials: model.Credentials{
-			Username:"",
-			Password:"",
-		},
-	}
 
 	container := &model.Container{
 		Image: "kibana:latest",
 	}
 
-	gateway.DockerClientInstance().PullImage(registry, container)
-	gateway.DockerClientInstance().ListImages()
+	//gateway.DockerClientInstance().PullImage(registry, container)
+	imageId, err := gateway.DockerClientInstance().ImageLayerId(container)
 
-	//log.Print(err)
+	log.Print(err)
+	log.Print(imageId)
 }

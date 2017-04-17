@@ -45,8 +45,17 @@ var definitions = []string{
 		"  created_on TIMESTAMP not null," +
 		"  version integer not null" +
 		") ",
+	"create unique index if not exists containers_image_registry_id_uindex on containers (image, registry_id)",
 };
 
+func init() {
+
+	_, err := Connect()
+
+	if(err != nil) {
+		panic(err)
+	}
+}
 
 
 func Connect() (*sql.DB, error) {

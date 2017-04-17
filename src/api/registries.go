@@ -26,7 +26,7 @@ import (
 	"log"
 )
 
-var registryService = &service.RegistryService{}
+var registryService = service.RegistryServiceSingleton()
 
 func RegisterRegistriesHandlers(router *middleware.Middleware) {
 
@@ -87,9 +87,7 @@ func createRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 func readRegistriesHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	repo := &service.RegistryService{}
-
-	model, err := repo.ReadRegistries()
+	model, err := registryService.ReadRegistries()
 
 	listRespond(model, len(model), 0, 0, err, w, r)
 }
@@ -103,9 +101,7 @@ func readRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	} else {
 
-		repo := &service.RegistryService{}
-
-		model, err := repo.ReadRegistry(id)
+		model, err := registryService.ReadRegistry(id)
 
 		respond(model, err, w, r)
 	}
@@ -129,11 +125,9 @@ func updateRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	_body.Id = id
 
-	_service := &service.RegistryService{}
-
 	if(r.URL.Query().Get("dryrun") == "true") {
 
-		err := _service.TestRegistryCredentials(&_body)
+		err := registryService.TestRegistryCredentials(&_body)
 
 		if(err != nil) {
 
@@ -145,7 +139,7 @@ func updateRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	} else {
 
-		_, err := _service.UpdateRegistry(&_body)
+		_, err := registryService.UpdateRegistry(&_body)
 
 		respond(&_body, err, w, r)
 	}
