@@ -15,7 +15,7 @@ func RegisterWebsiteHandlers(router *middleware.Middleware) {
 	_config := config.GetConfig()
 
 	//Containers
-	router.Router().ServeFiles("/ui/*filepath", http.Dir(_config.Server.Filepath))
+	router.Router().ServeFiles("/ui/*filepath", http.Dir(_config.Server.Filepath + "/public"))
 	router.GET("/", redirectHandler)
 }
 

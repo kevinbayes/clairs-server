@@ -18,8 +18,10 @@ import (
 	"log"
 	"github.com/signintech/gopdf/fontmaker/core"
 	"../model"
+	"../config"
 	"text/template"
 	"bytes"
+	"fmt"
 )
 
 type ShieldsService struct { }
@@ -32,7 +34,7 @@ func ShieldsServiceInstance() *ShieldsService {
 
 func (s *ShieldsService) GetShield(containerId int64) (bytes.Buffer, error) {
 
-	badge := &model.Shield{
+	shield := &model.Shield{
 		Subject: model.Text{
 			Value: "clair",
 		},
@@ -43,23 +45,23 @@ func (s *ShieldsService) GetShield(containerId int64) (bytes.Buffer, error) {
 		Template: "flat",
 	}
 
-	_width1 := s.textWidth(badge.Subject.Value)
-	_width2 := s.textWidth(badge.Status.Value)
+	_width1 := s.textWidth(shield.Subject.Value)
+	_width2 := s.textWidth(shield.Status.Value)
 
-	badge.Subject.Width = _width1 + 10
-	badge.Status.Width = _width2 + 10
-	badge.Width = badge.Subject.Width + badge.Status.Width
+	shield.Subject.Width = _width1 + 10
+	shield.Status.Width = _width2 + 10
+	shield.Width = shield.Subject.Width + shield.Status.Width
 
-	badge.Subject.X = badge.Subject.Width / 2
-	badge.Status.X = badge.Subject.Width + ( badge.Status.Width / 2 - 1 )
+	shield.Subject.X = shield.Subject.Width / 2
+	shield.Status.X = shield.Subject.Width + ( shield.Status.Width / 2 - 1 )
 
-	tmpl, err := template.New("badge").ParseFiles("./src/shield/shield.flat.svg")
+	tmpl, err := template.New(shield.Template).ParseFiles(fmt.Sprintf("%s/shield/shield.flat.svg", config.GetConfig().Server.Filepath))
 
 	if err != nil { return bytes.Buffer{}, err }
 
 	var doc bytes.Buffer
 
-	err = tmpl.ExecuteTemplate(&doc, "shield.flat.svg", badge)
+	err = tmpl.ExecuteTemplate(&doc, "shield.flat.svg", shield)
 
 	return doc, err
 }
@@ -68,7 +70,7 @@ func (s *ShieldsService) textWidth(text string) int {
 	pdf := gopdf.GoPdf{}
 	pdf.Start(gopdf.Config{ PageSize: gopdf.Rect{W: 595.28, H: 841.89}})
 
-	err := pdf.AddTTFFont("DejaVu Serif", "./src/shield/DejaVuSerif.ttf")
+	err := pdf.AddTTFFont("DejaVu Serif", fmt.Sprintf("%s/shield/DejaVuSerif.ttf", config.GetConfig().Server.Filepath))
 	if err != nil {
 		log.Print(err.Error())
 		panic(err)

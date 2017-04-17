@@ -67,9 +67,7 @@ func createContainerHandler(w http.ResponseWriter, r *http.Request, ps httproute
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	} else {
 
-		w.Header().Set("Location", fmt.Sprintf("/api/containers/%d", res.Id))
-		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte(""))
+		created(fmt.Sprintf("/api/containers/%d", res.Id), w)
 	}
 }
 
@@ -77,27 +75,7 @@ func readContainersHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	model, err := containerService.ReadContainers()
 
-	if (err != nil) {
-
-		http.Error(w, err.Error(), http.StatusBadRequest)
-	} else if (model == nil) {
-
-		http.NotFound(w, r)
-	} else {
-
-		_response := middleware.MakeSearchResult(len(model), 0, 0, model, make([]middleware.Link, 0))
-
-		response, err := json.Marshal(_response)
-
-		if (err != nil) {
-
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		} else {
-
-			w.Header().Set("Content-Type", "application/json")
-			w.Write(response)
-		}
-	}
+	listRespond(model, len(model), 0, 0, err, w, r)
 }
 
 func readContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

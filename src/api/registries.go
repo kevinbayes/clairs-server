@@ -68,8 +68,7 @@ func createRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		} else {
 
-			w.WriteHeader(http.StatusNoContent)
-			w.Write([]byte(""))
+			noContent(w)
 		}
 
 	} else {
@@ -81,9 +80,7 @@ func createRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		} else {
 
-			w.Header().Set("Location", fmt.Sprintf("/api/registries/%d", res.Id))
-			w.WriteHeader(http.StatusCreated)
-			w.Write([]byte(""))
+			created(fmt.Sprintf("/api/registries/%d", res.Id), w)
 		}
 	}
 }
@@ -94,27 +91,7 @@ func readRegistriesHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	model, err := repo.ReadRegistries()
 
-	if (err != nil) {
-
-		http.Error(w, err.Error(), http.StatusBadRequest)
-	} else if (model == nil) {
-
-		http.NotFound(w, r)
-	} else {
-
-		_response := middleware.MakeSearchResult(len(model), 0, 0, model, make([]middleware.Link, 0))
-
-		response, err := json.Marshal(_response)
-
-		if (err != nil) {
-
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		} else {
-
-			w.Header().Set("Content-Type", "application/json")
-			w.Write(response)
-		}
-	}
+	listRespond(model, len(model), 0, 0, err, w, r)
 }
 
 func readRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -130,27 +107,7 @@ func readRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.P
 
 		model, err := repo.ReadRegistry(id)
 
-		if (err != nil) {
-
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		} else if (model == nil) {
-
-			http.NotFound(w, r)
-		} else {
-
-			_response := middleware.MakeHateos(model, make([]middleware.Link, 0))
-
-			response, err := json.Marshal(_response)
-
-			if (err != nil) {
-
-				http.Error(w, err.Error(), http.StatusBadRequest)
-			} else {
-
-				w.Header().Set("Content-Type", "application/json")
-				w.Write(response)
-			}
-		}
+		respond(model, err, w, r)
 	}
 }
 
@@ -183,32 +140,14 @@ func updateRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		} else {
 
-			w.WriteHeader(http.StatusNoContent)
-			w.Write([]byte(""))
+			noContent(w)
 		}
 
 	} else {
 
 		_, err := _service.UpdateRegistry(&_body)
 
-		if (err != nil) {
-
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		} else {
-
-			_response := middleware.MakeHateos(_body, make([]middleware.Link, 0))
-
-			response, err := json.Marshal(_response)
-
-			if (err != nil) {
-
-				http.Error(w, err.Error(), http.StatusBadRequest)
-			} else {
-
-				w.Header().Set("Content-Type", "application/json")
-				w.Write(response)
-			}
-		}
+		respond(&_body, err, w, r)
 	}
 }
 
@@ -221,18 +160,7 @@ func deleteRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	res, err := registryService.DeleteRegistry(id)
 
-	_response := middleware.MakeHateos(res, make([]middleware.Link, 0))
-
-	response, err := json.Marshal(_response)
-
-	if (err != nil) {
-
-		http.Error(w, err.Error(), http.StatusBadRequest)
-	} else {
-
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(response)
-	}
+	respond(res, err, w, r)
 }
 
 func createRegistryContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -260,9 +188,7 @@ func createRegistryContainerHandler(w http.ResponseWriter, r *http.Request, ps h
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	} else {
 
-		w.Header().Set("Location", fmt.Sprintf("/api/containers/%d", res.Id))
-		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte(""))
+		created(fmt.Sprintf("/api/containers/%d", res.Id), w)
 	}
 }
 
