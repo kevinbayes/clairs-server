@@ -17,15 +17,57 @@ import (
 	"../api/dto"
 	"../model"
 	"../repository"
+	"../gateway"
 	"errors"
+	"log"
 )
 
 const DEFAULT_SHIELD = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"150\" height=\"20\"><g shape-rendering=\"crispEdges\"><rect width=\"37\" height=\"20\" fill=\"#555\"/><rect x=\"37\" width=\"113\" height=\"20\" fill=\"#4c1\"/></g><g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\"><text x=\"18\" y=\"14\">clair</text><text x=\"92\" y=\"14\">not implemented</text></g></svg>"
 
+var newContainerChannel = make(chan *model.Container)
+var _containerService *ContainerService
+
 type ContainerService struct { }
 
-func (s *ContainerService) CreateNewContainer(req *dto.NewContainer) (*model.Container, error) {
+func ContainerServiceSingleton() *ContainerService {
 
+	if(_containerService == nil) {
+
+		_containerService = &ContainerService{}
+		_containerService.Init()
+	}
+
+	return _containerService;
+}
+
+func (s *ContainerService) Init() {
+
+	log.Print("Initializing ContainerService")
+
+	go func() {
+
+		_registryService := &RegistryService{}
+
+		for {
+
+			container := <-newContainerChannel // read from a channel
+
+			log.Printf("Created container request %s.", container.Image)
+
+			registry, err := _registryService.ReadRegistry(container.Registry)
+
+			if(err != nil) {
+
+				log.Panicf("Error reading registry: %s", err.Error())
+			} else {
+
+				gateway.DockerClientInstance().PullImage(registry, container);
+			}
+		}
+	}()
+}
+
+func (s *ContainerService) CreateNewContainer(req *dto.NewContainer) (*model.Container, error) {
 
 	_container := s.convertRequest(req)
 
@@ -38,6 +80,12 @@ func (s *ContainerService) CreateNewContainer(req *dto.NewContainer) (*model.Con
 
 		return nil, errors.New("Not found")
 	}
+
+	log.Print("Sending request to pull container.")
+
+	newContainerChannel <- _container
+
+	log.Print("Sent request to pull container.")
 
 	err = repository.InstanceContainerRepository().Save(_container)
 

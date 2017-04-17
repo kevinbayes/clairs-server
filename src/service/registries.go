@@ -22,6 +22,18 @@ import (
 
 type RegistryService struct { }
 
+var _registryService *RegistryService
+
+func RegistryServiceSingleton() *RegistryService {
+
+	if(_registryService == nil) {
+
+		_registryService = &RegistryService{}
+	}
+
+	return _registryService;
+}
+
 func (s *RegistryService) TestNewRegistryCredentials(body *dto.NewRegistry) (error) {
 
 	_registry := s.convertRequest(body)

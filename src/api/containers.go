@@ -24,7 +24,7 @@ import (
 	"fmt"
 )
 
-var containerService = &service.ContainerService{}
+var containerService = service.ContainerServiceSingleton()
 
 func RegisterContainersHandlers(router *middleware.Middleware) {
 

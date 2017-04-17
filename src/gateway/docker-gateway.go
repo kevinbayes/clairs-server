@@ -19,6 +19,9 @@ import (
 	"context"
 	"../model"
 	"log"
+	"fmt"
+	"encoding/base64"
+	"bytes"
 )
 
 type DockerClient struct { }
@@ -55,6 +58,112 @@ func (d *DockerClient) ValidateLogin(registry *model.Registry) (error) {
 
 		return err2
 	}
+
+	return nil
+}
+
+
+/*
+ * ValidateImage
+ */
+func (d *DockerClient) PullImage(registry *model.Registry, container *model.Container) (error) {
+
+	client, err := client.NewEnvClient()
+
+	if(err != nil) {
+
+		return err
+	}
+
+	creds := fmt.Sprintf("%s:%s", registry.Credentials.Username, registry.Credentials.Password)
+
+	sEnc := base64.StdEncoding.EncodeToString([]byte(creds))
+	log.Print(sEnc)
+
+	auth := types.ImagePullOptions{
+	}
+
+	log.Print(container.Image)
+
+	read, err2 := client.ImagePull(context.Background(), container.Image, auth)
+
+	if(err2 != nil) {
+
+		return err2
+	}
+
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(read)
+	newStr := buf.String()
+
+	log.Print(newStr)
+
+	return nil
+}
+
+
+func (d *DockerClient) ListImages() (error) {
+
+	client, err := client.NewEnvClient()
+
+	if(err != nil) {
+
+		return err
+	}
+
+	auth := types.ImageListOptions{}
+
+	read, err2 := client.ImageList(context.Background(), auth)
+
+	if(err2 != nil) {
+
+		return err2
+	}
+
+	for _, item := range read {
+
+		log.Print("-------------------")
+		log.Print(item.Labels)
+		log.Print(item.RepoDigests)
+		log.Print(item.RepoTags)
+		log.Print(item.ID)
+	}
+
+	log.Print("---------------")
+	log.Print(len(read))
+
+	return nil
+}
+
+func (d *DockerClient) SearchImages() (error) {
+
+	client, err := client.NewEnvClient()
+
+	if(err != nil) {
+
+		return err
+	}
+
+	auth := types.ImageListOptions{}
+
+	read, err2 := client.ImageList(context.Background(), auth)
+
+	if(err2 != nil) {
+
+		return err2
+	}
+
+	for _, item := range read {
+
+		log.Print("-------------------")
+		log.Print(item.Labels)
+		log.Print(item.RepoDigests)
+		log.Print(item.RepoTags)
+		log.Print(item.ID)
+	}
+
+	log.Print("---------------")
+	log.Print(len(read))
 
 	return nil
 }
