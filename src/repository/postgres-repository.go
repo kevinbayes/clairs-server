@@ -46,6 +46,18 @@ var definitions = []string{
 		"  version integer not null" +
 		") ",
 	"create unique index if not exists containers_image_registry_id_uindex on containers (image, registry_id)",
+	"create table if not exists container_image_report " +
+	"( " +
+		"id bigserial not null " +
+		"constraint container_image_report_pkey " +
+		"primary key, " +
+		"container_id bigint not null " +
+		"constraint container_image_report_containers_id_fk " +
+		"references containers, " +
+		"layer_id varchar(100) not null, " +
+		"shield varchar(1000) not null, " +
+		"created_on timestamp default now() not null " +
+	");",
 };
 
 func init() {

@@ -18,3 +18,5 @@ type NewContainer struct {
 	Image string
 }
 
+type AuditRefreshRequest struct {
+}

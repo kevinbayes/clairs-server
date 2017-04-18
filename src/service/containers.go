@@ -49,18 +49,54 @@ func (s *ContainerService) Init() {
 
 		for {
 
-			container := <-newContainerChannel // read from a channel
+			_container := <-newContainerChannel // read from a channel
 
-			log.Printf("Created container request %s.", container.Image)
+			log.Printf("Created container request %s.", _container.Image)
 
-			registry, err := _registryService.ReadRegistry(container.Registry)
+			registry, err := _registryService.ReadRegistry(_container.Registry)
 
 			if(err != nil) {
 
 				log.Panicf("Error reading registry: %s", err.Error())
 			} else {
 
-				gateway.DockerClientInstance().PullImage(registry, container);
+				gateway.DockerClientInstance().PullImage(registry, _container);
+				analyzeContainerChannel <- _container
+			}
+		}
+	}()
+
+	go func() {
+
+		_registryService := &RegistryService{}
+
+		for {
+
+			container := <-analyzeContainerChannel // read from a channel
+
+			log.Printf("Created container request %s.", container.Image)
+
+			_, err := _registryService.ReadRegistry(container.Registry)
+
+			if(err != nil) {
+
+				log.Panicf("Error reading registry: %s", err.Error())
+			} else {
+
+				imageId, parentId, err := gateway.DockerClientInstance().ImageId(container)
+
+				if(err != nil) {
+
+					log.Panicln(err)
+				} else {
+
+					err = gateway.ClairClientInstance().PostLayer(imageId, parentId)
+
+					if(err != nil) {
+
+						log.Panic(err)
+					}
+				}
 			}
 		}
 	}()

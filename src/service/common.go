@@ -6,6 +6,7 @@ import (
 )
 
 var newContainerChannel = make(chan *model.Container)
+var analyzeContainerChannel = make(chan *model.Container)
 
 func init() {
 

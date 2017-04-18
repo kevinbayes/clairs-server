@@ -13,7 +13,9 @@
 // limitations under the License.
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type Container struct {
 	Id int64
@@ -23,4 +25,20 @@ type Container struct {
 	Shield string
 
 	DateUpdated time.Time
+}
+
+type ContainerImageReport struct {
+	Id int64
+	CounterId int64
+	Layer string
+	Shield string
+	CreatedOn time.Time
+
+	Counts []ContainerImageVulnerabilityCount
+}
+
+
+type ContainerImageVulnerabilityCount struct {
+	Level string
+	Count int
 }

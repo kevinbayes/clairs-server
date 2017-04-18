@@ -14,6 +14,11 @@ type Config struct {
 		Port string
 		Filepath string
 	}
+	Clair struct {
+		Protocol string
+		Host string
+		Port string
+	}
 	Database struct {
 		  Vendor string
 		  Database string
