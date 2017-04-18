@@ -1,0 +1,27 @@
+@import '~@angular/material/theming';
+
+// docs: https://material.angular.io/guide/theming
+
+// Include the base styles for Angular Material core
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue.
+$app-primary: mat-palette($mat-blue);
+$app-accent:  mat-palette($mat-light-blue);
+$app-warn:    mat-palette($mat-red);
+
+$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+
+@include angular-material-theme($app-theme);
+
+.secondary-theme {
+    $second-primary: mat-palette($mat-blue);
+    $second-accent:  mat-palette($mat-purple);
+    $second-warn:    mat-palette($mat-orange);
+
+    $second-theme: mat-light-theme($second-primary, $second-accent, $second-warn);
+
+    @include angular-material-theme($second-theme);
+}
