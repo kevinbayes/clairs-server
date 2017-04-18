@@ -13,11 +13,15 @@ func main() {
 	}
 
 	//gateway.DockerClientInstance().PullImage(registry, container)
+
+
 	imageId, parentId, err := gateway.DockerClientInstance().ImageId(container)
 
-	err2 := gateway.ClairClientInstance().PostLayer("4b8f83b7783857502bb3139a4c3ec9cbaf6eb2b34e0ca7360c9745b9aa5dae0a", parentId)
+	gateway.DockerClientInstance().SaveImage(container)
 
-	layer, err3 := gateway.ClairClientInstance().GetLayer("4b8f83b7783857502bb3139a4c3ec9cbaf6eb2b34e0ca7360c9745b9aa5dae0a");
+	err2 := gateway.ClairClientInstance().PostLayer("1f7dc3c631cf050d003954694badabe318cc5bbd86956d872e7da14e54039a10", parentId)
+
+	layer, err3 := gateway.ClairClientInstance().GetLayer("1f7dc3c631cf050d003954694badabe318cc5bbd86956d872e7da14e54039a10");
 
 	log.Print(err)
 	log.Print(imageId)

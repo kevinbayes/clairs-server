@@ -1,4 +1,5 @@
 header: "ClairUI"
+workDir: "./work"
 server:
   host: ""
   port: "18080"

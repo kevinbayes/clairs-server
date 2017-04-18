@@ -18,11 +18,14 @@ import (
 	"github.com/docker/docker/client"
 	"context"
 	"../model"
+	"../config"
 	"log"
 	"fmt"
 	"encoding/base64"
 	"bytes"
 	"strings"
+	"os/exec"
+	"errors"
 )
 
 type DockerClient struct { }
@@ -101,6 +104,43 @@ func (d *DockerClient) PullImage(registry *model.Registry, container *model.Cont
 
 	return nil
 }
+
+
+func (d *DockerClient) SaveImage(container *model.Container) (error) {
+
+	path := config.GetConfig().TmpDir() + "/" + string(container.Id)
+
+	var stderr bytes.Buffer
+	save := exec.Command("docker", "save", container.Image)
+	save.Stderr = &stderr
+	extract := exec.Command("tar", "xf", "-", "-C"+path)
+	extract.Stderr = &stderr
+	pipe, err := extract.StdinPipe()
+	if err != nil {
+		return err
+	}
+	save.Stdout = pipe
+
+	err = extract.Start()
+	if err != nil {
+		return errors.New(stderr.String())
+	}
+	err = save.Run()
+	if err != nil {
+		return errors.New(stderr.String())
+	}
+	err = pipe.Close()
+	if err != nil {
+		return err
+	}
+	err = extract.Wait()
+	if err != nil {
+		return errors.New(stderr.String())
+	}
+
+	return nil
+}
+
 
 
 
