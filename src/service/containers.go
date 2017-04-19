@@ -83,14 +83,14 @@ func (s *ContainerService) Init() {
 				log.Panicf("Error reading registry: %s", err.Error())
 			} else {
 
-				imageId, parentId, err := gateway.DockerClientInstance().ImageId(container)
+				imageId, err := gateway.DockerClientInstance().ImageId(container)
 
 				if(err != nil) {
 
 					log.Panicln(err)
 				} else {
 
-					err = gateway.ClairClientInstance().PostLayer(imageId, parentId)
+					err = gateway.ClairClientInstance().PostLayers(imageId)
 
 					if(err != nil) {
 

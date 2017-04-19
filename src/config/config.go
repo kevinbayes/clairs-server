@@ -9,7 +9,7 @@ import (
 
 type Config struct {
 	Header string
-	WorkDir string
+	Workdir string
 	Server struct {
 		Host string
 		Port string
@@ -33,7 +33,7 @@ type Config struct {
 
 func (c *Config) TmpDir() string {
 
-	return c.WorkDir + "/tmp"
+	return c.Workdir + "/tmp"
 }
 
 var config *Config;

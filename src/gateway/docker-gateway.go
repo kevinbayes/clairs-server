@@ -26,6 +26,9 @@ import (
 	"strings"
 	"os/exec"
 	"errors"
+	"os"
+	"io/ioutil"
+	"encoding/json"
 )
 
 type DockerClient struct { }
@@ -108,59 +111,111 @@ func (d *DockerClient) PullImage(registry *model.Registry, container *model.Cont
 
 func (d *DockerClient) SaveImage(container *model.Container) (error) {
 
-	path := config.GetConfig().TmpDir() + "/" + string(container.Id)
+	path := fmt.Sprintf("%s/%d", config.GetConfig().TmpDir(), container.Id)
+
+	mkerr := os.MkdirAll(path, os.ModePerm)
+	if(mkerr != nil) {
+
+		log.Panicln(mkerr)
+		return mkerr
+	}
 
 	var stderr bytes.Buffer
 	save := exec.Command("docker", "save", container.Image)
+
 	save.Stderr = &stderr
 	extract := exec.Command("tar", "xf", "-", "-C"+path)
 	extract.Stderr = &stderr
 	pipe, err := extract.StdinPipe()
 	if err != nil {
+		log.Printf("1. %s", err)
 		return err
 	}
 	save.Stdout = pipe
 
 	err = extract.Start()
 	if err != nil {
+		log.Printf("2. %s", err)
 		return errors.New(stderr.String())
 	}
 	err = save.Run()
 	if err != nil {
+		log.Printf("3. %s", err)
 		return errors.New(stderr.String())
 	}
 	err = pipe.Close()
 	if err != nil {
+		log.Printf("4. %s", err)
 		return err
 	}
 	err = extract.Wait()
 	if err != nil {
+		log.Printf("5. %s", err)
 		return errors.New(stderr.String())
+	}
+
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, file := range files {
+		fmt.Println(file.Name())
 	}
 
 	return nil
 }
 
 
+func (d *DockerClient) ImageLayers(container *model.Container) ([]string, error) {
+
+	path := fmt.Sprintf("%s/%d", config.GetConfig().TmpDir(), container.Id)
+
+	mf, err := os.Open(path + "/manifest.json")
+	if err != nil {
+		return nil, err
+	}
+	defer mf.Close()
+
+	// https://github.com/docker/docker/blob/master/image/tarexport/tarexport.go#L17
+	type manifestItem struct {
+		Config   string
+		RepoTags []string
+		Layers   []string
+	}
+
+	var manifest []manifestItem
+	if err = json.NewDecoder(mf).Decode(&manifest); err != nil {
+		return nil, err
+	} else if len(manifest) != 1 {
+		return nil, err
+	}
+	var layers []string
+	for _, layer := range manifest[0].Layers {
+		layers = append(layers, strings.TrimSuffix(layer, "/layer.tar"))
+	}
+	return layers, nil
+}
 
 
-func (d *DockerClient) ImageId(container *model.Container) (string, string, error) {
+
+func (d *DockerClient) ImageId(container *model.Container) (string, error) {
 
 	client, err := client.NewEnvClient()
 
 	if (err != nil) {
 
-		return "", "",err
+		return "",err
 	}
 
 	inspect, _, err2 :=  client.ImageInspectWithRaw(context.Background(), container.Image)
 
 	if(err2 != nil) {
 
-		return "", "",err2
+		return "",err2
 	}
 
-	return inspect.ID[(strings.Index(inspect.ID, ":") + 1):len(inspect.ID)], inspect.Parent, err2
+	return inspect.ID[(strings.Index(inspect.ID, ":") + 1):len(inspect.ID)], err2
 }
 
 

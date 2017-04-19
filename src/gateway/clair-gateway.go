@@ -16,12 +16,14 @@ package gateway
 import (
 	"net/http"
 	"../config"
+	"../model"
 	clairDto "github.com/coreos/clair/api/v1"
 	"fmt"
 	"bytes"
 	"time"
 	"log"
 	"encoding/json"
+	"sync"
 )
 
 var clairHttp = &http.Client{
@@ -35,13 +37,14 @@ func ClairClientInstance() *ClairClient {
 	return &ClairClient{}
 }
 
-func (c * ClairClient) PostLayer(image string, parent string) (error) {
+func (c * ClairClient) PostLayers(container *model.Container) (error) {
 
+	//path, err := DockerClientInstance().SaveImage(container)
 
 	dto := clairDto.LayerEnvelope{
 		Layer: &clairDto.Layer{
-			Name: image,
-			ParentName: parent,
+			Name: container.Image,
+			ParentName: container.Image,
 			Format: "Docker",
 			Path: "file:///Users/kevinbayes/software/clair/kibana.tar",
 		},
@@ -60,10 +63,10 @@ func (c * ClairClient) PostLayer(image string, parent string) (error) {
 
 	res, err := clairHttp.Post(
 		fmt.Sprintf("%s://%s:%s/%s",
-		_config.Protocol,
-		_config.Host,
-		_config.Port,
-		"v1/layers"),
+			_config.Protocol,
+			_config.Host,
+			_config.Port,
+			"v1/layers"),
 		"application/json",
 		buf)
 
@@ -75,6 +78,66 @@ func (c * ClairClient) PostLayer(image string, parent string) (error) {
 	log.Print(res)
 
 	return nil
+}
+
+func analyzeLayer(wg *sync.WaitGroup, layerId string, parentId string, path string, reportChannel chan<- error) {
+
+	defer wg.Done()
+
+	dto := clairDto.LayerEnvelope{
+		Layer: &clairDto.Layer{
+			Name: layerId,
+			ParentName: parentId,
+			Format: "Docker",
+			Path: "file:///Users/kevinbayes/software/clair/kibana.tar",
+		},
+	}
+
+	_req, err := json.Marshal(dto)
+
+	buf := bytes.NewBuffer(_req)
+	_config := config.GetConfig().Clair
+
+	_, err = clairHttp.Post(
+		fmt.Sprintf("%s://%s:%s/%s",
+			_config.Protocol,
+			_config.Host,
+			_config.Port,
+			"v1/layers"),
+		"application/json",
+		buf)
+
+	reportChannel <- err
+}
+
+func (c * ClairClient) PostLayer(container *model.Container, image string, layerIds []string) {
+
+	var wg sync.WaitGroup
+
+	path := fmt.Sprintf("%s/%d", config.GetConfig().TmpDir(), container.Id)
+	size := len(layerIds)
+
+	reportChannel := make(chan error)
+
+	log.Printf("Analyzing %d layers... \n", size)
+
+	for i := 0; i < size; i++ {
+
+		log.Printf("Analyzing %s\n", layerIds[i])
+		wg.Add(1)
+
+		if i > 0 {
+			go analyzeLayer(&wg, layerIds[i], layerIds[i-1], path, reportChannel)
+		} else {
+			go analyzeLayer(&wg, layerIds[i], image, path, reportChannel)
+		}
+	}
+
+	for i := 0; i < size; i++ {
+
+		err := <- reportChannel
+		println(err)
+	}
 }
 
 
