@@ -29,7 +29,7 @@ type Container struct {
 
 type ContainerImageReport struct {
 	Id int64
-	CounterId int64
+	ImageId int64
 	Layer string
 	Shield string
 	CreatedOn time.Time

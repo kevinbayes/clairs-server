@@ -83,27 +83,18 @@ func (d *DockerClient) PullImage(registry *model.Registry, container *model.Cont
 	}
 
 	creds := fmt.Sprintf("%s:%s", registry.Credentials.Username, registry.Credentials.Password)
-
-	sEnc := base64.StdEncoding.EncodeToString([]byte(creds))
-	log.Print(sEnc)
+	encodedCredentials := base64.StdEncoding.EncodeToString([]byte(creds))
 
 	auth := types.ImagePullOptions{
+		RegistryAuth: encodedCredentials,
 	}
 
-	log.Print(container.Image)
-
-	read, err2 := client.ImagePull(context.Background(), container.Image, auth)
+	_, err2 := client.ImagePull(context.Background(), container.Image, auth)
 
 	if(err2 != nil) {
 
 		return err2
 	}
-
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(read)
-	newStr := buf.String()
-
-	log.Print(newStr)
 
 	return nil
 }

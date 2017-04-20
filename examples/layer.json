@@ -1,0 +1,902 @@
+{
+  "Layer": {
+    "Name": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197",
+    "NamespaceName": "debian:8",
+    "IndexedByVersion": 3,
+    "Features": [
+      {
+        "Name": "inetutils",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2:1.9.2.39.3a460-3",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "dash",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "0.5.7-4",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "diffutils",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1:3.3-1",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "kmod",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "18-3",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "slang2",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2.3.0-2",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "sed",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "4.2.2-4+deb8u1",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "init-system-helpers",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.22",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "liblocale-gettext-perl",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.05-8",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "libcap2",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1:2.24-8",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "pam",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.1.8-3.1+deb8u2",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "lvm2",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2.02.111-2.2+deb8u1",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "tar",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.27.1-2+deb8u1",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2005-2541",
+            "NamespaceName": "debian:8",
+            "Description": "Tar 1.15.1 does not properly warn the user when extracting setuid or setgid files, which may allow local users or remote attackers to gain privileges.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2005-2541",
+            "Severity": "Negligible",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 10,
+                  "Vectors": "AV:N/AC:L/Au:N/C:C/I:C"
+                }
+              }
+            }
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "e2fsprogs",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.42.12-2",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "hostname",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "3.15",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "base-passwd",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "3.5.37",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "ustr",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.0.4-3",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "netbase",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "5.3",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "grep",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2.20-4.1",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "libgcrypt20",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.6.3-2+deb8u2",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "lsb",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "4.1+Debian13+nmu1",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "libtext-wrapi18n-perl",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "0.06-7",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "libtext-iconv-perl",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.7-5",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "systemd",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "215-17+deb8u6",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2013-4392",
+            "NamespaceName": "debian:8",
+            "Description": "systemd, when updating file permissions, allows local users to change the permissions and SELinux security contexts for arbitrary files via a symlink attack on unspecified files.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2013-4392",
+            "Severity": "Negligible",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 3.3,
+                  "Vectors": "AV:L/AC:M/Au:N/C:P/I:P"
+                }
+              }
+            }
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "gnupg",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.4.18-7+deb8u3",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "base-files",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "8+deb8u7",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "util-linux",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2.25.2-6",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2016-2779",
+            "NamespaceName": "debian:8",
+            "Description": "runuser in util-linux allows local users to escape to the parent session via a crafted TIOCSTI ioctl call, which pushes characters to the terminal's input buffer.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2016-2779",
+            "Severity": "High",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 7.2,
+                  "Vectors": "AV:L/AC:L/Au:N/C:C/I:C"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2015-5218",
+            "NamespaceName": "debian:8",
+            "Description": "Buffer overflow in text-utils/colcrt.c in colcrt in util-linux before 2.27 allows local users to cause a denial of service (crash) via a crafted file, related to the page global variable.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2015-5218",
+            "Severity": "Negligible",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 2.1,
+                  "Vectors": "AV:L/AC:L/Au:N/C:N/I:N"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2015-5224",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2015-5224",
+            "Severity": "Negligible"
+          },
+          {
+            "Name": "CVE-2017-2616",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2017-2616",
+            "Severity": "Negligible"
+          },
+          {
+            "Name": "CVE-2016-5011",
+            "NamespaceName": "debian:8",
+            "Description": "The parse_dos_extended function in partitions/dos.c in the libblkid library in util-linux allows physically proximate attackers to cause a denial of service (memory consumption) via a crafted MSDOS partition table with an extended partition boot record at zero offset.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2016-5011",
+            "Severity": "Medium"
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "ncurses",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "5.9+20140913-1",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "zlib",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1:1.2.8.dfsg-2",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2016-9840",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2016-9840",
+            "Severity": "Unknown"
+          },
+          {
+            "Name": "CVE-2016-9841",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2016-9841",
+            "Severity": "Unknown"
+          },
+          {
+            "Name": "CVE-2016-9842",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2016-9842",
+            "Severity": "Unknown"
+          },
+          {
+            "Name": "CVE-2016-9843",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2016-9843",
+            "Severity": "Unknown"
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "procps",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2:3.3.9-9",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "audit",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1:2.4-1",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2015-5186",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2015-5186",
+            "Severity": "Negligible"
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "shadow",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1:4.2-3+deb8u3",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2007-5686",
+            "NamespaceName": "debian:8",
+            "Description": "initscripts in rPath Linux 1 sets insecure permissions for the /var/log/btmp file, which allows local users to obtain sensitive information regarding authentication attempts.  NOTE: because sshd detects the insecure permissions and does not log certain events, this also prevents sshd from logging failed authentication attempts by remote attackers.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2007-5686",
+            "Severity": "Negligible",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 4.9,
+                  "Vectors": "AV:L/AC:L/Au:N/C:C/I:N"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2013-4235",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2013-4235",
+            "Severity": "Negligible"
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "gcc-4.9",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "4.9.2-10",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2015-5276",
+            "NamespaceName": "debian:8",
+            "Description": "The std::random_device class in libstdc++ in the GNU Compiler Collection (aka GCC) before 4.9.4 does not properly handle short reads from blocking sources, which makes it easier for context-dependent attackers to predict the random values via unspecified vectors.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2015-5276",
+            "Severity": "Medium",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 5,
+                  "Vectors": "AV:N/AC:L/Au:N/C:P/I:N"
+                }
+              }
+            }
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "cryptsetup",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2:1.6.6-5",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2016-4484",
+            "NamespaceName": "debian:8",
+            "Description": "The Debian initrd script for the cryptsetup package 2:1.7.3-2 and earlier allows physically proximate attackers to gain shell access via many log in attempts with an invalid password.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2016-4484",
+            "Severity": "Negligible",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 7.2,
+                  "Vectors": "AV:L/AC:L/Au:N/C:C/I:C"
+                }
+              }
+            }
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "coreutils",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "8.23-4",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2016-2781",
+            "NamespaceName": "debian:8",
+            "Description": "chroot in GNU coreutils, when used with --userspec, allows local users to escape to the parent session via a crafted TIOCSTI ioctl call, which pushes characters to the terminal's input buffer.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2016-2781",
+            "Severity": "Low",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 2.1,
+                  "Vectors": "AV:L/AC:L/Au:N/C:N/I:P"
+                }
+              }
+            }
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "debianutils",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "4.4",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "perl",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "5.20.2-3+deb8u6",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2012-3878",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2012-3878",
+            "Severity": "Negligible"
+          },
+          {
+            "Name": "CVE-2011-4116",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2011-4116",
+            "Severity": "Negligible"
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "dpkg",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.17.27",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "db5.3",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "5.3.28-9",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "libgpg-error",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.17-3",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "adduser",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "3.113+nmu3",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "findutils",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "4.4.2-9",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "mawk",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.3.3-17",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "sysvinit",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2.88dsf-59",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "libsepol",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2.3-2",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "readline6",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "6.3-8",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "tzdata",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2017a-0+deb8u1",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "iproute2",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "3.16.0-2",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "libtext-charwidth-perl",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "0.04-7",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "pcre3",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2:8.35-3.3+deb8u4",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2015-3217",
+            "NamespaceName": "debian:8",
+            "Description": "PCRE 7.8 and 8.32 through 8.37, and PCRE2 10.10 mishandle group empty matches, which might allow remote attackers to cause a denial of service (stack-based buffer overflow) via a crafted regular expression, as demonstrated by /^(?:(?(1)\\\\.|([^\\\\\\\\W_])?)+)+$/.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2015-3217",
+            "Severity": "Medium",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 5,
+                  "Vectors": "AV:N/AC:L/Au:N/C:N/I:N"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2017-7244",
+            "NamespaceName": "debian:8",
+            "Description": "The _pcre32_xclass function in pcre_xclass.c in libpcre1 in PCRE 8.40 allows remote attackers to cause a denial of service (invalid memory read) via a crafted file.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2017-7244",
+            "Severity": "Medium",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 4.3,
+                  "Vectors": "AV:N/AC:M/Au:N/C:N/I:N"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2017-7186",
+            "NamespaceName": "debian:8",
+            "Description": "libpcre1 in PCRE 8.40 and libpcre2 in PCRE2 10.23 allow remote attackers to cause a denial of service (segmentation violation for read access, and application crash) by triggering an invalid Unicode property lookup.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2017-7186",
+            "Severity": "Medium",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 5,
+                  "Vectors": "AV:N/AC:L/Au:N/C:N/I:N"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2017-7245",
+            "NamespaceName": "debian:8",
+            "Description": "Stack-based buffer overflow in the pcre32_copy_substring function in pcre_get.c in libpcre1 in PCRE 8.40 allows remote attackers to cause a denial of service (WRITE of size 4) or possibly have unspecified other impact via a crafted file.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2017-7245",
+            "Severity": "Negligible",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 6.8,
+                  "Vectors": "AV:N/AC:M/Au:N/C:P/I:P"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2017-7246",
+            "NamespaceName": "debian:8",
+            "Description": "Stack-based buffer overflow in the pcre32_copy_substring function in pcre_get.c in libpcre1 in PCRE 8.40 allows remote attackers to cause a denial of service (WRITE of size 268) or possibly have unspecified other impact via a crafted file.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2017-7246",
+            "Severity": "Negligible",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 6.8,
+                  "Vectors": "AV:N/AC:M/Au:N/C:P/I:P"
+                }
+              }
+            }
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "cdebconf",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "0.192",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "sensible-utils",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "0.0.9",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "libsemanage",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2.3-1",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "gzip",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.6-4",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "startpar",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "0.59-3",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "libusb",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2:0.1.12-25",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "insserv",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.14.0-5",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "gcc-4.8",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "4.8.4-1",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "glibc",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2.19-18+deb8u7",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2016-10228",
+            "NamespaceName": "debian:8",
+            "Description": "The iconv program in the GNU C Library (aka glibc or libc6) 2.25 and earlier, when invoked with the -c option, enters an infinite loop when processing invalid multi-byte input sequences, leading to a denial of service.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2016-10228",
+            "Severity": "Medium",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 4.3,
+                  "Vectors": "AV:N/AC:M/Au:N/C:N/I:N"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2010-4051",
+            "NamespaceName": "debian:8",
+            "Description": "The regcomp implementation in the GNU C Library (aka glibc or libc6) through 2.11.3, and 2.12.x through 2.12.2, allows context-dependent attackers to cause a denial of service (application crash) via a regular expression containing adjacent bounded repetitions that bypass the intended RE_DUP_MAX limitation, as demonstrated by a {10,}{10,}{10,}{10,}{10,} sequence in the proftpd.gnu.c exploit for ProFTPD, related to a \"RE_DUP_MAX overflow.\"",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2010-4051",
+            "Severity": "Negligible",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 5,
+                  "Vectors": "AV:N/AC:L/Au:N/C:N/I:N"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2010-4052",
+            "NamespaceName": "debian:8",
+            "Description": "Stack consumption vulnerability in the regcomp implementation in the GNU C Library (aka glibc or libc6) through 2.11.3, and 2.12.x through 2.12.2, allows context-dependent attackers to cause a denial of service (resource exhaustion) via a regular expression containing adjacent repetition operators, as demonstrated by a {10,}{10,}{10,}{10,} sequence in the proftpd.gnu.c exploit for ProFTPD.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2010-4052",
+            "Severity": "Negligible",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 5,
+                  "Vectors": "AV:N/AC:L/Au:N/C:N/I:N"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2015-5180",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2015-5180",
+            "Severity": "Low"
+          },
+          {
+            "Name": "CVE-2010-4756",
+            "NamespaceName": "debian:8",
+            "Description": "The glob implementation in the GNU C Library (aka glibc or libc6) allows remote authenticated users to cause a denial of service (CPU and memory consumption) via crafted glob expressions that do not match any pathnames, as demonstrated by glob expressions in STAT commands to an FTP daemon, a different vulnerability than CVE-2010-2632.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2010-4756",
+            "Severity": "Negligible",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 4,
+                  "Vectors": "AV:N/AC:L/Au:S/C:N/I:N"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2015-8985",
+            "NamespaceName": "debian:8",
+            "Description": "The pop_fail_stack function in the GNU C Library (aka glibc or libc6) allows context-dependent attackers to cause a denial of service (assertion failure and application crash) via vectors related to extended regular expression processing.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2015-8985",
+            "Severity": "Negligible",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 4.3,
+                  "Vectors": "AV:N/AC:M/Au:N/C:N/I:N"
+                }
+              }
+            }
+          },
+          {
+            "Name": "CVE-2014-9761",
+            "NamespaceName": "debian:8",
+            "Description": "Multiple stack-based buffer overflows in the GNU C Library (aka glibc or libc6) before 2.23 allow context-dependent attackers to cause a denial of service (application crash) or possibly execute arbitrary code via a long argument to the (1) nan, (2) nanf, or (3) nanl function.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2014-9761",
+            "Severity": "High",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 7.5,
+                  "Vectors": "AV:N/AC:L/Au:N/C:P/I:P"
+                }
+              }
+            }
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "debian-archive-keyring",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2014.3",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "attr",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1:2.4.47-2",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "debconf",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.5.56",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "bash",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "4.3-11+deb8u1",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2016-9401",
+            "NamespaceName": "debian:8",
+            "Description": "popd in bash might allow local users to bypass the restricted shell and cause a use-after-free via a crafted address.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2016-9401",
+            "Severity": "Low",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 2.1,
+                  "Vectors": "AV:L/AC:L/Au:N/C:N/I:P"
+                }
+              }
+            }
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "acl",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2.2.52-2",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "libselinux",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "2.3-2",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "xz-utils",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "5.1.1alpha+20120614-2",
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "bzip2",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.0.6-7",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2016-3189",
+            "NamespaceName": "debian:8",
+            "Description": "Use-after-free vulnerability in bzip2recover in bzip2 1.0.6 allows remote attackers to cause a denial of service (crash) via a crafted bzip2 file, related to block ends set to before the start of the block.",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2016-3189",
+            "Severity": "Low",
+            "Metadata": {
+              "NVD": {
+                "CVSSv2": {
+                  "Score": 4.3,
+                  "Vectors": "AV:N/AC:M/Au:N/C:N/I:N"
+                }
+              }
+            }
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      },
+      {
+        "Name": "apt",
+        "NamespaceName": "debian:8",
+        "VersionFormat": "dpkg",
+        "Version": "1.0.9.8.4",
+        "Vulnerabilities": [
+          {
+            "Name": "CVE-2011-3374",
+            "NamespaceName": "debian:8",
+            "Link": "https://security-tracker.debian.org/tracker/CVE-2011-3374",
+            "Severity": "Negligible"
+          }
+        ],
+        "AddedBy": "54f50ac8effbf255544e21f0f6ce1a8a9d47d72c673682f81e2f1252282fd197"
+      }
+    ]
+  }
+}

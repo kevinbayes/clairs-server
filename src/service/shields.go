@@ -38,6 +38,29 @@ func ShieldsServiceSingleton() *ShieldsService {
 	return _shieldsService
 }
 
+func (s *ShieldsService) GenerateShieldSVG(shield *model.Shield) (bytes.Buffer, error) {
+
+	_width1 := s.textWidth(shield.Subject.Value)
+	_width2 := s.textWidth(shield.Status.Value)
+
+	shield.Subject.Width = _width1 + 10
+	shield.Status.Width = _width2 + 10
+	shield.Width = shield.Subject.Width + shield.Status.Width
+
+	shield.Subject.X = shield.Subject.Width / 2
+	shield.Status.X = shield.Subject.Width + ( shield.Status.Width / 2 - 1 )
+
+	tmpl, err := template.New(shield.Template).ParseFiles(fmt.Sprintf("%s/shield/shield.flat.svg", config.GetConfig().Server.Filepath))
+
+	if err != nil { return bytes.Buffer{}, err }
+
+	var doc bytes.Buffer
+
+	err = tmpl.ExecuteTemplate(&doc, "shield.flat.svg", shield)
+
+	return doc, err
+}
+
 
 func (s *ShieldsService) GetShield(containerId int64) (bytes.Buffer, error) {
 

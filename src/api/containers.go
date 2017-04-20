@@ -22,6 +22,7 @@ import (
 	"./dto"
 	"encoding/json"
 	"fmt"
+	"strconv"
 )
 
 var containerService = service.ContainerServiceSingleton()
@@ -46,7 +47,7 @@ func RegisterContainersHandlers(router *middleware.Middleware) {
 	router.GET("/api/containers/:id/reports/:reportId", readContainerReportHandler)
 
 	//Container Re-evaluate
-	router.PUT("/api/containers/:id/_evaluate", reevaluateContainerReportsHandler)
+	router.PUT("/api/containers/:id/_evaluate", evaluateContainerReportsHandler)
 }
 
 func createContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -108,10 +109,19 @@ func readContainerReportHandler(w http.ResponseWriter, r *http.Request, ps httpr
 	w.Write([]byte("{\"status\":\"UP\"}"))
 }
 
-func reevaluateContainerReportsHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func evaluateContainerReportsHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("{\"status\":\"UP\"}"))
+	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
+
+	if(err != nil) {
+
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else {
+
+		model, err := containerService.EvaluateContainers(id)
+
+		respond(model, err, w, r)
+	}
 }
 
 

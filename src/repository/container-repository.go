@@ -58,6 +58,52 @@ func (r *ContainerRepository) Save(container *model.Container) (error) {
 	return nil
 }
 
+func (r *ContainerRepository) FindOne(_id int64) (*model.Container, error) {
+
+	var (
+		id int64
+		registryId int64
+		image string
+		state string
+		shield string
+		version int
+	)
+
+	db, err := Connect()
+	if(err != nil) {
+
+		return nil, err
+	}
+
+	// read one
+	rows, err := db.Query("select id, image, registry_id, state, shield, version from containers where id = $1", _id)
+	if(err != nil) {
+
+		log.Fatal(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+
+		err := rows.Scan(&id, &image, &registryId, &state, &shield, &version)
+		if err != nil {
+
+			log.Fatal(err)
+			return nil, err
+		}
+
+		return &model.Container{
+			Id: id,
+			Image: image,
+			Registry: registryId,
+			State: state,
+		}, nil
+	}
+
+	return nil, nil
+}
+
 
 func (r *ContainerRepository) Find() ([]*model.Container, error) {
 

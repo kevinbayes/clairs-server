@@ -23,7 +23,6 @@ import (
 	"time"
 	"log"
 	"encoding/json"
-	"sync"
 )
 
 var clairHttp = &http.Client{
@@ -37,107 +36,73 @@ func ClairClientInstance() *ClairClient {
 	return &ClairClient{}
 }
 
-func (c * ClairClient) PostLayers(container *model.Container) (error) {
 
-	//path, err := DockerClientInstance().SaveImage(container)
 
-	dto := clairDto.LayerEnvelope{
-		Layer: &clairDto.Layer{
-			Name: container.Image,
-			ParentName: container.Image,
-			Format: "Docker",
-			Path: "file:///Users/kevinbayes/software/clair/kibana.tar",
-		},
-	}
-
-	_req, err := json.Marshal(dto)
-
-	buf := bytes.NewBuffer(_req)
-	_config := config.GetConfig().Clair
-
-	log.Printf("%s://%s:%s/%s",
-		_config.Protocol,
-		_config.Host,
-		_config.Port,
-		"v1/layers")
-
-	res, err := clairHttp.Post(
-		fmt.Sprintf("%s://%s:%s/%s",
-			_config.Protocol,
-			_config.Host,
-			_config.Port,
-			"v1/layers"),
-		"application/json",
-		buf)
-
-	if(err != nil) {
-
-		return err
-	}
-
-	log.Print(res)
-
-	return nil
-}
-
-func analyzeLayer(wg *sync.WaitGroup, layerId string, parentId string, path string, reportChannel chan<- error) {
-
-	defer wg.Done()
-
-	dto := clairDto.LayerEnvelope{
-		Layer: &clairDto.Layer{
-			Name: layerId,
-			ParentName: parentId,
-			Format: "Docker",
-			Path: "file:///Users/kevinbayes/software/clair/kibana.tar",
-		},
-	}
-
-	_req, err := json.Marshal(dto)
-
-	buf := bytes.NewBuffer(_req)
-	_config := config.GetConfig().Clair
-
-	_, err = clairHttp.Post(
-		fmt.Sprintf("%s://%s:%s/%s",
-			_config.Protocol,
-			_config.Host,
-			_config.Port,
-			"v1/layers"),
-		"application/json",
-		buf)
-
-	reportChannel <- err
-}
-
-func (c * ClairClient) PostLayer(container *model.Container, image string, layerIds []string) {
-
-	var wg sync.WaitGroup
+func (c * ClairClient) AnalyzeImage(container *model.Container, image string, layerIds []string) {
 
 	path := fmt.Sprintf("%s/%d", config.GetConfig().TmpDir(), container.Id)
 	size := len(layerIds)
 
 	reportChannel := make(chan error)
+	defer close(reportChannel)
 
 	log.Printf("Analyzing %d layers... \n", size)
 
 	for i := 0; i < size; i++ {
 
 		log.Printf("Analyzing %s\n", layerIds[i])
-		wg.Add(1)
 
 		if i > 0 {
-			go analyzeLayer(&wg, layerIds[i], layerIds[i-1], path, reportChannel)
+			go analyzeLayer(layerIds[i], layerIds[i-1], path, reportChannel)
 		} else {
-			go analyzeLayer(&wg, layerIds[i], image, path, reportChannel)
+			go analyzeLayer(layerIds[i], "", path, reportChannel)
 		}
 	}
 
 	for i := 0; i < size; i++ {
 
 		err := <- reportChannel
-		println(err)
+		if(err != nil) {
+			println(err.Error())
+		}
 	}
+
+}
+
+func analyzeLayer(layerId string, parentId string, path string, reportChannel chan<- error) {
+
+	_config := config.GetConfig()
+
+	dto := clairDto.LayerEnvelope{
+		Layer: &clairDto.Layer{
+			Name: layerId,
+			ParentName: parentId,
+			Format: "Docker",
+			Path: fmt.Sprintf("file://%s/%s/layer.tar", path, layerId),
+		},
+	}
+
+	_req, err := json.Marshal(dto)
+
+	if(err != nil) {
+		reportChannel <- err
+		return
+	}
+
+	buf := bytes.NewBuffer(_req)
+
+	_, err = clairHttp.Post(
+		fmt.Sprintf("%s://%s:%s/%s",
+			_config.Clair.Protocol,
+			_config.Clair.Host,
+			_config.Clair.Port,
+			"v1/layers"),
+		"application/json",
+		buf)
+
+	log.Printf("Completed analyzing %s", layerId)
+
+	reportChannel <- err
 }
 
 

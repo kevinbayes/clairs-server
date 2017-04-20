@@ -1,5 +1,5 @@
 header: "ClairUI"
-workdir: "."
+workdir: "/Users/kevinbayes/git/clairs-server"
 server:
   host: ""
   port: "18080"

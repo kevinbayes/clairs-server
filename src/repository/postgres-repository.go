@@ -51,12 +51,23 @@ var definitions = []string{
 		"id bigserial not null " +
 		"constraint container_image_report_pkey " +
 		"primary key, " +
-		"container_id bigint not null " +
+		"image_id bigint not null " +
 		"constraint container_image_report_containers_id_fk " +
 		"references containers, " +
 		"layer_id varchar(100) not null, " +
 		"shield varchar(1000) not null, " +
 		"created_on timestamp default now() not null " +
+	");",
+	"create table if not exists container_image_vulnerability_counts " +
+	"( " +
+		"id serial not null " +
+		"constraint container_image_vulnerability_counts_pkey " +
+		"primary key, " +
+		"vulnerability_level varchar(20) not null, " +
+		"count integer not null, " +
+		"image_report_id bigint not null " +
+		"constraint container_image_vulnerability_counts_container_image_report_id_ " +
+		"references container_image_report " +
 	");",
 };
 
