@@ -45,7 +45,7 @@ func (r *ContainerRepository) Save(container *model.Container) (error) {
 
 	// insert
 	var lastInsertId int64 = 0
-	err = db.QueryRow("INSERT INTO containers(image, registry_id, state, shield, created_on, version) " +
+	err = db.QueryRow("INSERT INTO container_image(image, registry_id, state, shield, created_on, version) " +
 		"VALUES ($1, $2, $3, $4, $5, 0) RETURNING id", container.Image, container.Registry,
 		container.State, container.Shield, time.Now()).Scan(&lastInsertId)
 	if(err != nil) {
@@ -76,7 +76,7 @@ func (r *ContainerRepository) FindOne(_id int64) (*model.Container, error) {
 	}
 
 	// read one
-	rows, err := db.Query("select id, image, registry_id, state, shield, version from containers where id = $1", _id)
+	rows, err := db.Query("select id, image, registry_id, state, shield, version from container_image where id = $1", _id)
 	if(err != nil) {
 
 		log.Fatal(err)
@@ -123,7 +123,7 @@ func (r *ContainerRepository) Find() ([]*model.Container, error) {
 	}
 
 	// read one
-	rows, err := db.Query("select id, image, registry_id, state, shield, version from containers")
+	rows, err := db.Query("select id, image, registry_id, state, shield, version from container_image")
 	if(err != nil) {
 
 		log.Fatal(err)

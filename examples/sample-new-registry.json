@@ -1,9 +1,9 @@
 {
-  "name": "Private Docker Hub",
-  "description": "Docker hub private repository.",
-  "uri": "dscontainerregistrytest.azurecr.io",
+  "name": "Azure Test",
+  "description": "Test registry hosted on azure in west us.",
+  "uri": "dscontainer.azurecr.io",
   "credentials" : {
-    "username" : "dscontainerregistrytest",
+    "username" : "dscontainer",
     "password" : "vo=CQdC2UVxYR5HJRX9/m8kDy3S6qyF4"
   }
 }

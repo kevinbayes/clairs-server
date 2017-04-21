@@ -19,6 +19,7 @@ import (
 	"github.com/signintech/gopdf/fontmaker/core"
 	"../model"
 	"../config"
+	"../repository"
 	"text/template"
 	"bytes"
 	"fmt"
@@ -62,16 +63,27 @@ func (s *ShieldsService) GenerateShieldSVG(shield *model.Shield) (bytes.Buffer, 
 }
 
 
-func (s *ShieldsService) GetShield(containerId int64) (bytes.Buffer, error) {
+func (s *ShieldsService) GetShield(containerId int64) (*bytes.Buffer, error) {
+
+	report, err := repository.ImageReportRepositoryInstance().FindLatest(containerId)
+
+	if(err != nil || report == nil) {
+		return s.notEvaluatedShield()
+	}
+
+	return bytes.NewBufferString(report.Shield), nil
+}
+
+func (s *ShieldsService) notEvaluatedShield() (*bytes.Buffer, error) {
 
 	shield := &model.Shield{
 		Subject: model.Text{
 			Value: "clair",
 		},
 		Status: model.Text{
-			Value: "not implemented",
+			Value: "not evaluated",
 		},
-		Colour: "blue",
+		Colour: "#f00",
 		Template: "flat",
 	}
 
@@ -87,13 +99,13 @@ func (s *ShieldsService) GetShield(containerId int64) (bytes.Buffer, error) {
 
 	tmpl, err := template.New(shield.Template).ParseFiles(fmt.Sprintf("%s/shield/shield.flat.svg", config.GetConfig().Server.Filepath))
 
-	if err != nil { return bytes.Buffer{}, err }
+	if err != nil { return &bytes.Buffer{}, err }
 
 	var doc bytes.Buffer
 
 	err = tmpl.ExecuteTemplate(&doc, "shield.flat.svg", shield)
 
-	return doc, err
+	return &doc, err
 }
 
 func (s *ShieldsService) textWidth(text string) int {

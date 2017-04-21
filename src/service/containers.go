@@ -23,7 +23,7 @@ import (
 	"fmt"
 )
 
-const DEFAULT_SHIELD = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"150\" height=\"20\"><g shape-rendering=\"crispEdges\"><rect width=\"37\" height=\"20\" fill=\"#555\"/><rect x=\"37\" width=\"113\" height=\"20\" fill=\"#4c1\"/></g><g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\"><text x=\"18\" y=\"14\">clair</text><text x=\"92\" y=\"14\">not implemented</text></g></svg>"
+const DEFAULT_SHIELD = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"150\" height=\"20\"><g shape-rendering=\"crispEdges\"><rect width=\"37\" height=\"20\" fill=\"#555\"/><rect x=\"37\" width=\"113\" height=\"20\" fill=\"#f00\"/></g><g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\"><text x=\"18\" y=\"14\">clair</text><text x=\"92\" y=\"14\">not implemented</text></g></svg>"
 
 type ContainerService struct { }
 
@@ -93,7 +93,7 @@ func runAnalysis(_registryService *RegistryService, clairClient *gateway.ClairCl
 	for {
 		container := <-analyzeContainerChannel // read from a channel
 
-		log.Printf("Created container request %s.", container.Image)
+		log.Printf("Analyse container image %s.", container.Image)
 
 		_, err := _registryService.ReadRegistry(container.Registry)
 
@@ -126,7 +126,7 @@ func runAnalysis(_registryService *RegistryService, clairClient *gateway.ClairCl
 
 func runAnalysisSync(_container *model.Container, _registryService *RegistryService, clairClient *gateway.ClairClient, dockerClient *gateway.DockerClient) (*model.ContainerImageReport, error) {
 
-	log.Printf("Created container request %s.", _container.Image)
+	log.Printf("Analyse container image %s.", _container.Image)
 
 	_, err := _registryService.ReadRegistry(_container.Registry)
 
@@ -177,7 +177,7 @@ func saveAnalysisResults(container *model.Container, layerId string, clairClient
 			Status: model.Text{
 				Value: "error",
 			},
-			Colour: "red",
+			Colour: "#f00",
 			Template: "flat",
 		}
 
@@ -218,9 +218,9 @@ func saveAnalysisResults(container *model.Container, layerId string, clairClient
 				Value: "clair",
 			},
 			Status: model.Text{
-				Value: fmt.Sprintf("%d", total),
+				Value: fmt.Sprintf("%d vulnerabilities", total),
 			},
-			Colour: "blue",
+			Colour: "#4c1",
 			Template: "flat",
 		}
 
@@ -286,6 +286,11 @@ func (s *ContainerService) CreateNewContainer(req *dto.NewContainer) (*model.Con
 func (s *ContainerService) ReadContainers() ([]*model.Container, error) {
 
 	return repository.InstanceContainerRepository().Find()
+}
+
+func (s *ContainerService) ReadContainer(id int64) (*model.Container, error) {
+
+	return repository.InstanceContainerRepository().FindOne(id)
 }
 
 func (s *ContainerService) convertRequest(req *dto.NewContainer) (*model.Container) {

@@ -19,6 +19,7 @@ import (
 	middleware "../http"
 	"../service"
 	"log"
+	"strconv"
 )
 
 func RegisterShieldsHandlers(router *middleware.Middleware) {
@@ -30,14 +31,21 @@ func RegisterShieldsHandlers(router *middleware.Middleware) {
 
 func readShieldHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	buf, err := service.ShieldsServiceSingleton().GetShield(0)
+	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
 
 	if(err != nil) {
 
 		http.Error(w, err.Error(), http.StatusBadRequest)
-	} else {
-
-		w.Header().Set("Content-Type", "image/svg+xml")
-		w.Write(buf.Bytes())
+		return;
 	}
+
+	buf, err := service.ShieldsServiceSingleton().GetShield(id)
+
+	if(err != nil) {
+
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
+	w.Header().Set("Content-Type", "image/svg+xml")
+	w.Write(buf.Bytes())
 }

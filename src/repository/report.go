@@ -17,6 +17,8 @@ import (
 	"fmt"
 	"../model"
 	"time"
+	"database/sql"
+	"log"
 )
 
 type ImageReportRepository struct {
@@ -54,27 +56,22 @@ func (r *ImageReportRepository) Save(report *model.ContainerImageReport) (error)
 	report.Id = lastInsertId
 
 	fmt.Printf("Created new id %d\n", lastInsertId)
-	r.saveVulnerabilitySummary(report)
+	r.saveVulnerabilitySummary(report, db)
 
 	return nil
 }
 
-func (r *ImageReportRepository) saveVulnerabilitySummary(report *model.ContainerImageReport) (error) {
+func (r *ImageReportRepository) saveVulnerabilitySummary(report *model.ContainerImageReport, db *sql.DB) (error) {
 
-	if( report.Counts != nil ) {
+	if( report.Counts == nil ) {
 
 		return nil;
-	}
-
-	db, err := Connect()
-	if(err != nil) {
-		return err
 	}
 
 	for _, summary := range report.Counts {
 
 		var lastInsertId int64 = 0
-		err = db.QueryRow("INSERT INTO container_image_vulnerability_counts (vulnerability_level, count, image_report_id) " +
+		err := db.QueryRow("INSERT INTO container_image_vulnerability_counts (vulnerability_level, count, image_report_id) " +
 			"VALUES ($1, $2, $3) RETURNING id", summary.Level, summary.Count,
 			report.Id).Scan(&lastInsertId)
 
@@ -84,4 +81,51 @@ func (r *ImageReportRepository) saveVulnerabilitySummary(report *model.Container
 	}
 
 	return nil
+}
+
+
+func (r *ImageReportRepository) FindLatest(containerId int64) (*model.ContainerImageReport, error) {
+
+	var (
+		id int64
+		imageId int64
+		layerId string
+		shield string
+		createdOn time.Time
+	)
+
+	db, err := Connect()
+	if(err != nil) {
+
+		return nil, err
+	}
+
+	// read one
+	rows, err := db.Query("select id, image_id, layer_id, shield, created_on from container_image_report where image_id = $1 order by created_on desc", containerId)
+	if(err != nil) {
+
+		log.Fatal(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+
+		err := rows.Scan(&id, &imageId, &layerId, &shield, &createdOn)
+		if err != nil {
+
+			log.Fatal(err)
+			return nil, err
+		}
+
+		return &model.ContainerImageReport{
+			Id: id,
+			ImageId: imageId,
+			Layer: layerId,
+			Shield: shield,
+			CreatedOn: createdOn,
+		}, nil
+	}
+
+	return nil, nil
 }

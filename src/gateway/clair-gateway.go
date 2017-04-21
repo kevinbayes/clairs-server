@@ -43,9 +43,6 @@ func (c * ClairClient) AnalyzeImage(container *model.Container, image string, la
 	path := fmt.Sprintf("%s/%d", config.GetConfig().TmpDir(), container.Id)
 	size := len(layerIds)
 
-	reportChannel := make(chan error)
-	defer close(reportChannel)
-
 	log.Printf("Analyzing %d layers... \n", size)
 
 	for i := 0; i < size; i++ {
@@ -53,23 +50,14 @@ func (c * ClairClient) AnalyzeImage(container *model.Container, image string, la
 		log.Printf("Analyzing %s\n", layerIds[i])
 
 		if i > 0 {
-			go analyzeLayer(layerIds[i], layerIds[i-1], path, reportChannel)
+			analyzeLayer(layerIds[i], "", path)
 		} else {
-			go analyzeLayer(layerIds[i], "", path, reportChannel)
+			analyzeLayer(layerIds[i], "", path)
 		}
 	}
-
-	for i := 0; i < size; i++ {
-
-		err := <- reportChannel
-		if(err != nil) {
-			println(err.Error())
-		}
-	}
-
 }
 
-func analyzeLayer(layerId string, parentId string, path string, reportChannel chan<- error) {
+func analyzeLayer(layerId string, parentId string, path string) {
 
 	_config := config.GetConfig()
 
@@ -82,16 +70,11 @@ func analyzeLayer(layerId string, parentId string, path string, reportChannel ch
 		},
 	}
 
-	_req, err := json.Marshal(dto)
-
-	if(err != nil) {
-		reportChannel <- err
-		return
-	}
+	_req, _ := json.Marshal(dto)
 
 	buf := bytes.NewBuffer(_req)
 
-	_, err = clairHttp.Post(
+	clairHttp.Post(
 		fmt.Sprintf("%s://%s:%s/%s",
 			_config.Clair.Protocol,
 			_config.Clair.Host,
@@ -101,8 +84,6 @@ func analyzeLayer(layerId string, parentId string, path string, reportChannel ch
 		buf)
 
 	log.Printf("Completed analyzing %s", layerId)
-
-	reportChannel <- err
 }
 
 

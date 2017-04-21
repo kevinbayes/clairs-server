@@ -4,4 +4,4 @@ curl -X PUT \
      -H "Content-Type: application/json" \
      -d @sample-new-container.json \
      -i \
-     http://localhost:18080/api/containers/5/_evaluate
+     "http://localhost:18080/api/containers/$1/_evaluate"

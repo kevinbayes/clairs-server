@@ -35,7 +35,7 @@ var definitions = []string{
 		"  created_on TIMESTAMP not null," +
 		"  version integer not null" +
 		") ",
-	"CREATE TABLE IF NOT EXISTS containers " +
+	"CREATE TABLE IF NOT EXISTS container_image " +
 		"( id serial primary key," +
 		"  image VARCHAR(255) not null," +
 		"  registry_id BIGINT not null," +
@@ -45,7 +45,7 @@ var definitions = []string{
 		"  created_on TIMESTAMP not null," +
 		"  version integer not null" +
 		") ",
-	"create unique index if not exists containers_image_registry_id_uindex on containers (image, registry_id)",
+	"create unique index if not exists containers_image_registry_id_uindex on container_image (image, registry_id)",
 	"create table if not exists container_image_report " +
 	"( " +
 		"id bigserial not null " +
@@ -53,7 +53,7 @@ var definitions = []string{
 		"primary key, " +
 		"image_id bigint not null " +
 		"constraint container_image_report_containers_id_fk " +
-		"references containers, " +
+		"references container_image, " +
 		"layer_id varchar(100) not null, " +
 		"shield varchar(1000) not null, " +
 		"created_on timestamp default now() not null " +

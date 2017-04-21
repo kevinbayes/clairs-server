@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{.Width}}" height="20">
     <g shape-rendering="crispEdges">
         <rect width="{{.Subject.Width}}" height="20" fill="#555"/>
-        <rect x="{{.Subject.Width}}" width="{{.Status.Width}}" height="20" fill="#4c1"/>
+        <rect x="{{.Subject.Width}}" width="{{.Status.Width}}" height="20" fill="{{.Colour}}"/>
     </g>
     <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
         <text x="{{.Subject.X}}" y="14">{{.Subject.Value}}</text>

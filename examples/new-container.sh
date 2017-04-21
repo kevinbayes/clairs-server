@@ -4,4 +4,4 @@ curl -X POST \
      -H "Content-Type: application/json" \
      -d @sample-new-container.json \
      -i \
-     http://localhost:18080/api/registries/4/containers
+     "http://localhost:18080/api/registries/$1/containers"

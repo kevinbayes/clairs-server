@@ -86,3 +86,15 @@ func noContent(w http.ResponseWriter) {
 	w.Write([]byte(""))
 }
 
+
+func parseJson(_body *interface{}, r *http.Request) {
+
+	defer r.Body.Close()
+
+	decoder := json.NewDecoder(r.Body)
+
+	err := decoder.Decode(_body)
+	if err != nil {
+		panic(err)
+	}
+}
