@@ -81,8 +81,17 @@ func readContainersHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 func readContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("{\"status\":\"UP\"}"))
+	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
+
+	if(err != nil) {
+
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else {
+
+		model, err := containerService.ReadContainer(id)
+
+		respond(model, err, w, r)
+	}
 }
 
 func updateContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

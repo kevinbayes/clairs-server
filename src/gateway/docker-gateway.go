@@ -100,15 +100,15 @@ func (d *DockerClient) PullImage(registry *model.Registry, container *model.Cont
 }
 
 
-func (d *DockerClient) SaveImage(container *model.Container) (error) {
+func (d *DockerClient) SaveImage(container *model.Container) (string, error) {
 
 	path := fmt.Sprintf("%s/%d", config.GetConfig().TmpDir(), container.Id)
 
 	mkerr := os.MkdirAll(path, os.ModePerm)
 	if(mkerr != nil) {
 
-		log.Panicln(mkerr)
-		return mkerr
+		log.Print(mkerr)
+		return path, mkerr
 	}
 
 	var stderr bytes.Buffer
@@ -120,41 +120,42 @@ func (d *DockerClient) SaveImage(container *model.Container) (error) {
 	pipe, err := extract.StdinPipe()
 	if err != nil {
 		log.Printf("1. %s", err)
-		return err
+		return path, err
 	}
 	save.Stdout = pipe
 
 	err = extract.Start()
 	if err != nil {
 		log.Printf("2. %s", err)
-		return errors.New(stderr.String())
+		return path, errors.New(stderr.String())
 	}
 	err = save.Run()
 	if err != nil {
 		log.Printf("3. %s", err)
-		return errors.New(stderr.String())
+		return path, errors.New(stderr.String())
 	}
 	err = pipe.Close()
 	if err != nil {
 		log.Printf("4. %s", err)
-		return err
+		return path, err
 	}
 	err = extract.Wait()
 	if err != nil {
 		log.Printf("5. %s", err)
-		return errors.New(stderr.String())
+		return path, errors.New(stderr.String())
 	}
 
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
-		log.Fatal(err)
+
+		return path, err
 	}
 
 	for _, file := range files {
 		fmt.Println(file.Name())
 	}
 
-	return nil
+	return path, nil
 }
 
 

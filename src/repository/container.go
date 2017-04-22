@@ -18,6 +18,7 @@ import (
 	"../model"
 	"log"
 	"time"
+	"database/sql"
 )
 
 type ContainerRepository struct {
@@ -45,15 +46,44 @@ func (r *ContainerRepository) Save(container *model.Container) (error) {
 
 	// insert
 	var lastInsertId int64 = 0
-	err = db.QueryRow("INSERT INTO container_image(image, registry_id, state, shield, created_on, version) " +
-		"VALUES ($1, $2, $3, $4, $5, 0) RETURNING id", container.Image, container.Registry,
-		container.State, container.Shield, time.Now()).Scan(&lastInsertId)
+	err = db.QueryRow("INSERT INTO container_image(image, registry_id, state, created_on, updated_on, version) " +
+		"VALUES ($1, $2, $3, $5, 0) RETURNING id", container.Image, container.Registry,
+		container.State, time.Now(), time.Now()).Scan(&lastInsertId)
 	if(err != nil) {
 		return err
 	}
 
 	container.Id = lastInsertId
 	fmt.Printf("Created new id %d\n", lastInsertId)
+
+	return nil
+}
+
+func (r *ContainerRepository) UpdateState(container *model.Container, newState string) (error) {
+
+	db, err := Connect()
+	if(err != nil) {
+		return err
+	}
+
+	stmt, err := db.Prepare("UPDATE container_image SET state = $1, updated_on = $2 WHERE id = $3")
+	if err != nil {
+		log.Print(err)
+	}
+
+	res, err := stmt.Exec(newState, time.Now(), container.Id)
+	if err != nil {
+		log.Print(err)
+		return err
+	}
+	rowCnt, err := res.RowsAffected()
+	if err != nil {
+		log.Print(err)
+		return err
+	}
+	log.Printf("affected = %d\n", rowCnt)
+
+	container.State = newState
 
 	return nil
 }
@@ -65,7 +95,7 @@ func (r *ContainerRepository) FindOne(_id int64) (*model.Container, error) {
 		registryId int64
 		image string
 		state string
-		shield string
+		updated time.Time
 		version int
 	)
 
@@ -76,7 +106,7 @@ func (r *ContainerRepository) FindOne(_id int64) (*model.Container, error) {
 	}
 
 	// read one
-	rows, err := db.Query("select id, image, registry_id, state, shield, version from container_image where id = $1", _id)
+	rows, err := db.Query("select id, image, registry_id, state, updated_on, version from container_image where id = $1", _id)
 	if(err != nil) {
 
 		log.Fatal(err)
@@ -86,7 +116,7 @@ func (r *ContainerRepository) FindOne(_id int64) (*model.Container, error) {
 
 	for rows.Next() {
 
-		err := rows.Scan(&id, &image, &registryId, &state, &shield, &version)
+		err := rows.Scan(&id, &image, &registryId, &state, &updated, &version)
 		if err != nil {
 
 			log.Fatal(err)
@@ -98,6 +128,7 @@ func (r *ContainerRepository) FindOne(_id int64) (*model.Container, error) {
 			Image: image,
 			Registry: registryId,
 			State: state,
+			DateUpdated: updated,
 		}, nil
 	}
 
@@ -107,12 +138,30 @@ func (r *ContainerRepository) FindOne(_id int64) (*model.Container, error) {
 
 func (r *ContainerRepository) Find() ([]*model.Container, error) {
 
+	return r.find(func(db *sql.DB) (*sql.Rows, error) {
+
+		return db.Query("select id, image, registry_id, state, updated_on, version from container_image")
+	})
+}
+
+func (r *ContainerRepository) FindByRegistry(registryId int64) ([]*model.Container, error) {
+
+	return r.find(func(db *sql.DB) (*sql.Rows, error) {
+
+		return db.Query("select id, image, registry_id, state, updated_on, version from container_image where registry_id = $1", registryId)
+	})
+}
+
+type sqlQuery func(*sql.DB) (*sql.Rows, error)
+
+func (r *ContainerRepository) find(_func sqlQuery) ([]*model.Container, error) {
+
 	var (
 		id int64
 		registryId int64
 		image string
 		state string
-		shield string
+		updated time.Time
 		version int
 	)
 
@@ -123,7 +172,7 @@ func (r *ContainerRepository) Find() ([]*model.Container, error) {
 	}
 
 	// read one
-	rows, err := db.Query("select id, image, registry_id, state, shield, version from container_image")
+	rows, err := _func(db)
 	if(err != nil) {
 
 		log.Fatal(err)
@@ -135,7 +184,7 @@ func (r *ContainerRepository) Find() ([]*model.Container, error) {
 
 	for rows.Next() {
 
-		err := rows.Scan(&id, &image, &registryId, &state, &shield, &version)
+		err := rows.Scan(&id, &image, &registryId, &state, &updated, &version)
 		if err != nil {
 
 			log.Fatal(err)
@@ -147,6 +196,7 @@ func (r *ContainerRepository) Find() ([]*model.Container, error) {
 			Image: image,
 			Registry: registryId,
 			State: state,
+			DateUpdated: updated,
 		}
 
 		result = append(result, _row)

@@ -22,7 +22,6 @@ type Container struct {
 	Registry int64
 	Image string
 	State string
-	Shield string
 
 	DateUpdated time.Time
 }

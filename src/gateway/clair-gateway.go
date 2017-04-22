@@ -23,6 +23,7 @@ import (
 	"time"
 	"log"
 	"encoding/json"
+	"io/ioutil"
 )
 
 var clairHttp = &http.Client{
@@ -38,9 +39,8 @@ func ClairClientInstance() *ClairClient {
 
 
 
-func (c * ClairClient) AnalyzeImage(container *model.Container, image string, layerIds []string) {
+func (c * ClairClient) AnalyzeImage(path string, container *model.Container, image string, layerIds []string) {
 
-	path := fmt.Sprintf("%s/%d", config.GetConfig().TmpDir(), container.Id)
 	size := len(layerIds)
 
 	log.Printf("Analyzing %d layers... \n", size)
@@ -50,7 +50,7 @@ func (c * ClairClient) AnalyzeImage(container *model.Container, image string, la
 		log.Printf("Analyzing %s\n", layerIds[i])
 
 		if i > 0 {
-			analyzeLayer(layerIds[i], "", path)
+			analyzeLayer(layerIds[i], layerIds[i-1], path)
 		} else {
 			analyzeLayer(layerIds[i], "", path)
 		}
@@ -66,7 +66,7 @@ func analyzeLayer(layerId string, parentId string, path string) {
 			Name: layerId,
 			ParentName: parentId,
 			Format: "Docker",
-			Path: fmt.Sprintf("file://%s/%s/layer.tar", path, layerId),
+			Path: fmt.Sprintf("%s/%s/layer.tar", path, layerId),
 		},
 	}
 
@@ -74,7 +74,7 @@ func analyzeLayer(layerId string, parentId string, path string) {
 
 	buf := bytes.NewBuffer(_req)
 
-	clairHttp.Post(
+	response, err := clairHttp.Post(
 		fmt.Sprintf("%s://%s:%s/%s",
 			_config.Clair.Protocol,
 			_config.Clair.Host,
@@ -82,6 +82,19 @@ func analyzeLayer(layerId string, parentId string, path string) {
 			"v1/layers"),
 		"application/json",
 		buf)
+
+	if err != nil {
+
+		log.Printf("Error calling clair: %s", err.Error())
+		return;
+	}
+
+	defer response.Body.Close()
+
+	if response.StatusCode != 201 {
+		body, _ := ioutil.ReadAll(response.Body)
+		log.Printf("Got invalid response: %s", body)
+	}
 
 	log.Printf("Completed analyzing %s", layerId)
 }

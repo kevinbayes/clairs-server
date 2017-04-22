@@ -1,3 +1,3 @@
 {
-  "image": "elasticsearch:5"
+  "image": "openjdk:9"
 }

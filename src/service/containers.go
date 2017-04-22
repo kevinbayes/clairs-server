@@ -21,6 +21,7 @@ import (
 	"errors"
 	"log"
 	"fmt"
+	"os"
 )
 
 const DEFAULT_SHIELD = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"150\" height=\"20\"><g shape-rendering=\"crispEdges\"><rect width=\"37\" height=\"20\" fill=\"#555\"/><rect x=\"37\" width=\"113\" height=\"20\" fill=\"#f00\"/></g><g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\"><text x=\"18\" y=\"14\">clair</text><text x=\"92\" y=\"14\">not implemented</text></g></svg>"
@@ -63,10 +64,17 @@ func prepareContainer(_registryService *RegistryService, dockerClient *gateway.D
 
 		if(err != nil) {
 
-			log.Panicf("Error reading registry: %s", err.Error())
+			log.Printf("Error reading registry: %s", err.Error())
 		} else {
 
-			dockerClient.PullImage(registry, _container);
+			err = dockerClient.PullImage(registry, _container);
+
+			if(err != nil) {
+
+				log.Printf("Error pulling container. Error: %s", err)
+				return;
+			}
+
 			analyzeContainerChannel <- _container
 		}
 	}
@@ -93,34 +101,17 @@ func runAnalysis(_registryService *RegistryService, clairClient *gateway.ClairCl
 	for {
 		container := <-analyzeContainerChannel // read from a channel
 
-		log.Printf("Analyse container image %s.", container.Image)
+		_, err := runAnalysisSync(container, _registryService, clairClient, dockerClient)
 
-		_, err := _registryService.ReadRegistry(container.Registry)
-
-		if(err != nil) {
-
-			log.Panicf("Error reading registry: %s", err.Error())
-			return;
-		}
-
-		imageId, err := dockerClient.ImageId(container)
+		newState := "analyzed";
 
 		if(err != nil) {
 
-			log.Panicln(err)
-			return;
+			log.Printf("Error with analysis")
+			newState = "invalid"
 		}
 
-		layers, err := dockerClient.ImageLayers(container)
-
-		if(err != nil) {
-
-			log.Panic(err)
-			return;
-		}
-
-		clairClient.AnalyzeImage(container, imageId, layers)
-		saveAnalysisResults(container, layers[0], clairClient)
+		repository.InstanceContainerRepository().UpdateState(container, newState)
 	}
 }
 
@@ -144,13 +135,15 @@ func runAnalysisSync(_container *model.Container, _registryService *RegistryServ
 		return nil, err;
 	}
 
-	err = dockerClient.SaveImage(_container)
+	path, err := dockerClient.SaveImage(_container)
 
 	if(err != nil) {
 
 		log.Print(err)
 		return nil, err;
 	}
+
+	defer os.RemoveAll(path)
 
 	layers, err := dockerClient.ImageLayers(_container)
 
@@ -160,8 +153,8 @@ func runAnalysisSync(_container *model.Container, _registryService *RegistryServ
 		return nil, err;
 	}
 
-	clairClient.AnalyzeImage(_container, imageId, layers)
-	return saveAnalysisResults(_container, layers[0], clairClient)
+	clairClient.AnalyzeImage(path, _container, imageId, layers)
+	return saveAnalysisResults(_container, layers[len(layers)-1], clairClient)
 }
 
 func saveAnalysisResults(container *model.Container, layerId string, clairClient *gateway.ClairClient) (*model.ContainerImageReport, error) {
@@ -298,7 +291,6 @@ func (s *ContainerService) convertRequest(req *dto.NewContainer) (*model.Contain
 	return &model.Container{
 		Registry: req.Registry,
 		Image: req.Image,
-		Shield: DEFAULT_SHIELD,
 		State: model.STATE_REQUESTED,
 	}
 }
@@ -315,6 +307,14 @@ func (s *ContainerService) EvaluateContainers(id int64) (*model.ContainerImageRe
 
 		prepareContainerSync(container, registryService, dockerClient)
 		report, err := runAnalysisSync(container, registryService, clairClient, dockerClient)
+
+		if(err != nil) {
+
+			log.Printf("Error with analysis")
+		} else if(container.State != "analyzed") {
+
+			repository.InstanceContainerRepository().UpdateState(container, "analyzed")
+		}
 
 		return report, err
 
