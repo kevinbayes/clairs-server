@@ -39,53 +39,50 @@ func InstanceContainerRepository() *ContainerRepository {
 
 func (r *ContainerRepository) Save(container *model.Container) (error) {
 
-	db, err := Connect()
-	if(err != nil) {
-		return err
-	}
+	return notTransaction(func(db *sql.DB) (error) {
 
-	// insert
-	var lastInsertId int64 = 0
-	err = db.QueryRow("INSERT INTO container_image(image, registry_id, state, created_on, updated_on, version) " +
-		"VALUES ($1, $2, $3, $5, 0) RETURNING id", container.Image, container.Registry,
-		container.State, time.Now(), time.Now()).Scan(&lastInsertId)
-	if(err != nil) {
-		return err
-	}
+		// insert
+		var lastInsertId int64 = 0
+		err := db.QueryRow("INSERT INTO container_image(image, registry_id, state, created_on, updated_on, version) " +
+			"VALUES ($1, $2, $3, $5, 0) RETURNING id", container.Image, container.Registry,
+			container.State, time.Now(), time.Now()).Scan(&lastInsertId)
+		if (err != nil) {
 
-	container.Id = lastInsertId
-	fmt.Printf("Created new id %d\n", lastInsertId)
+			return err
+		}
 
-	return nil
+		container.Id = lastInsertId
+		fmt.Printf("Created new id %d\n", lastInsertId)
+
+		return nil
+	});
 }
 
 func (r *ContainerRepository) UpdateState(container *model.Container, newState string) (error) {
 
-	db, err := Connect()
-	if(err != nil) {
-		return err
-	}
+	return notTransaction(func(db *sql.DB) (error) {
 
-	stmt, err := db.Prepare("UPDATE container_image SET state = $1, updated_on = $2 WHERE id = $3")
-	if err != nil {
-		log.Print(err)
-	}
+		stmt, err := db.Prepare("UPDATE container_image SET state = $1, updated_on = $2 WHERE id = $3")
+		if err != nil {
+			log.Print(err)
+		}
 
-	res, err := stmt.Exec(newState, time.Now(), container.Id)
-	if err != nil {
-		log.Print(err)
-		return err
-	}
-	rowCnt, err := res.RowsAffected()
-	if err != nil {
-		log.Print(err)
-		return err
-	}
-	log.Printf("affected = %d\n", rowCnt)
+		res, err := stmt.Exec(newState, time.Now(), container.Id)
+		if err != nil {
+			log.Print(err)
+			return err
+		}
+		rowCnt, err := res.RowsAffected()
+		if err != nil {
+			log.Print(err)
+			return err
+		}
+		log.Printf("affected = %d\n", rowCnt)
 
-	container.State = newState
+		container.State = newState
 
-	return nil
+		return nil
+	});
 }
 
 func (r *ContainerRepository) FindOne(_id int64) (*model.Container, error) {

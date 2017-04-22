@@ -14,10 +14,10 @@
 package repository
 
 import (
-	"fmt"
 	"../model"
 	"log"
 	"time"
+	"database/sql"
 )
 
 type RegistryRepository struct {
@@ -38,64 +38,56 @@ func InstanceRegistryRepository() *RegistryRepository {
 
 func (r *RegistryRepository) Save(registry *model.Registry) (error) {
 
-	db, err := Connect()
-	if(err != nil) {
+	return notTransaction(func(db *sql.DB) (error) {
+		// insert
+		var lastInsertId int64 = 0
+		err := db.QueryRow("INSERT INTO registries(name, description, uri, username, password, created_on, version) VALUES ($1, $2, $3, $4, $5, $6, 0) RETURNING id", registry.Name, registry.Description, registry.Uri, registry.Credentials.Username, registry.Credentials.Password, time.Now()).Scan(&lastInsertId)
+		if (err != nil) {
+			return err
+		}
+
+		registry.Id = lastInsertId
+		log.Printf("Created new id %d\n", lastInsertId)
 		return err
-	}
-
-	// insert
-	var lastInsertId int64 = 0
-	err = db.QueryRow("INSERT INTO registries(name, description, uri, username, password, created_on, version) VALUES ($1, $2, $3, $4, $5, $6, 0) RETURNING id", registry.Name, registry.Description, registry.Uri, registry.Credentials.Username, registry.Credentials.Password, time.Now()).Scan(&lastInsertId)
-	if(err != nil) {
-		return err
-	}
-
-	registry.Id = lastInsertId
-	fmt.Printf("Created new id %d\n", lastInsertId)
-
-	return nil
+	});
 }
-
 
 func (r *RegistryRepository) Update(registry *model.Registry) (error) {
 
-	db, err := Connect()
-	if(err != nil) {
-		return err
-	}
+	return notTransaction(func(db *sql.DB) (error) {
 
-	stmt, err := db.Prepare("UPDATE registries SET name=$1, description=$2, uri=$3, username=$4, password=$5, version= version + 1 WHERE id = $6")
-	if err != nil {
-		return err
-	}
-	_, err = stmt.Exec(registry.Name, registry.Description, registry.Uri, registry.Credentials.Username, registry.Credentials.Password, registry.Id)
-	if err != nil {
-		return err
-	}
+		stmt, err := db.Prepare("UPDATE registries SET name=$1, description=$2, uri=$3, username=$4, password=$5, version= version + 1 WHERE id = $6")
+		if err != nil {
+			return err
+		}
+		_, err = stmt.Exec(registry.Name, registry.Description, registry.Uri, registry.Credentials.Username, registry.Credentials.Password, registry.Id)
+		if err != nil {
+			return err
+		}
 
-	return nil
+		return nil
+	});
 }
 
 func (r *RegistryRepository) Delete(registry *model.Registry) (error) {
 
-	db, err := Connect()
-	if(err != nil) {
-		return err
-	}
+	return notTransaction(func(db *sql.DB) (error) {
 
-	stmt, err := db.Prepare("DELETE FROM registries WHERE id = $1")
-	if err != nil {
-		return err
-	}
-	_, err = stmt.Exec(registry.Id)
-	if err != nil {
-		return err
-	}
+		stmt, err := db.Prepare("DELETE FROM registries WHERE id = $1")
+		if err != nil {
+			return err
+		}
+		_, err = stmt.Exec(registry.Id)
+		if err != nil {
+			return err
+		}
 
-	return nil
+		return nil
+	});
 }
 
 func (r *RegistryRepository) FindOne(_id int64) (*model.Registry, error) {
+
 
 	var (
 		id int64
@@ -107,11 +99,6 @@ func (r *RegistryRepository) FindOne(_id int64) (*model.Registry, error) {
 		version int
 	)
 
-	db, err := Connect()
-	if(err != nil) {
-
-		return nil, err
-	}
 
 	// read one
 	rows, err := db.Query("select id, name, description, uri, username, password, version from registries where id = $1", _id)

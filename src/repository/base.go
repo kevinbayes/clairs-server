@@ -13,3 +13,59 @@
 // limitations under the License.
 package repository
 
+import (
+	"database/sql"
+	"log"
+)
+
+type sqlFunction func(*sql.DB) (error)
+
+type sqlFunctionTx func(*sql.Tx) (error)
+
+//For no return needed except an error
+func notTransaction(_func sqlFunction) (error) {
+
+	db, err := Connect()
+
+	if(err != nil) {
+
+		log.Printf("Error opening DB connection: %s", err)
+		return err;
+	}
+
+	return _func(db)
+}
+
+//For no return needed except an error
+func inTransaction(_func sqlFunctionTx) (error) {
+
+	db, err := Connect()
+
+	if(err != nil) {
+
+		log.Printf("Error opening DB connection: %s", err)
+		return err;
+	}
+
+	tx, err := db.Begin()
+
+	if(err != nil) {
+
+		log.Printf("Error starting DB transaction: %s", err)
+		return err;
+	}
+
+	err = _func(tx)
+
+	if(err != nil) {
+
+		log.Printf("Rollback transaction: %s", err)
+		tx.Rollback()
+	} else {
+
+		log.Print("Commit transaction")
+		tx.Commit()
+	}
+
+	return err;
+}
