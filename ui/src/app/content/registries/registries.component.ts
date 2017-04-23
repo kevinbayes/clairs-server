@@ -1,5 +1,4 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ContainersService} from "../../services/containers.service";
 import {
   IDatatablePaginationEvent,
   IDatatableSelectionEvent, IDatatableSortEvent, MdDataTableComponent,
@@ -8,13 +7,14 @@ import {
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/from';
 import {Subject} from "rxjs/Subject";
+import {RegistriesService} from "../../services/registries.service";
 
 @Component({
-  selector: 'app-containers',
-  templateUrl: './containers.component.html',
-  styleUrls: ['./containers.component.less']
+  selector: 'app-registries',
+  templateUrl: './registries.component.html',
+  styleUrls: ['./registries.component.less']
 })
-export class ContainersComponent implements OnInit, AfterViewInit, OnDestroy {
+export class RegistriesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MdDataTableComponent) datatable: MdDataTableComponent;
   @ViewChild(MdDataTablePaginationComponent) pager: MdDataTablePaginationComponent;
@@ -24,18 +24,18 @@ export class ContainersComponent implements OnInit, AfterViewInit, OnDestroy {
     Page: 0,
     Size: 10
   };
-  private containers: any[];
+  private registries: any[];
   private unmount$: Subject<void> = new Subject<void>();
 
-  constructor(private containersService: ContainersService) { }
+  constructor(private registriesService: RegistriesService) { }
 
   ngOnInit() {
 
-    this.containersService.all().subscribe((res) => {
+    this.registriesService.all().subscribe((res) => {
 
       console.log(res);
       this.pagination = res.Meta;
-      this.containers = res.Entities;
+      this.registries = res.Entities;
     }, (err) => {
 
       console.error(err);

@@ -1,16 +1,21 @@
 <div class="clair__nav">
 <div class="clair__title">
   <a class="clair__nav-item">
-  <div class="clair__nav-item-content">
+  <div class="clair__nav-item-content" [routerLink]="['/dashboard']">
     <md-icon>home</md-icon> Home
   </div>
   </a>
 </div>
 
+  <div class="clair__sidenav-button-group">
+    <nav>
+      <button md-button [routerLink]="['/containers']">Containers</button>
+      <button md-button [routerLink]="['/registries']">Registries</button>
+    </nav>
+  </div>
+
 <div class="clair__sidemenu-spacer">
-
 </div>
-
 
 <button class="clair__nav-expander">
   <md-icon>chevron_left</md-icon>

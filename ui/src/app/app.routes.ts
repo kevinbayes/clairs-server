@@ -2,15 +2,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { containersRoutes } from './content/containers/containers.routing';
+import {registriesRoutes} from "./content/registries/registries.routing";
+import {dashboardRoutes} from "./content/dashboard/dashboard.routing";
 
 const appRoutes: Routes = [
 
   {
     path: '',
     children: [
+      ...dashboardRoutes,
       ...containersRoutes,
-
-      { path: '**', redirectTo: '/containers' },
+      ...registriesRoutes,
+      { path: '**', redirectTo: '/dashboard' },
     ]
   },
 ];
