@@ -55,6 +55,7 @@ var definitions = []string{
 		"references container_image, " +
 		"layer_id varchar(100) not null, " +
 		"shield varchar(1000) not null, " +
+		"image_tag varchar(1000) not null, " +
 		"created_on timestamp default now() not null " +
 	");",
 	"create table if not exists container_image_vulnerability_counts " +
