@@ -104,9 +104,9 @@ func (s *RegistryService) UpdateRegistry(_registry *model.Registry) (*model.Regi
 	return _registry, err
 }
 
-func (s *RegistryService) ReadRegistries() ([]*model.Registry, error) {
+func (s *RegistryService) ReadRegistries(pagination *repository.Pagination) (*repository.PaginationResult, error) {
 
-	return repository.InstanceRegistryRepository().Find()
+	return repository.InstanceRegistryRepository().Find(pagination)
 }
 
 func (s *RegistryService) DeleteRegistry(id int64) (*model.Registry, error) {

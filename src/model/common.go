@@ -16,7 +16,11 @@ package model
 const (
 	STATE_REQUESTED = "requested"
 	STATE_ACTIVE = "active"
+	STATE_ERROR = "error"
 	STATE_DEACTIVATED = "deactivated"
+
+	STATE_NOT_EVALUATED = "notevaluated"
+	STATE_EVALUATED = "evaluated"
 )
 
 type Credentials struct {

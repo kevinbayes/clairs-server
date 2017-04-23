@@ -73,7 +73,7 @@ func (d *DockerClient) ValidateLogin(registry *model.Registry) (error) {
 /*
  * ValidateImage
  */
-func (d *DockerClient) PullImage(registry *model.Registry, container *model.Container) (error) {
+func (d *DockerClient) PullImage(registry *model.Registry, container *model.ContainerImage) (error) {
 
 	client, err := client.NewEnvClient()
 
@@ -100,7 +100,7 @@ func (d *DockerClient) PullImage(registry *model.Registry, container *model.Cont
 }
 
 
-func (d *DockerClient) SaveImage(container *model.Container) (string, error) {
+func (d *DockerClient) SaveImage(container *model.ContainerImage) (string, error) {
 
 	path := fmt.Sprintf("%s/%d", config.GetConfig().TmpDir(), container.Id)
 
@@ -159,7 +159,7 @@ func (d *DockerClient) SaveImage(container *model.Container) (string, error) {
 }
 
 
-func (d *DockerClient) ImageLayers(container *model.Container) ([]string, error) {
+func (d *DockerClient) ImageLayers(container *model.ContainerImage) ([]string, error) {
 
 	path := fmt.Sprintf("%s/%d", config.GetConfig().TmpDir(), container.Id)
 
@@ -191,7 +191,7 @@ func (d *DockerClient) ImageLayers(container *model.Container) ([]string, error)
 
 
 
-func (d *DockerClient) ImageId(container *model.Container) (string, error) {
+func (d *DockerClient) ImageId(container *model.ContainerImage) (string, error) {
 
 	client, err := client.NewEnvClient()
 

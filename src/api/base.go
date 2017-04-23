@@ -16,6 +16,7 @@ package api
 import (
 	"net/http"
 	"encoding/json"
+	"../repository"
 	middleware "../http"
 )
 
@@ -31,7 +32,7 @@ func created(location string, w http.ResponseWriter) {
 	w.Write([]byte(""))
 }
 
-func listRespond(entity interface{}, size int, pages int, page int, err error, w http.ResponseWriter, r *http.Request) {
+func listRespond(entity interface{}, total int, pagination *repository.Pagination, err error, w http.ResponseWriter, r *http.Request) {
 
 	if (err != nil) {
 
@@ -41,7 +42,7 @@ func listRespond(entity interface{}, size int, pages int, page int, err error, w
 		http.NotFound(w, r)
 	} else {
 
-		listOk(entity, size, pages, page, w)
+		listOk(entity, pagination.Size, total / pagination.Size, pagination.Page, w)
 	}
 }
 

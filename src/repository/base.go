@@ -18,9 +18,24 @@ import (
 	"log"
 )
 
+type Pagination struct {
+	Page int
+	Offset int
+	Size int
+}
+
+type PaginationResult struct {
+	Result interface{}
+	Total int
+}
+
 type sqlFunction func(*sql.DB) (error)
 
+type sqlPaginationFunction func(*sql.DB) (*PaginationResult, error)
+
 type sqlFunctionTx func(*sql.Tx) (error)
+
+type sqlPaginationFunctionTx func(*sql.Tx) (*PaginationResult, error)
 
 //For no return needed except an error
 func notTransaction(_func sqlFunction) (error) {
@@ -34,6 +49,52 @@ func notTransaction(_func sqlFunction) (error) {
 	}
 
 	return _func(db)
+}
+
+func notTransactionWithPagination(_func sqlPaginationFunction) (*PaginationResult, error) {
+
+	db, err := Connect()
+
+	if(err != nil) {
+
+		log.Printf("Error opening DB connection: %s", err)
+		return nil, err;
+	}
+
+	return _func(db)
+}
+
+func inTransactionWithPagination(_func sqlPaginationFunctionTx) (*PaginationResult, error) {
+
+	db, err := Connect()
+
+	if(err != nil) {
+
+		log.Printf("Error opening DB connection: %s", err)
+		return nil, err;
+	}
+
+	tx, err := db.Begin()
+
+	if(err != nil) {
+
+		log.Printf("Error starting DB transaction: %s", err)
+		return nil, err;
+	}
+
+	result, err := _func(tx)
+
+	if(err != nil) {
+
+		log.Printf("Rollback transaction: %s", err)
+		tx.Rollback()
+	} else {
+
+		log.Print("Commit transaction")
+		tx.Commit()
+	}
+
+	return result, err;
 }
 
 //For no return needed except an error

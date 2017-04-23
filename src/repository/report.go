@@ -84,11 +84,12 @@ func (r *ImageReportRepository) saveVulnerabilitySummary(report *model.Container
 }
 
 
-func (r *ImageReportRepository) FindLatest(containerId int64) (*model.ContainerImageReport, error) {
+func (r *ImageReportRepository) FindLatest(containerId int64, _tag string) (*model.ContainerImageReport, error) {
 
 	var (
 		id int64
 		imageId int64
+		tag string
 		layerId string
 		shield string
 		createdOn time.Time
@@ -101,7 +102,7 @@ func (r *ImageReportRepository) FindLatest(containerId int64) (*model.ContainerI
 	}
 
 	// read one
-	rows, err := db.Query("select id, image_id, layer_id, shield, created_on from container_image_report where image_id = $1 order by created_on desc", containerId)
+	rows, err := db.Query("select id, image_id, image_tag, layer_id, shield, created_on from container_image_report where image_id = $1 and image_tag = $2 order by created_on desc", containerId, _tag)
 	if(err != nil) {
 
 		log.Fatal(err)
@@ -111,7 +112,7 @@ func (r *ImageReportRepository) FindLatest(containerId int64) (*model.ContainerI
 
 	for rows.Next() {
 
-		err := rows.Scan(&id, &imageId, &layerId, &shield, &createdOn)
+		err := rows.Scan(&id, &imageId, &tag, &layerId, &shield, &createdOn)
 		if err != nil {
 
 			log.Fatal(err)
@@ -123,6 +124,7 @@ func (r *ImageReportRepository) FindLatest(containerId int64) (*model.ContainerI
 			ImageId: imageId,
 			Layer: layerId,
 			Shield: shield,
+			Tag: tag,
 			CreatedOn: createdOn,
 		}, nil
 	}

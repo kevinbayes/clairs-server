@@ -87,9 +87,11 @@ func createRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 
 func readRegistriesHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	model, err := registryService.ReadRegistries()
+	pagination := middleware.MakePagination(r)
 
-	listRespond(model, len(model), 0, 0, err, w, r)
+	result, err := registryService.ReadRegistries(pagination)
+
+	listRespond(result.Result, result.Total, pagination, err, w, r)
 }
 
 func readRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -188,8 +190,17 @@ func createRegistryContainerHandler(w http.ResponseWriter, r *http.Request, ps h
 
 func readRegistryContainersHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("{\"status\":\"UP\"}"))
+	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
+	if err != nil {
+		panic(err)
+	}
+
+	pagination := middleware.MakePagination(r)
+
+	model, err := containerService.ReadContainersByRegistry(pagination, id)
+
+	listRespond(model, len(model), pagination, err, w, r)
+
 }
 
 func deleteRegistryContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

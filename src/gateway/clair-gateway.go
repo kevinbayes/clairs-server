@@ -39,7 +39,7 @@ func ClairClientInstance() *ClairClient {
 
 
 
-func (c * ClairClient) AnalyzeImage(path string, container *model.Container, image string, layerIds []string) {
+func (c * ClairClient) AnalyzeImage(path string, container *model.ContainerImage, image string, layerIds []string) {
 
 	size := len(layerIds)
 

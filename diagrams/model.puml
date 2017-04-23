@@ -1,0 +1,27 @@
+@startuml
+
+interface Registry
+interface ContainerImage
+interface ContainerImageTag
+interface ContainerImageReport
+interface ContainerImageVulnerabilityCount
+
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+class ArrayList {
+Object[] elementData
+size()
+}
+
+enum TimeUnit {
+DAYS
+HOURS
+MINUTES
+}
+
+@enduml

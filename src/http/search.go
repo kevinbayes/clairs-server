@@ -26,7 +26,7 @@ type ResponseList struct {
 	Links []Link
 }
 
-func MakeSearchResult(size int, page int, pages int, entities interface{}, links []Link) *ResponseList {
+func MakeSearchResult(size int, pages int, page int, entities interface{}, links []Link) *ResponseList {
 
 	return &ResponseList{
 		Meta: ListMeta{

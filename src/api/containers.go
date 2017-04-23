@@ -74,9 +74,11 @@ func createContainerHandler(w http.ResponseWriter, r *http.Request, ps httproute
 
 func readContainersHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	model, err := containerService.ReadContainers()
+	pagination := middleware.MakePagination(r)
 
-	listRespond(model, len(model), 0, 0, err, w, r)
+	model, err := containerService.ReadContainers(pagination)
+
+	listRespond(model, len(model), pagination, err, w, r)
 }
 
 func readContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

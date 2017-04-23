@@ -136,57 +136,62 @@ func (r *RegistryRepository) FindOne(_id int64) (*model.Registry, error) {
 }
 
 
-func (r *RegistryRepository) Find() ([]*model.Registry, error) {
+func (r *RegistryRepository) Find(pagination *Pagination) (*PaginationResult, error) {
 
-	var (
-		id int64
-		name string
-		description string
-		uri string
-		username string
-		password string
-		version int
-	)
+	return notTransactionWithPagination(func(db *sql.DB) (*PaginationResult, error) {
 
-	db, err := Connect()
-	if(err != nil) {
+		var (
+			id int64
+			name string
+			description string
+			uri string
+			username string
+			password string
+			version int
+		)
 
-		return nil, err
-	}
+		rows, err := db.Query("select id, name, description, uri, username, " +
+			"password, version from registries " +
+			"limit $1 offset $2", pagination.Size, pagination.Offset)
 
-	// read one
-	rows, err := db.Query("select id, name, description, uri, username, password, version from registries")
-	if(err != nil) {
-
-		log.Fatal(err)
-		return nil, err
-	}
-	defer rows.Close()
-
-	var result []*model.Registry
-
-	for rows.Next() {
-
-		err := rows.Scan(&id, &name, &description, &uri, &username, &password, &version)
-		if err != nil {
+		if(err != nil) {
 
 			log.Fatal(err)
 			return nil, err
 		}
+		defer rows.Close()
 
-		_row := &model.Registry{
-			Id: id,
-			Name: name,
-			Description: description,
-			Uri: uri,
-			Credentials: model.Credentials{
-				Username: username,
-				Password: password,
-			},
+		var result []*model.Registry
+
+		for rows.Next() {
+
+			err := rows.Scan(&id, &name, &description, &uri, &username, &password, &version)
+			if err != nil {
+
+				log.Fatal(err)
+				return nil, err
+			}
+
+			_row := &model.Registry{
+				Id: id,
+				Name: name,
+				Description: description,
+				Uri: uri,
+				Credentials: model.Credentials{
+					Username: username,
+					Password: password,
+				},
+			}
+
+			result = append(result, _row)
 		}
 
-		result = append(result, _row)
-	}
+		var total int = 0
+		db.QueryRow("select count(id) from registries").Scan(&total)
 
-	return result, nil
+		return &PaginationResult{
+			Result: result,
+			Total: total,
+		}, nil
+	});
 }

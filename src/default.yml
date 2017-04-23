@@ -1,4 +1,5 @@
 header: "ClairUI"
+#Must be the absolute path
 workdir: "/Users/kevinbayes/git/clairs-server"
 server:
   host: ""

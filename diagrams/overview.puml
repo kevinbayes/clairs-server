@@ -1,15 +1,16 @@
 @startuml
 skinparam handwritten true
 :User: as User
-(Add Containers) as (UC1)
-(List Containers) as (UC2)
+(Add Container Images) as (UC1)
+(List Container Images) as (UC2)
+(Maintain Docker Registries) as (MDR1)
 
-(Maintain Container) as (UC3)
-(Update Container) as (UC3a)
-(Read Container) as (UC3b)
-(Delete Container) as (UC3c)
+(Maintain Container Image) as (UC3)
+(Update Container Image) as (UC3a)
+(Read Container Image) as (UC3b)
+(Delete Container Image) as (UC3c)
 
-(Refresh Container Report) as (UC4)
+(Evaluate Container Image) as (UC4)
 (View Container Report) as (UC5)
 
 User -> (UC1)
@@ -17,6 +18,7 @@ User -> (UC2)
 User --> (UC3)
 User ---> (UC4)
 User ---> (UC5)
+User --> (MDR1)
 
 (UC3) ..> (UC3a) :<<includes>>
 (UC3) ..> (UC3b) :<<includes>>

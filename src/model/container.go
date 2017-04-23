@@ -17,10 +17,18 @@ import (
 	"time"
 )
 
-type Container struct {
+type ContainerImage struct {
 	Id int64
 	Registry int64
 	Image string
+	State string
+	Tags []ContainerImageTag
+
+	DateUpdated time.Time
+}
+
+type ContainerImageTag struct {
+	Tag string
 	State string
 
 	DateUpdated time.Time
@@ -29,6 +37,7 @@ type Container struct {
 type ContainerImageReport struct {
 	Id int64
 	ImageId int64
+	Tag string
 	Layer string
 	Shield string
 	CreatedOn time.Time

@@ -63,9 +63,13 @@ func (s *ShieldsService) GenerateShieldSVG(shield *model.Shield) (bytes.Buffer, 
 }
 
 
-func (s *ShieldsService) GetShield(containerId int64) (*bytes.Buffer, error) {
+func (s *ShieldsService) GetShield(containerId int64, tag string) (*bytes.Buffer, error) {
 
-	report, err := repository.ImageReportRepositoryInstance().FindLatest(containerId)
+	if(tag == "") {
+		tag = "latest"
+	}
+
+	report, err := repository.ImageReportRepositoryInstance().FindLatest(containerId, tag)
 
 	if(err != nil || report == nil) {
 		return s.notEvaluatedShield()

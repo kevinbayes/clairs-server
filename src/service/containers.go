@@ -22,6 +22,7 @@ import (
 	"log"
 	"fmt"
 	"os"
+	"strings"
 )
 
 const DEFAULT_SHIELD = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"150\" height=\"20\"><g shape-rendering=\"crispEdges\"><rect width=\"37\" height=\"20\" fill=\"#555\"/><rect x=\"37\" width=\"113\" height=\"20\" fill=\"#f00\"/></g><g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\"><text x=\"18\" y=\"14\">clair</text><text x=\"92\" y=\"14\">not implemented</text></g></svg>"
@@ -58,29 +59,19 @@ func prepareContainer(_registryService *RegistryService, dockerClient *gateway.D
 	for {
 		_container := <-newContainerChannel // read from a channel
 
-		log.Printf("Created container request %s.", _container.Image)
-
-		registry, err := _registryService.ReadRegistry(_container.Registry)
+		err := prepareContainerSync(_container, _registryService, dockerClient)
 
 		if(err != nil) {
 
 			log.Printf("Error reading registry: %s", err.Error())
 		} else {
 
-			err = dockerClient.PullImage(registry, _container);
-
-			if(err != nil) {
-
-				log.Printf("Error pulling container. Error: %s", err)
-				return;
-			}
-
 			analyzeContainerChannel <- _container
 		}
 	}
 }
 
-func prepareContainerSync(_container *model.Container, _registryService *RegistryService, dockerClient *gateway.DockerClient) (error) {
+func prepareContainerSync(_container *model.ContainerImage, _registryService *RegistryService, dockerClient *gateway.DockerClient) (error) {
 
 	log.Printf("Created container request %s.", _container.Image)
 
@@ -88,7 +79,7 @@ func prepareContainerSync(_container *model.Container, _registryService *Registr
 
 	if(err != nil) {
 
-		log.Panicf("Error reading registry: %s", err.Error())
+		log.Printf("Error reading registry: %s", err.Error())
 		return err;
 	} else {
 
@@ -115,7 +106,7 @@ func runAnalysis(_registryService *RegistryService, clairClient *gateway.ClairCl
 	}
 }
 
-func runAnalysisSync(_container *model.Container, _registryService *RegistryService, clairClient *gateway.ClairClient, dockerClient *gateway.DockerClient) (*model.ContainerImageReport, error) {
+func runAnalysisSync(_container *model.ContainerImage, _registryService *RegistryService, clairClient *gateway.ClairClient, dockerClient *gateway.DockerClient) (*model.ContainerImageReport, error) {
 
 	log.Printf("Analyse container image %s.", _container.Image)
 
@@ -157,7 +148,7 @@ func runAnalysisSync(_container *model.Container, _registryService *RegistryServ
 	return saveAnalysisResults(_container, layers[len(layers)-1], clairClient)
 }
 
-func saveAnalysisResults(container *model.Container, layerId string, clairClient *gateway.ClairClient) (*model.ContainerImageReport, error) {
+func saveAnalysisResults(container *model.ContainerImage, layerId string, clairClient *gateway.ClairClient) (*model.ContainerImageReport, error) {
 
 	layer, err := clairClient.GetLayer(layerId)
 
@@ -249,7 +240,7 @@ func saveAnalysisResults(container *model.Container, layerId string, clairClient
 
 }
 
-func (s *ContainerService) CreateNewContainer(req *dto.NewContainer) (*model.Container, error) {
+func (s *ContainerService) CreateNewContainer(req *dto.NewContainer) (*model.ContainerImage, error) {
 
 	log.Print("Creatng new container.")
 
@@ -276,22 +267,45 @@ func (s *ContainerService) CreateNewContainer(req *dto.NewContainer) (*model.Con
 	return _container, err
 }
 
-func (s *ContainerService) ReadContainers() ([]*model.Container, error) {
+func (s *ContainerService) ReadContainers(pagination *repository.Pagination) ([]*model.ContainerImage, error) {
 
-	return repository.InstanceContainerRepository().Find()
+	return repository.InstanceContainerRepository().Find(pagination)
 }
 
-func (s *ContainerService) ReadContainer(id int64) (*model.Container, error) {
+func (s *ContainerService) ReadContainersByRegistry(pagination *repository.Pagination, id int64) ([]*model.ContainerImage, error) {
+
+	return repository.InstanceContainerRepository().FindByRegistry(pagination, id)
+}
+
+func (s *ContainerService) ReadContainer(id int64) (*model.ContainerImage, error) {
 
 	return repository.InstanceContainerRepository().FindOne(id)
 }
 
-func (s *ContainerService) convertRequest(req *dto.NewContainer) (*model.Container) {
+func (s *ContainerService) convertRequest(req *dto.NewContainer) (*model.ContainerImage) {
 
-	return &model.Container{
+	image := req.Image
+	tag := "latest"
+
+	if(strings.Contains(image, ":")) {
+		parts := strings.Split(image, ":")
+
+		image = parts[0]
+		tag = parts[1]
+	}
+
+	tags := []model.ContainerImageTag{
+		{
+			Tag: tag,
+			State: model.STATE_NOT_EVALUATED,
+		},
+	}
+
+	return &model.ContainerImage{
 		Registry: req.Registry,
-		Image: req.Image,
+		Image: image,
 		State: model.STATE_REQUESTED,
+		Tags: tags,
 	}
 }
 

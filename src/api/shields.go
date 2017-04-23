@@ -39,7 +39,9 @@ func readShieldHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 		return;
 	}
 
-	buf, err := service.ShieldsServiceSingleton().GetShield(id)
+	queryParams := r.URL.Query()
+
+	buf, err := service.ShieldsServiceSingleton().GetShield(id, queryParams.Get("tag"))
 
 	if(err != nil) {
 

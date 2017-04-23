@@ -18,8 +18,8 @@ import (
 	"../model"
 )
 
-var newContainerChannel = make(chan *model.Container)
-var analyzeContainerChannel = make(chan *model.Container)
+var newContainerChannel = make(chan *model.ContainerImage)
+var analyzeContainerChannel = make(chan *model.ContainerImage)
 
 func init() {
 
