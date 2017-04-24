@@ -2,8 +2,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { containersRoutes } from './content/containers/containers.routing';
-import {registriesRoutes} from "./content/registries/registries.routing";
-import {dashboardRoutes} from "./content/dashboard/dashboard.routing";
+import { registriesRoutes } from "./content/registries/registries.routing";
+import { dashboardRoutes } from "./content/dashboard/dashboard.routing";
 
 const appRoutes: Routes = [
 
@@ -21,7 +21,7 @@ const appRoutes: Routes = [
 export const appRoutingProviders: any[] = [
 ];
 
-export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes, { useHash: true });
 
 @NgModule({
   imports: [routing],

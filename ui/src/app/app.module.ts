@@ -23,6 +23,7 @@ import {ContainersService} from "./services/containers.service";
 
 import { MdDataTableModule } from 'ng2-md-datatable';
 import {DashboardModule} from "./content/dashboard/dashboard.module";
+import { AppStoreModule } from '../store/app-store.module';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import {DashboardModule} from "./content/dashboard/dashboard.module";
     RegistriesModule,
 
     MdDataTableModule,
+    AppStoreModule,
   ],
   providers: [
     appRoutingProviders,

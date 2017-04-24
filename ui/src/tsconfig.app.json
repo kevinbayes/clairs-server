@@ -4,6 +4,9 @@
     "outDir": "../out-tsc/app",
     "module": "es2015",
     "baseUrl": "",
+    "paths": {
+      "store/*": ["app/store/*"]
+    },
     "types": []
   },
   "exclude": [

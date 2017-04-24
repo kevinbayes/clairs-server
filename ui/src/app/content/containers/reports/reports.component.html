@@ -1,0 +1,23 @@
+<md-card>
+  overview
+</md-card>
+<md-card>
+  <ng2-md-datatable>
+    <ng2-md-datatable-header>
+      <ng2-md-datatable-column>Package Name</ng2-md-datatable-column>
+      <ng2-md-datatable-column>Package Version</ng2-md-datatable-column>
+      <ng2-md-datatable-column>Vulnerabilities</ng2-md-datatable-column>
+      <ng2-md-datatable-column>Remaining After Upgrade</ng2-md-datatable-column>
+      <ng2-md-datatable-column>Upgrade Impact</ng2-md-datatable-column>
+    </ng2-md-datatable-header>
+    <tbody>
+      <ng2-md-datatable-row class="selectable" *ngFor="let item of reports;">
+        <td>{{ item.packageName }}</td>
+        <td>{{ item.packageVersion }}</td>
+        <td>{{ getVulnerabilitySummary(item.vulnerabilitiesBefore) }}</td>
+        <td>{{ getVulnerabilitySummary(item.vulnerabilitiesAfter) }}</td>
+        <td>{{ item.upgradeImpact }}</td>
+      </ng2-md-datatable-row>
+    </tbody>
+  </ng2-md-datatable>
+</md-card>

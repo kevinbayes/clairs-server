@@ -19,12 +19,12 @@ export class RegistriesComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MdDataTableComponent) datatable: MdDataTableComponent;
   @ViewChild(MdDataTablePaginationComponent) pager: MdDataTablePaginationComponent;
 
-  private pagination: any = {
+  public pagination: any = {
     Pages: 0,
     Page: 0,
     Size: 10
   };
-  private registries: any[];
+  public registries: any[];
   private unmount$: Subject<void> = new Subject<void>();
 
   constructor(private registriesService: RegistriesService) { }

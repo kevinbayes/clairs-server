@@ -1,15 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body, .clair__content {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  font-family: Roboto,"Helvetica Neue",sans-serif;
-
-  button.clair__fab {
-    position: fixed;
-    right: 50px;
-    bottom: 50px;
-  }
+html,
+body,
+.clair__content {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    button.clair__fab {
+        position: fixed;
+        right: 50px;
+        bottom: 50px;
+    }
 }
 
+.clair__tab-content {
+    padding: 40px;
+    md-card {
+        margin-bottom: 15px;
+        .clair__tab-card-toolbar {
+            text-align: right;
+        }
+    }
+}

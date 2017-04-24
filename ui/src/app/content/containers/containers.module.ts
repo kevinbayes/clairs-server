@@ -11,6 +11,7 @@ import { MaterialModule } from '../../shared/material.module';
 import {BrowserModule} from "@angular/platform-browser";
 
 import { MdDataTableModule } from 'ng2-md-datatable';
+import { ReportsComponent } from './reports/reports.component';
 
 @NgModule({
     imports: [
@@ -29,6 +30,8 @@ import { MdDataTableModule } from 'ng2-md-datatable';
       ContainersRootComponent,
 
       ContainersComponent,
+
+      ReportsComponent,
     ],
     providers: [
 

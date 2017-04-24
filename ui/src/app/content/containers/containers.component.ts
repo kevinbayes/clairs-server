@@ -19,12 +19,12 @@ export class ContainersComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MdDataTableComponent) datatable: MdDataTableComponent;
   @ViewChild(MdDataTablePaginationComponent) pager: MdDataTablePaginationComponent;
 
-  private pagination: any = {
+  public pagination: any = {
     Pages: 0,
     Page: 0,
     Size: 10
   };
-  private containers: any[];
+  public containers: any[];
   private unmount$: Subject<void> = new Subject<void>();
 
   constructor(private containersService: ContainersService) { }

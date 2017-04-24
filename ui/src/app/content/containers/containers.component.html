@@ -9,7 +9,7 @@
         <div class="clair__tab-card-toolbar">
           <button color="primary" md-raised-button>New</button>
         </div>
-      <ng2-md-datatable selectable>
+      <ng2-md-datatable>
         <ng2-md-datatable-header>
           <ng2-md-datatable-column sortValue="Image">Image</ng2-md-datatable-column>
           <ng2-md-datatable-column sortValue="Repository">Repository</ng2-md-datatable-column>
@@ -17,7 +17,7 @@
           <ng2-md-datatable-column sortValue="Tags" numeric>Tags</ng2-md-datatable-column>
         </ng2-md-datatable-header>
         <tbody>
-        <ng2-md-datatable-row *ngFor="let container of containers;" selectableValue="{{container.Id}}">
+        <ng2-md-datatable-row class="selectable" [routerLink]="[container.Id, 'report']" *ngFor="let container of containers;" selectableValue="{{container.Id}}">
           <td>{{container.Image}}</td>
           <td>{{container.Registry}}</td>
           <td>{{container.State}}</td>
