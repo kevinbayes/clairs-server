@@ -28,6 +28,7 @@ type ContainerImage struct {
 }
 
 type ContainerImageTag struct {
+	Id int64
 	Tag string
 	State string
 

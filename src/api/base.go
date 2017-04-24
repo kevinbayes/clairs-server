@@ -64,12 +64,28 @@ func listOk(entity interface{}, size int, pages int, page int, w http.ResponseWr
 
 	_response := middleware.MakeSearchResult(size, pages, page, entity, make([]middleware.Link, 0))
 
-	ok(_response, w)
+	okNoHateoas(_response, w)
+}
+
+func okNoHateoas(entity interface{}, w http.ResponseWriter) {
+
+	response, err := json.Marshal(entity)
+
+	if (err != nil) {
+
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	} else {
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(response)
+	}
 }
 
 func ok(entity interface{}, w http.ResponseWriter) {
 
-	response, err := json.Marshal(entity)
+	_response := middleware.MakeHateos(entity, make([]middleware.Link, 0))
+
+	response, err := json.Marshal(_response)
 
 	if (err != nil) {
 

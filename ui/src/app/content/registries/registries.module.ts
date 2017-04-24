@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../shared/material.module';
 import {BrowserModule} from "@angular/platform-browser";
 import {MdDataTableModule} from "ng2-md-datatable";
+import { RegistryComponent } from './registry/registry.component';
 
 @NgModule({
     imports: [
@@ -21,13 +22,13 @@ import {MdDataTableModule} from "ng2-md-datatable";
     ],
     exports: [
       RegistriesRootComponent,
-
-      RegistriesComponent,
     ],
     declarations: [
       RegistriesRootComponent,
 
       RegistriesComponent,
+
+      RegistryComponent,
     ],
     providers: [
 

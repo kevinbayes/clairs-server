@@ -9,14 +9,14 @@
         <div class="clair__tab-card-toolbar">
           <button color="primary" md-raised-button>New</button>
         </div>
-        <ng2-md-datatable selectable>
+        <ng2-md-datatable>
           <ng2-md-datatable-header>
             <ng2-md-datatable-column sortValue="Registry">Registry</ng2-md-datatable-column>
             <ng2-md-datatable-column sortValue="Uri">Uri</ng2-md-datatable-column>
             <ng2-md-datatable-column sortValue="User">User</ng2-md-datatable-column>
           </ng2-md-datatable-header>
           <tbody>
-          <ng2-md-datatable-row *ngFor="let registry of registries;" selectableValue="{{registry.Id}}">
+          <ng2-md-datatable-row class="selectable" [routerLink]="[registry.Id]" *ngFor="let registry of registries;" selectableValue="{{registry.Id}}">
             <td>{{registry.Name}}</td>
             <td>{{registry.Uri}}</td>
             <td>{{registry.Credentials.Username}}</td>

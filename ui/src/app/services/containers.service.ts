@@ -17,4 +17,10 @@ export class ContainersService {
     return this.http.get(`${this.baseUrl}`)
       .map(r => r.json());
   }
+
+  public get(id: number): Observable<any> {
+
+    return this.http.get(`${this.baseUrl}/${id}`)
+      .map(r => r.json());
+  }
 }

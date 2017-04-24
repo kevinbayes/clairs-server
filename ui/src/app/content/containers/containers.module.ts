@@ -12,6 +12,7 @@ import {BrowserModule} from "@angular/platform-browser";
 
 import { MdDataTableModule } from 'ng2-md-datatable';
 import { ReportsComponent } from './reports/reports.component';
+import { ContainerComponent } from './container/container.component';
 
 @NgModule({
     imports: [
@@ -22,9 +23,8 @@ import { ReportsComponent } from './reports/reports.component';
         MdDataTableModule,
     ],
     exports: [
-      ContainersRootComponent,
 
-      ContainersComponent,
+      ContainersRootComponent,
     ],
     declarations: [
       ContainersRootComponent,
@@ -32,6 +32,8 @@ import { ReportsComponent } from './reports/reports.component';
       ContainersComponent,
 
       ReportsComponent,
+
+      ContainerComponent,
     ],
     providers: [
 

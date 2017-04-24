@@ -1,0 +1,50 @@
+<md-toolbar color="accent">
+  <span>Container > {{container.Image}}</span>
+</md-toolbar>
+<md-tab-group>
+  <md-tab label="Information" color="accent">
+
+    <div class="clair__tab-content">
+      <md-card>
+        <div class="clair__tab-card-toolbar">
+          <button color="primary" md-raised-button>Delete</button>
+        </div>
+        <p>Description</p>
+      </md-card>
+    </div>
+  </md-tab>
+  <md-tab label="Tags" color="accent">
+
+    <div class="clair__tab-content">
+      <md-card>
+        <div class="clair__tab-card-toolbar">
+          <button color="primary" md-raised-button>New</button>
+        </div>
+        <ng2-md-datatable>
+          <ng2-md-datatable-header>
+            <ng2-md-datatable-column sortValue="Tag">Tag</ng2-md-datatable-column>
+            <ng2-md-datatable-column sortValue="LastModified">Last Modified</ng2-md-datatable-column>
+            <ng2-md-datatable-column sortValue="State">State</ng2-md-datatable-column>
+          </ng2-md-datatable-header>
+          <tbody>
+          <ng2-md-datatable-row class="selectable" [routerLink]="['/containers', container.Id, 'report', tag.Tag]" *ngFor="let tag of container.Tags" selectableValue="{{tag.Tag}}">
+            <td>{{tag.Tag}}</td>
+            <td>{{tag.DateUpdated}}</td>
+            <td>{{tag.State}}</td>
+          </ng2-md-datatable-row>
+          </tbody>
+        </ng2-md-datatable>
+        <ng2-md-datatable-pagination
+          [currentPage]="1"
+          [itemsPerPage]="10"
+          [itemsCount]="pagination.Pages"
+          [itemsPerPageChoices]="[10,20,50]"
+          [itemsPerPageFirstChoice]="10"
+        >
+        </ng2-md-datatable-pagination>
+      </md-card>
+    </div>
+  </md-tab>
+</md-tab-group>
+
+

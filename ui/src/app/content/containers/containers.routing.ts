@@ -5,6 +5,8 @@ import { ContainersComponent } from './containers.component';
 import { ContainersRootComponent } from './containers.root.component';
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders }   from '@angular/core';
+
+import { ContainerComponent } from './container/container.component';
 import { ReportsComponent } from './reports/reports.component';
 
 
@@ -18,7 +20,11 @@ export const containersRoutes: Routes = [
                 component: ContainersComponent,
             },
             {
-                path: ':id/report',
+                path: ':id',
+                component: ContainerComponent,
+            },
+            {
+                path: ':id/report/:tag',
                 component: ReportsComponent,
             }
         ],
