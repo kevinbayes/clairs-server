@@ -18,6 +18,7 @@ import (
 	"encoding/json"
 	"../repository"
 	middleware "../http"
+	"math"
 )
 
 type EntityApi interface {
@@ -42,7 +43,7 @@ func listRespond(entity interface{}, total int, pagination *repository.Paginatio
 		http.NotFound(w, r)
 	} else {
 
-		listOk(entity, pagination.Size, total / pagination.Size, pagination.Page, w)
+		listOk(entity, total, int(math.Ceil(float64(total) / float64(pagination.Size))), pagination.Page, pagination.Size, w)
 	}
 }
 
@@ -60,9 +61,9 @@ func respond(entity interface{}, err error, w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func listOk(entity interface{}, size int, pages int, page int, w http.ResponseWriter) {
+func listOk(entity interface{}, total int, pages int, page int, size int, w http.ResponseWriter) {
 
-	_response := middleware.MakeSearchResult(size, pages, page, entity, make([]middleware.Link, 0))
+	_response := middleware.MakeSearchResult(total, pages, size, page, entity, make([]middleware.Link, 0))
 
 	okNoHateoas(_response, w)
 }

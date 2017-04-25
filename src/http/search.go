@@ -14,7 +14,7 @@
 package http
 
 type ListMeta struct {
-
+	Total int
 	Size int
 	Page int
 	Pages int
@@ -26,10 +26,11 @@ type ResponseList struct {
 	Links []Link
 }
 
-func MakeSearchResult(size int, pages int, page int, entities interface{}, links []Link) *ResponseList {
+func MakeSearchResult(total int, pages int, size int, page int, entities interface{}, links []Link) *ResponseList {
 
 	return &ResponseList{
 		Meta: ListMeta{
+			Total: total,
 			Size: size,
 			Page: page,
 			Pages: pages,

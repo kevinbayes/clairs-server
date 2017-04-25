@@ -1,6 +1,8 @@
 header: "ClairUI"
 #Must be the absolute path
 workdir: "/Users/kevinbayes/git/clairs-server"
+analysis:
+  type: local
 server:
   host: ""
   port: "18080"

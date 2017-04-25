@@ -23,6 +23,9 @@ import (
 type Config struct {
 	Header string
 	Workdir string
+	Analysis struct {
+		Type string
+	}
 	Server struct {
 		Host string
 		Port string

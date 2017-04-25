@@ -50,7 +50,12 @@ func (s *RegistryService) CreateRegistry(body *dto.NewRegistry) (*model.Registry
 
 	_registry := s.convertRequest(body)
 
-	validationError := s.testRegistryCredentials(_registry)
+	var validationError error = nil
+
+	if(len(_registry.Credentials.Username) > 0) {
+
+		validationError = s.testRegistryCredentials(_registry)
+	}
 
 	if(validationError != nil) {
 

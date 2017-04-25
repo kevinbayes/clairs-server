@@ -44,8 +44,8 @@ func (r *ContainerRepository) Save(container *model.ContainerImage) (error) {
 		// insert
 		var lastInsertId int64 = 0
 		err := db.QueryRow("INSERT INTO container_image(image, registry_id, state, created_on, updated_on, version) " +
-			"VALUES ($1, $2, $3, $5, 0) RETURNING id", container.Image, container.Registry,
-			container.State, time.Now(), time.Now()).Scan(&lastInsertId)
+			"VALUES ($1, $2, $3, $4, $4, 0) RETURNING id", container.Image, container.Registry,
+			container.State, time.Now()).Scan(&lastInsertId)
 		if (err != nil) {
 
 			return err
