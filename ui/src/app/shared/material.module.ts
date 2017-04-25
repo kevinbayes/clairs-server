@@ -15,7 +15,8 @@ import {
   MdSidenavModule,
   MdSnackBarModule,
   MdTabsModule,
-  MdToolbarModule
+  MdToolbarModule,
+  MdDialogModule, MdSelectModule,
 } from '@angular/material';
 import { NgModule } from "@angular/core";
 
@@ -34,7 +35,9 @@ import { NgModule } from "@angular/core";
     MdSnackBarModule,
     MdRippleModule,
     MdSidenavModule,
-    MdTabsModule
+    MdTabsModule,
+    MdDialogModule,
+    MdSelectModule,
   ],
   exports:      [
     MdButtonModule,
@@ -50,7 +53,9 @@ import { NgModule } from "@angular/core";
     MdSnackBarModule,
     MdRippleModule,
     MdSidenavModule,
-    MdTabsModule
+    MdTabsModule,
+    MdDialogModule,
+    MdSelectModule,
   ]
 })
 export class MaterialModule { }

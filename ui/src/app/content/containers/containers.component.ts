@@ -8,6 +8,8 @@ import {
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/from';
 import {Subject} from "rxjs/Subject";
+import {NewContainerModalComponent} from "./new/new.container.modal.component";
+import {MdDialog} from "@angular/material";
 
 @Component({
   selector: 'app-containers',
@@ -27,7 +29,8 @@ export class ContainersComponent implements OnInit, AfterViewInit, OnDestroy {
   public containers: any[];
   private unmount$: Subject<void> = new Subject<void>();
 
-  constructor(private containersService: ContainersService) { }
+  constructor(private containersService: ContainersService,
+              public dialog: MdDialog) { }
 
   ngOnInit() {
 
@@ -58,6 +61,12 @@ export class ContainersComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe((e: IDatatablePaginationEvent) =>
           console.log("Pager changed"));
     }
+  }
+
+  openDialog() {
+    let dialogRef = this.dialog.open(NewContainerModalComponent);
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 
   ngOnDestroy() {

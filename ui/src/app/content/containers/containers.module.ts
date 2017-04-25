@@ -13,6 +13,8 @@ import {BrowserModule} from "@angular/platform-browser";
 import { MdDataTableModule } from 'ng2-md-datatable';
 import { ReportsComponent } from './reports/reports.component';
 import { ContainerComponent } from './container/container.component';
+import {NewContainerModalComponent} from "./new/new.container.modal.component";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
     imports: [
@@ -20,6 +22,7 @@ import { ContainerComponent } from './container/container.component';
         RouterModule,
         MaterialModule,
         BrowserModule,
+        ReactiveFormsModule,
         MdDataTableModule,
     ],
     exports: [
@@ -34,11 +37,14 @@ import { ContainerComponent } from './container/container.component';
       ReportsComponent,
 
       ContainerComponent,
+
+      NewContainerModalComponent,
     ],
     providers: [
 
     ],
     entryComponents: [
+      NewContainerModalComponent,
     ]
 })
 

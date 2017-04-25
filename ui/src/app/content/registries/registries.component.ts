@@ -8,6 +8,8 @@ import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/from';
 import {Subject} from "rxjs/Subject";
 import {RegistriesService} from "../../services/registries.service";
+import {MdDialog} from "@angular/material";
+import {NewRegistryModalComponent} from "./new/new.registry.modal.component";
 
 @Component({
   selector: 'app-registries',
@@ -27,7 +29,9 @@ export class RegistriesComponent implements OnInit, AfterViewInit, OnDestroy {
   public registries: any[];
   private unmount$: Subject<void> = new Subject<void>();
 
-  constructor(private registriesService: RegistriesService) { }
+  constructor(
+    private registriesService: RegistriesService,
+    public dialog: MdDialog) { }
 
   ngOnInit() {
 
@@ -58,6 +62,12 @@ export class RegistriesComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe((e: IDatatablePaginationEvent) =>
           console.log("Pager changed"));
     }
+  }
+
+  openDialog() {
+    let dialogRef = this.dialog.open(NewRegistryModalComponent);
+      dialogRef.afterClosed().subscribe(result => {
+    });
   }
 
   ngOnDestroy() {
