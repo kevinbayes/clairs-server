@@ -20,10 +20,12 @@ export class RegistriesService {
       .post(`${this.baseUrl}`, registry);
   }
 
-  public all(): Observable<any> {
+  public all(page: number = 0, size:number = 10, _container_count: boolean = true): Observable<any> {
+
+    var url = (_container_count ? `/api/summary/registries?p=${page}&s=${size}` : `${this.baseUrl}?p=${page}&s=${size}`)
 
     return this.http
-      .get(`${this.baseUrl}`)
+      .get(url)
       .map(r => r.json());
   }
 }

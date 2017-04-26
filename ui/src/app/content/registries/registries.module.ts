@@ -12,6 +12,9 @@ import {BrowserModule} from "@angular/platform-browser";
 import {MdDataTableModule} from "ng2-md-datatable";
 import { RegistryComponent } from './registry/registry.component';
 import { NewRegistryModalComponent } from './new/new.registry.modal.component';
+import {SidemenuComponent} from "../shared/sidemenu/sidemenu.component";
+import {RegistryContainersComponent} from "./registry/containers/registry.containers.component";
+import {RegistryNewContainerModalComponent} from "./registry/containers/new/registry.new.container.modal.component";
 
 @NgModule({
     imports: [
@@ -26,19 +29,24 @@ import { NewRegistryModalComponent } from './new/new.registry.modal.component';
       RegistriesRootComponent,
     ],
     declarations: [
+      SidemenuComponent,
+
       RegistriesRootComponent,
 
       RegistriesComponent,
 
       RegistryComponent,
+      RegistryContainersComponent,
 
       NewRegistryModalComponent,
+      RegistryNewContainerModalComponent,
     ],
     providers: [
 
     ],
     entryComponents: [
       NewRegistryModalComponent,
+      RegistryNewContainerModalComponent,
     ]
 })
 

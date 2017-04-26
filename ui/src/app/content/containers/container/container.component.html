@@ -35,9 +35,9 @@
           </tbody>
         </ng2-md-datatable>
         <ng2-md-datatable-pagination
-          [currentPage]="1"
-          [itemsPerPage]="10"
-          [itemsCount]="pagination.Pages"
+          [currentPage]="pagination.Page"
+          [itemsPerPage]="pagination.Size"
+          [itemsCount]="pagination.Total"
           [itemsPerPageChoices]="[10,20,50]"
           [itemsPerPageFirstChoice]="10"
         >

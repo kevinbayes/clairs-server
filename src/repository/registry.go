@@ -52,6 +52,11 @@ func (r *RegistryRepository) Save(registry *model.Registry) (error) {
 	});
 }
 
+func (r *RegistryRepository) Count() (int, error) {
+
+	return count("registries")
+}
+
 func (r *RegistryRepository) Update(registry *model.Registry) (error) {
 
 	return notTransaction(func(db *sql.DB) (error) {
@@ -177,6 +182,72 @@ func (r *RegistryRepository) Find(pagination *Pagination) (*PaginationResult, er
 				Name: name,
 				Description: description,
 				Uri: uri,
+				Credentials: model.Credentials{
+					Username: username,
+					Password: password,
+				},
+			}
+
+			result = append(result, _row)
+		}
+
+		var total int = 0
+		db.QueryRow("select count(id) from registries").Scan(&total)
+
+		return &PaginationResult{
+			Result: result,
+			Total: total,
+		}, nil
+	});
+}
+
+func (r *RegistryRepository) FindSummary(pagination *Pagination) (*PaginationResult, error) {
+
+	return notTransactionWithPagination(func(db *sql.DB) (*PaginationResult, error) {
+
+		var (
+			id int64
+			name string
+			description string
+			uri string
+			username string
+			password string
+			count int
+			version int
+		)
+
+
+		rows, err := db.Query("select r.id, r.name, r.description, r.uri, r.username, " +
+			"r.password, r.version, count(i.*) " +
+			"from registries r " +
+			"left join container_image i on r.id=i.registry_id " +
+			"GROUP BY r.id " +
+			"limit $1 offset $2", pagination.Size, pagination.Offset)
+
+		if(err != nil) {
+
+			log.Fatal(err)
+			return nil, err
+		}
+		defer rows.Close()
+
+		var result []*model.Registry
+
+		for rows.Next() {
+
+			err := rows.Scan(&id, &name, &description, &uri, &username, &password, &version, &count)
+			if err != nil {
+
+				log.Fatal(err)
+				return nil, err
+			}
+
+			_row := &model.Registry{
+				Id: id,
+				Name: name,
+				Description: description,
+				Uri: uri,
+				ContainerCount: count,
 				Credentials: model.Credentials{
 					Username: username,
 					Password: password,

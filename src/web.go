@@ -40,6 +40,7 @@ func main() {
 	api.RegisterContainersHandlers(_middleware)
 	api.RegisterWebhookHandlers(_middleware)
 	api.RegisterShieldsHandlers(_middleware)
+	api.RegisterSummariesHandlers(_middleware)
 
 	web.RegisterWebsiteHandlers(_middleware)
 

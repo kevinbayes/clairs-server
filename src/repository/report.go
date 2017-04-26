@@ -83,6 +83,11 @@ func (r *ImageReportRepository) saveVulnerabilitySummary(report *model.Container
 	return nil
 }
 
+func (r *ImageReportRepository) Count() (int, error) {
+
+	return count("container_image_report")
+}
+
 
 func (r *ImageReportRepository) FindLatest(containerId int64, _tag string) (*model.ContainerImageReport, error) {
 

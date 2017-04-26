@@ -1,13 +1,32 @@
 <md-toolbar color="accent">
   <span>Registry > {{registry.Name}}</span>
 </md-toolbar>
-<div class="clair__content-padding">
-  <md-card>
-    <div class="clair__tab-card-toolbar">
-      <button color="primary" md-raised-button>Delete</button>
+<md-tab-group>
+  <md-tab label="Summary" color="primary">
+    <div class="clair__tab-content">
+      <ul>
+        <li>Count of containers and reports.</li>
+        <li>Total vulnerabilities over time span of last 6 months shown month by month.</li>
+        <li>Top 10 images ranked by high vulnerability count</li>
+        <li>10 latest reports</li>
+      </ul>
     </div>
-    <p>Description</p>
-  </md-card>
-</div>
+  </md-tab>
+  <md-tab label="Containers" color="primary">
+    <div class="clair__tab-content">
 
+      <app-registry-containers></app-registry-containers>
 
+    </div>
+  </md-tab>
+  <md-tab label="Information" color="primary">
+    <div class="clair__tab-content">
+      <md-card>
+        <div class="clair__tab-card-toolbar">
+          <button color="primary" md-raised-button>Delete</button>
+        </div>
+        <p>Description</p>
+      </md-card>
+    </div>
+  </md-tab>
+</md-tab-group>

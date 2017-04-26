@@ -65,6 +65,11 @@ func (r *ContainerRepository) Save(container *model.ContainerImage) (error) {
 	});
 }
 
+func (r *ContainerRepository) Count() (int, error) {
+
+	return count("container_image")
+}
+
 func (r *ContainerRepository) UpdateState(container *model.ContainerImage, newState string) (error) {
 
 	return notTransaction(func(db *sql.DB) (error) {

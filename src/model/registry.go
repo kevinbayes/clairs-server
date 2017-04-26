@@ -19,6 +19,7 @@ type Registry struct {
 	Name string `Name of the repository`
 	Description string `Description of the repository`
 	Uri string `Uri to the repostory`
+	ContainerCount int `Count of the containers registered.`
 
 	Credentials Credentials
 }

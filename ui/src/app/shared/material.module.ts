@@ -16,7 +16,7 @@ import {
   MdSnackBarModule,
   MdTabsModule,
   MdToolbarModule,
-  MdDialogModule, MdSelectModule,
+  MdDialogModule, MdSelectModule, MdChipsModule,
 } from '@angular/material';
 import { NgModule } from "@angular/core";
 
@@ -38,6 +38,7 @@ import { NgModule } from "@angular/core";
     MdTabsModule,
     MdDialogModule,
     MdSelectModule,
+    MdChipsModule,
   ],
   exports:      [
     MdButtonModule,
@@ -56,6 +57,7 @@ import { NgModule } from "@angular/core";
     MdTabsModule,
     MdDialogModule,
     MdSelectModule,
+    MdChipsModule,
   ]
 })
 export class MaterialModule { }

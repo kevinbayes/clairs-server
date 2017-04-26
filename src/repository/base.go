@@ -130,3 +130,18 @@ func inTransaction(_func sqlFunctionTx) (error) {
 
 	return err;
 }
+
+func count(tablename string) (int, error) {
+
+	var count int = 0
+
+	db, err := Connect()
+	if(err != nil) {
+
+		return count, err
+	}
+
+	err = db.QueryRow("select count(*) from " + tablename).Scan(&count)
+
+	return count, err
+}

@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ContainersService} from "../../../../services/containers.service";
 import {
   IDatatablePaginationEvent,
   IDatatableSelectionEvent, IDatatableSortEvent, MdDataTableComponent,
@@ -7,16 +8,15 @@ import {
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/from';
 import {Subject} from "rxjs/Subject";
-import {RegistriesService} from "../../services/registries.service";
+import {RegistryNewContainerModalComponent} from "./new/registry.new.container.modal.component";
 import {MdDialog} from "@angular/material";
-import {NewRegistryModalComponent} from "./new/new.registry.modal.component";
 
 @Component({
-  selector: 'app-registries',
-  templateUrl: './registries.component.html',
-  styleUrls: ['./registries.component.less']
+  selector: 'app-registry-containers',
+  templateUrl: './registry.containers.component.html',
+  styleUrls: ['./registry.containers.component.less']
 })
-export class RegistriesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class RegistryContainersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MdDataTableComponent) datatable: MdDataTableComponent;
   @ViewChild(MdDataTablePaginationComponent) pager: MdDataTablePaginationComponent;
@@ -26,16 +26,23 @@ export class RegistriesComponent implements OnInit, AfterViewInit, OnDestroy {
     Page: 0,
     Size: 10
   };
-  public registries: any[];
+  public containers: any[];
   private unmount$: Subject<void> = new Subject<void>();
 
-  constructor(
-    private registriesService: RegistriesService,
-    public dialog: MdDialog) { }
+  constructor(private containersService: ContainersService,
+              public dialog: MdDialog) { }
 
   ngOnInit() {
 
-    this.loadPage(0, 10);
+    this.containersService.all().subscribe((res) => {
+
+      console.log(res);
+      this.pagination = res.Meta;
+      this.containers = res.Entities;
+    }, (err) => {
+
+      console.error(err);
+    });
   }
 
   ngAfterViewInit() {
@@ -52,27 +59,13 @@ export class RegistriesComponent implements OnInit, AfterViewInit, OnDestroy {
       Observable.from(this.pager.paginationChange)
         .takeUntil(this.unmount$)
         .subscribe((e: IDatatablePaginationEvent) =>
-          this.loadPage(e.page - 1, e.itemsPerPage));
-
+          console.log("Pager changed"));
     }
   }
 
-  loadPage(page, size) {
-    this.registriesService.all(page, size).subscribe((res) => {
-
-      console.log(res);
-      this.pagination = res.Meta;
-      this.pagination.Page++;
-      this.registries = res.Entities;
-    }, (err) => {
-
-      console.error(err);
-    });
-  }
-
   openDialog() {
-    let dialogRef = this.dialog.open(NewRegistryModalComponent);
-      dialogRef.afterClosed().subscribe(result => {
+    let dialogRef = this.dialog.open(RegistryNewContainerModalComponent);
+    dialogRef.afterClosed().subscribe(result => {
     });
   }
 

@@ -114,6 +114,11 @@ func (s *RegistryService) ReadRegistries(pagination *repository.Pagination) (*re
 	return repository.InstanceRegistryRepository().Find(pagination)
 }
 
+func (s *RegistryService) ReadRegistriesWithContainerCount(pagination *repository.Pagination) (*repository.PaginationResult, error) {
+
+	return repository.InstanceRegistryRepository().FindSummary(pagination)
+}
+
 func (s *RegistryService) DeleteRegistry(id int64) (*model.Registry, error) {
 
 	reg, err := s.ReadRegistry(id)

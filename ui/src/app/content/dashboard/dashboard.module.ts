@@ -10,6 +10,9 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../shared/material.module';
 import {BrowserModule} from "@angular/platform-browser";
 import {MdDataTableModule} from "ng2-md-datatable";
+import {NgxChartsModule} from "@swimlane/ngx-charts";
+import { NewRegistryModalComponent } from "./new/new.registry.modal.component";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
     imports: [
@@ -17,7 +20,9 @@ import {MdDataTableModule} from "ng2-md-datatable";
       RouterModule,
       MaterialModule,
       BrowserModule,
+      ReactiveFormsModule,
       MdDataTableModule,
+      NgxChartsModule,
     ],
     exports: [
       DashboardRootComponent,
@@ -28,11 +33,14 @@ import {MdDataTableModule} from "ng2-md-datatable";
       DashboardRootComponent,
 
       DashboardComponent,
+
+      NewRegistryModalComponent,
     ],
     providers: [
 
     ],
     entryComponents: [
+      NewRegistryModalComponent,
     ]
 })
 

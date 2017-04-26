@@ -16,6 +16,7 @@ package service
 import (
 	"log"
 	"../model"
+	"../repository"
 )
 
 var newContainerChannel = make(chan *model.ContainerImage)
@@ -25,4 +26,40 @@ func init() {
 
 	log.Print("Initiating Services")
 	ContainerServiceSingleton().Init()
+}
+
+
+type GeneralService struct { }
+
+var _generalService *GeneralService
+
+func GeneralServiceSingleton() *GeneralService {
+
+	if(_containerService == nil) {
+
+		_generalService = &GeneralService{}
+	}
+
+	return _generalService;
+}
+
+
+func (g *GeneralService) GenerateSummary() (*model.Summary, error) {
+
+	containerCount, _ := repository.InstanceContainerRepository().Count()
+	registriesCount, _ := repository.InstanceRegistryRepository().Count()
+	reportsCount, _ := repository.ImageReportRepositoryInstance().Count()
+
+
+	return &model.Summary{
+		Registries: model.RegistriesSummary {
+			Total: registriesCount,
+		},
+		Containers: model.ContainersSummary {
+			Total: containerCount,
+		},
+		Reports: model.ReportsSummary {
+			Total: reportsCount,
+		},
+	}, nil
 }
