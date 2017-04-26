@@ -24,6 +24,7 @@ import { MdDataTableModule } from 'ng2-md-datatable';
 import {DashboardModule} from "./content/dashboard/dashboard.module";
 import { AppStoreModule } from '../store/app-store.module';
 import {SummariesService} from "./services/summaries.service";
+import { DetailComponent } from './registries/registry/detail/detail.component';
 
 @NgModule({
   declarations: [

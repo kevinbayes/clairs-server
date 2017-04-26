@@ -10,6 +10,8 @@ import 'rxjs/add/observable/from';
 import {Subject} from "rxjs/Subject";
 import {RegistryNewContainerModalComponent} from "./new/registry.new.container.modal.component";
 import {MdDialog} from "@angular/material";
+import {RegistriesService} from "../../../../services/registries.service";
+import {ActivatedRoute, Route} from "@angular/router";
 
 @Component({
   selector: 'app-registry-containers',
@@ -21,6 +23,8 @@ export class RegistryContainersComponent implements OnInit, AfterViewInit, OnDes
   @ViewChild(MdDataTableComponent) datatable: MdDataTableComponent;
   @ViewChild(MdDataTablePaginationComponent) pager: MdDataTablePaginationComponent;
 
+  private id: number;
+
   public pagination: any = {
     Pages: 0,
     Page: 0,
@@ -30,18 +34,23 @@ export class RegistryContainersComponent implements OnInit, AfterViewInit, OnDes
   private unmount$: Subject<void> = new Subject<void>();
 
   constructor(private containersService: ContainersService,
+              private registriesService: RegistriesService,
+              private route: ActivatedRoute,
               public dialog: MdDialog) { }
 
   ngOnInit() {
 
-    this.containersService.all().subscribe((res) => {
+    this.route.params.subscribe(params => {
 
-      console.log(res);
-      this.pagination = res.Meta;
-      this.containers = res.Entities;
-    }, (err) => {
+      this.id = +params['id']; // (+) converts string 'id' to a number
 
-      console.error(err);
+      this.registriesService.listContainers(this.id).subscribe((res) => {
+        this.pagination = res.Meta;
+        this.containers = res.Entities;
+      }, (err) => {
+
+        console.error(err);
+      });
     });
   }
 

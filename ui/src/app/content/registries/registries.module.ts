@@ -15,6 +15,7 @@ import { NewRegistryModalComponent } from './new/new.registry.modal.component';
 import {SidemenuComponent} from "../shared/sidemenu/sidemenu.component";
 import {RegistryContainersComponent} from "./registry/containers/registry.containers.component";
 import {RegistryNewContainerModalComponent} from "./registry/containers/new/registry.new.container.modal.component";
+import {RegistryDetailComponent} from "./registry/detail/detail.component";
 
 @NgModule({
     imports: [
@@ -36,6 +37,7 @@ import {RegistryNewContainerModalComponent} from "./registry/containers/new/regi
       RegistriesComponent,
 
       RegistryComponent,
+      RegistryDetailComponent,
       RegistryContainersComponent,
 
       NewRegistryModalComponent,
