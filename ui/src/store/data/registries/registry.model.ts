@@ -1,6 +1,6 @@
 export namespace Registries {
 
-  export class NewRegistry {
+  export class BaseRegistry {
     name: string;
     description: string;
     uri: string;
@@ -11,5 +11,10 @@ export namespace Registries {
   export class Credentials {
     username: string;
     password: string;
+  }
+
+  export class Registry extends BaseRegistry {
+    id: number;
+
   }
 }

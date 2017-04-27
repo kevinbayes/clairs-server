@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ContainersService} from "../../../../services/containers.service";
+import {ContainersService} from "../../../services/containers.service";
 import {
   IDatatablePaginationEvent,
   IDatatableSelectionEvent, IDatatableSortEvent, MdDataTableComponent,
@@ -10,7 +10,7 @@ import 'rxjs/add/observable/from';
 import {Subject} from "rxjs/Subject";
 import {RegistryNewContainerModalComponent} from "./new/registry.new.container.modal.component";
 import {MdDialog} from "@angular/material";
-import {RegistriesService} from "../../../../services/registries.service";
+import {RegistriesService} from "../../../services/registries.service";
 import {ActivatedRoute, Route} from "@angular/router";
 
 @Component({

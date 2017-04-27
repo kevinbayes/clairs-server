@@ -151,12 +151,11 @@ func (r *RegistryRepository) Find(pagination *Pagination) (*PaginationResult, er
 			description string
 			uri string
 			username string
-			password string
 			version int
 		)
 
 		rows, err := db.Query("select id, name, description, uri, username, " +
-			"password, version from registries order by id desc " +
+			"version from registries order by id desc " +
 			"limit $1 offset $2", pagination.Size, pagination.Offset)
 
 		if(err != nil) {
@@ -170,7 +169,7 @@ func (r *RegistryRepository) Find(pagination *Pagination) (*PaginationResult, er
 
 		for rows.Next() {
 
-			err := rows.Scan(&id, &name, &description, &uri, &username, &password, &version)
+			err := rows.Scan(&id, &name, &description, &uri, &username, &version)
 			if err != nil {
 
 				log.Fatal(err)
@@ -184,7 +183,6 @@ func (r *RegistryRepository) Find(pagination *Pagination) (*PaginationResult, er
 				Uri: uri,
 				Credentials: model.Credentials{
 					Username: username,
-					Password: password,
 				},
 			}
 
@@ -211,14 +209,13 @@ func (r *RegistryRepository) FindSummary(pagination *Pagination) (*PaginationRes
 			description string
 			uri string
 			username string
-			password string
 			count int
 			version int
 		)
 
 
 		rows, err := db.Query("select r.id, r.name, r.description, r.uri, r.username, " +
-			"r.password, r.version, count(i.*) " +
+			"r.version, count(i.*) " +
 			"from registries r " +
 			"left join container_image i on r.id=i.registry_id " +
 			"GROUP BY r.id " +
@@ -236,7 +233,7 @@ func (r *RegistryRepository) FindSummary(pagination *Pagination) (*PaginationRes
 
 		for rows.Next() {
 
-			err := rows.Scan(&id, &name, &description, &uri, &username, &password, &version, &count)
+			err := rows.Scan(&id, &name, &description, &uri, &username, &version, &count)
 			if err != nil {
 
 				log.Fatal(err)
@@ -251,7 +248,6 @@ func (r *RegistryRepository) FindSummary(pagination *Pagination) (*PaginationRes
 				ContainerCount: count,
 				Credentials: model.Credentials{
 					Username: username,
-					Password: password,
 				},
 			}
 

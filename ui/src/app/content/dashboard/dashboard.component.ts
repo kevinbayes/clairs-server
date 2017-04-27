@@ -39,7 +39,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(private summariesService: SummariesService,
               private registriesService: RegistriesService,
-              public dialog: MdDialog) { }
+              private dialog: MdDialog,
+  ) { }
 
   ngOnInit() {
 
@@ -70,6 +71,10 @@ export class DashboardComponent implements OnInit {
   openNewRegistry() {
     let dialogRef = this.dialog.open(NewRegistryModalComponent);
     dialogRef.afterClosed().subscribe(result => {
+
+      if(result) {
+
+      }
     });
   }
 

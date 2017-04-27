@@ -1,8 +1,7 @@
 /**
  * Created by kevinbayes on 19/12/16.
  */
-import { RegistriesComponent } from './registries.component';
-import { RegistriesRootComponent } from './registries.root.component';
+import { RegistryRootComponent } from './registry.root.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { NgModule } from '@angular/core';
@@ -10,12 +9,12 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../shared/material.module';
 import {BrowserModule} from "@angular/platform-browser";
 import {MdDataTableModule} from "ng2-md-datatable";
-import { RegistryComponent } from './registry/registry.component';
-import { NewRegistryModalComponent } from './new/new.registry.modal.component';
+import { RegistryComponent } from './registry.component';
 import {SidemenuComponent} from "../shared/sidemenu/sidemenu.component";
-import {RegistryContainersComponent} from "./registry/containers/registry.containers.component";
-import {RegistryNewContainerModalComponent} from "./registry/containers/new/registry.new.container.modal.component";
-import {RegistryDetailComponent} from "./registry/detail/detail.component";
+import {RegistryContainersComponent} from "./containers/registry.containers.component";
+import {RegistryNewContainerModalComponent} from "./containers/new/registry.new.container.modal.component";
+import {RegistryDetailComponent} from "./detail/detail.component";
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
     imports: [
@@ -27,29 +26,29 @@ import {RegistryDetailComponent} from "./registry/detail/detail.component";
       MdDataTableModule,
     ],
     exports: [
-      RegistriesRootComponent,
+      RegistryRootComponent,
     ],
     declarations: [
       SidemenuComponent,
 
-      RegistriesRootComponent,
+      RegistryRootComponent,
 
-      RegistriesComponent,
+      RegistryComponent,
 
       RegistryComponent,
       RegistryDetailComponent,
       RegistryContainersComponent,
 
-      NewRegistryModalComponent,
       RegistryNewContainerModalComponent,
+      DashboardComponent,
     ],
     providers: [
 
     ],
     entryComponents: [
-      NewRegistryModalComponent,
+
       RegistryNewContainerModalComponent,
     ]
 })
 
-export class RegistriesModule { }
+export class RegistryModule { }

@@ -23,3 +23,9 @@ type Registry struct {
 
 	Credentials Credentials
 }
+
+type RegistryDashboard struct {
+
+	Registry Registry
+	Counts Summary
+}

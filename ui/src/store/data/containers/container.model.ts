@@ -4,4 +4,8 @@ export namespace Containers {
     public image: string;
     public registry: number;
   }
+
+  export class Container {
+
+  }
 }

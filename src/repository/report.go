@@ -88,6 +88,11 @@ func (r *ImageReportRepository) Count() (int, error) {
 	return count("container_image_report")
 }
 
+func (r *ImageReportRepository) RegistryCount(id int64) (int, error) {
+
+	return count(fmt.Sprintf("container_image_report where image_id in ( select i.id from container_image i where i.registry_id = %d )", id))
+}
+
 
 func (r *ImageReportRepository) FindLatest(containerId int64, _tag string) (*model.ContainerImageReport, error) {
 

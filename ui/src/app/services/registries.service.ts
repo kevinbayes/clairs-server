@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {Registries} from "../../store/data/registries/registry.model";
-import NewRegistry = Registries.NewRegistry;
+import BaseRegistry = Registries.BaseRegistry;
 
 @Injectable()
 export class RegistriesService {
@@ -14,7 +14,7 @@ export class RegistriesService {
     this.baseUrl = "/api/registries";
   }
 
-  public save(registry: NewRegistry): Observable<any> {
+  public save(registry: BaseRegistry): Observable<any> {
 
     return this.http
       .post(`${this.baseUrl}`, registry);
@@ -30,6 +30,13 @@ export class RegistriesService {
 
     return this.http
       .get(`${this.baseUrl}/${registry}/containers`)
+      .map(r => r.json());
+  }
+
+  public dashboard(registry: any) {
+
+    return this.http
+      .get(`${this.baseUrl}/${registry}/_dashboard`)
       .map(r => r.json());
   }
 

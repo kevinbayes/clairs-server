@@ -1,5 +1,5 @@
 <md-toolbar color="accent">
-  <span>Registry > {{registry.Name}}</span>
+  <span>{{registry.Name}}</span>
 </md-toolbar>
 <md-tab-group>
   <md-tab label="Summary" color="primary">
@@ -10,6 +10,7 @@
         <li>Top 10 images ranked by high vulnerability count</li>
         <li>10 latest reports</li>
       </ul>
+      <app-registry-dashboard></app-registry-dashboard>
     </div>
   </md-tab>
   <md-tab label="Containers" color="primary">

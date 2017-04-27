@@ -24,7 +24,31 @@
     transition: box-shadow .3s ease,padding .3s ease,width .3s cubic-bezier(0.4,0.0,0.2,1);
   }
 
+  .clair__title:hover {
+    background: #eee;
+  }
+
+  .clair__sidemenu-heading {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+    padding: 0 24px;
+    overflow: hidden;
+    cursor: default;
+    -webkit-user-select: none;
+    color: rgba(0,0,0,0.38);
+    font-size: 12px;
+    line-height: 24px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    height: 32px;
+    -webkit-transition: height .3s ease,opacity .3s ease .15s;
+    transition: height .3s ease,opacity .3s ease .15s;
+  }
+
   .clair__nav-item {
+    cursor: pointer;
     margin: 0;
     box-sizing: border-box;
     display: flex;
@@ -51,13 +75,17 @@
       align-items: center;
       flex-direction: row;
       width: 100%;
-      color: rgba(0,0,0,0.54);
       font-size: 14px;
       font-weight: 500;
       letter-spacing: 0;
       line-height: 20px;
       text-align: start;
       text-transform: none;
+
+      span {
+        padding-top: 5px;
+        margin-right: 20px;
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 <md-toolbar color="primary">
-  <span>Clair</span>
-  <md-select placeholder="Select Registry" [(ngModel)]="selectedRegistry" name="selectRegistry">
+  <span [routerLink]="['/']">Clair</span>
+  <md-select [(ngModel)]="selectedRegistry" name="selectRegistry">
     <md-option [value]="4">
       Docker Hub (Public)
     </md-option>

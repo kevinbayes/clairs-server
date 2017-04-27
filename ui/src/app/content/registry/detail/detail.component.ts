@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators }    from '@angular/forms';
-import {RegistriesService} from "../../../../services/registries.service";
+import {RegistriesService} from "../../../services/registries.service";
 
 @Component({
   selector: 'app-registry-detail',

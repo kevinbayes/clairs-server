@@ -2,7 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { containersRoutes } from './content/containers/containers.routing';
-import { registriesRoutes } from "./content/registries/registries.routing";
+import { registryRoutes } from "./content/registry/registry.routing";
 import { dashboardRoutes } from "./content/dashboard/dashboard.routing";
 
 const appRoutes: Routes = [
@@ -12,7 +12,7 @@ const appRoutes: Routes = [
     children: [
       ...dashboardRoutes,
       ...containersRoutes,
-      ...registriesRoutes,
+      ...registryRoutes,
       { path: '**', redirectTo: '/dashboard' },
     ]
   },

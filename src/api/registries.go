@@ -121,7 +121,7 @@ func readRegistryDashboardHandler(w http.ResponseWriter, r *http.Request, ps htt
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	} else {
 
-		model, err := registryService.ReadRegistry(id)
+		model, err := registryService.CompileRegistryDashboard(id)
 
 		respond(model, err, w, r)
 	}

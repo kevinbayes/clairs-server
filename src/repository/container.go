@@ -70,6 +70,11 @@ func (r *ContainerRepository) Count() (int, error) {
 	return count("container_image")
 }
 
+func (r *ContainerRepository) RegistryCount(id int64) (int, error) {
+
+	return count(fmt.Sprintf("container_image where registry_id = %d", id))
+}
+
 func (r *ContainerRepository) UpdateState(container *model.ContainerImage, newState string) (error) {
 
 	return notTransaction(func(db *sql.DB) (error) {

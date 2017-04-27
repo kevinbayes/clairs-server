@@ -92,7 +92,43 @@ func (s *RegistryService) testRegistryCredentials(registry *model.Registry) (err
 
 func (s *RegistryService) ReadRegistry(id int64) (*model.Registry, error) {
 
-	return repository.InstanceRegistryRepository().FindOne(id)
+	registry, err := repository.InstanceRegistryRepository().FindOne(id)
+
+	if(err == nil) {
+
+		registry.Credentials.Password = ""
+	}
+
+	return registry, err
+}
+
+func (s *RegistryService) CompileRegistryDashboard(id int64) (*model.RegistryDashboard, error) {
+
+	registry, err := repository.InstanceRegistryRepository().FindOne(id)
+
+	if(err != nil) {
+
+		return nil, err
+	}
+
+	registry.Credentials.Password = "";
+
+	containerCount, _ := repository.InstanceContainerRepository().RegistryCount(registry.Id)
+	reportsCount, _ := repository.ImageReportRepositoryInstance().RegistryCount(registry.Id)
+
+	dashboard := &model.RegistryDashboard{
+		Registry: *registry,
+		Counts: model.Summary{
+			Containers: model.ContainersSummary{
+				Total: containerCount,
+			},
+			Reports: model.ReportsSummary{
+				Total: reportsCount,
+			},
+		},
+	}
+
+	return dashboard, nil
 }
 
 func (s *RegistryService) UpdateRegistry(_registry *model.Registry) (*model.Registry, error) {
