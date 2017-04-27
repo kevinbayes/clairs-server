@@ -29,7 +29,7 @@ export class RegistriesService {
   public listContainers(registry: any, page: number = 0, size:number = 10): Observable<any> {
 
     return this.http
-      .get(`${this.baseUrl}/${registry.Id}`)
+      .get(`${this.baseUrl}/${registry}/containers`)
       .map(r => r.json());
   }
 

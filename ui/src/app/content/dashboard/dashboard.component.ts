@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
     Page: 0,
     Size: 11
   };
-  public registries: any[];
+  public registries: any[] = [];
 
   view: any[] = [700, 150];
 
@@ -25,15 +25,15 @@ export class DashboardComponent implements OnInit {
   numbers = [
     {
       "name": "Registries",
-      "value": 40632
+      "value": 0
     },
     {
       "name": "Containers",
-      "value": 49737
+      "value": 0
     },
     {
       "name": "Reports",
-      "value": 49737
+      "value": 0
     }
   ];
 
@@ -78,12 +78,17 @@ export class DashboardComponent implements OnInit {
 
       console.log(res);
       this.pagination = res.Meta;
-      this.pagination.Page++;
-      this.registries = res.Entities;
+      if(res.Entities) {
+        this.registries = this.registries.concat(res.Entities);
+      }
     }, (err) => {
 
       console.error(err);
     });
+  }
+
+  loadNextPageofRegistries() {
+    this.loadRegistries(this.pagination.Page + 1, this.pagination.Size);
   }
 
 }

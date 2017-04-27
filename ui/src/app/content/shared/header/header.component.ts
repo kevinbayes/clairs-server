@@ -9,6 +9,8 @@ import {DomSanitizer} from "@angular/platform-browser";
 })
 export class HeaderComponent implements OnInit {
 
+  private selectedRegistry: any;
+
   constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon(
       'github-circle',

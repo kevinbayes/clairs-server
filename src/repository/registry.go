@@ -156,7 +156,7 @@ func (r *RegistryRepository) Find(pagination *Pagination) (*PaginationResult, er
 		)
 
 		rows, err := db.Query("select id, name, description, uri, username, " +
-			"password, version from registries " +
+			"password, version from registries order by id desc " +
 			"limit $1 offset $2", pagination.Size, pagination.Offset)
 
 		if(err != nil) {
@@ -222,6 +222,7 @@ func (r *RegistryRepository) FindSummary(pagination *Pagination) (*PaginationRes
 			"from registries r " +
 			"left join container_image i on r.id=i.registry_id " +
 			"GROUP BY r.id " +
+			"order by r.id desc " +
 			"limit $1 offset $2", pagination.Size, pagination.Offset)
 
 		if(err != nil) {

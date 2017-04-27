@@ -1,5 +1,10 @@
-<md-toolbar  color="primary">
+<md-toolbar color="primary">
   <span>Clair</span>
+  <md-select placeholder="Select Registry" [(ngModel)]="selectedRegistry" name="selectRegistry">
+    <md-option [value]="4">
+      Docker Hub (Public)
+    </md-option>
+  </md-select>
 
   <span class="clair__fill-remaining-space"></span>
 

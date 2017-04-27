@@ -41,6 +41,9 @@ func RegisterRegistriesHandlers(router *middleware.Middleware) {
 	router.PUT("/api/registries/:id", updateRegistryHandler)
 	router.DELETE("/api/registries/:id", deleteRegistryHandler)
 
+	//Registry Dashboard
+	router.GET("/api/registries/:id/_dashboard", readRegistryDashboardHandler)
+
 	//Registry Containers
 	router.POST("/api/registries/:id/containers", createRegistryContainerHandler)
 	router.GET("/api/registries/:id/containers", readRegistryContainersHandler)
@@ -95,6 +98,21 @@ func readRegistriesHandler(w http.ResponseWriter, r *http.Request, ps httprouter
 }
 
 func readRegistryHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+
+	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
+
+	if(err != nil) {
+
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else {
+
+		model, err := registryService.ReadRegistry(id)
+
+		respond(model, err, w, r)
+	}
+}
+
+func readRegistryDashboardHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
 
