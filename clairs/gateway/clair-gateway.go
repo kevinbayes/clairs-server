@@ -17,7 +17,7 @@ import (
 	"net/http"
 	"../config"
 	"../model"
-	clairDto "github.com/coreos/clair/api/v1"
+	clairDto "github.com/coreos/clair/api/v3"
 	"fmt"
 	"bytes"
 	"time"
