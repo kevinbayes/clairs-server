@@ -17,7 +17,6 @@ import (
 	"fmt"
 	"../model"
 	"time"
-	"database/sql"
 	"log"
 )
 
@@ -56,29 +55,6 @@ func (r *ImageReportRepository) Save(report *model.ContainerImageReport) (error)
 	report.Id = lastInsertId
 
 	fmt.Printf("Created new id %d\n", lastInsertId)
-	r.saveVulnerabilitySummary(report, db)
-
-	return nil
-}
-
-func (r *ImageReportRepository) saveVulnerabilitySummary(report *model.ContainerImageReport, db *sql.DB) (error) {
-
-	if( report.Counts == nil ) {
-
-		return nil;
-	}
-
-	for _, summary := range report.Counts {
-
-		var lastInsertId int64 = 0
-		err := db.QueryRow("INSERT INTO container_image_vulnerability_counts (vulnerability_level, count, image_report_id) " +
-			"VALUES ($1, $2, $3) RETURNING id", summary.Level, summary.Count,
-			report.Id).Scan(&lastInsertId)
-
-		if (err != nil) {
-			return err
-		}
-	}
 
 	return nil
 }

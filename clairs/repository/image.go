@@ -21,23 +21,23 @@ import (
 	"database/sql"
 )
 
-type ContainerRepository struct {
+type ImageRepository struct {
 }
 
 
-var containerRepositoryInstance *ContainerRepository = nil;
+var ImageRepositoryInstance *ImageRepository = nil;
 
-func InstanceContainerRepository() *ContainerRepository {
+func InstanceImageRepository() *ImageRepository {
 
-	if(containerRepositoryInstance == nil) {
+	if(ImageRepositoryInstance == nil) {
 
-		containerRepositoryInstance = &ContainerRepository{}
+		ImageRepositoryInstance = &ImageRepository{}
 	}
 
-	return containerRepositoryInstance
+	return ImageRepositoryInstance
 }
 
-func (r *ContainerRepository) Save(container *model.ContainerImage) (error) {
+func (r *ImageRepository) Save(container *model.ContainerImage) (error) {
 
 	return inTransaction(func(tx *sql.Tx) (error) {
 
@@ -65,17 +65,17 @@ func (r *ContainerRepository) Save(container *model.ContainerImage) (error) {
 	});
 }
 
-func (r *ContainerRepository) Count() (int, error) {
+func (r *ImageRepository) Count() (int, error) {
 
 	return count("container_image")
 }
 
-func (r *ContainerRepository) RegistryCount(id int64) (int, error) {
+func (r *ImageRepository) RegistryCount(id int64) (int, error) {
 
 	return count(fmt.Sprintf("container_image where registry_id = %d", id))
 }
 
-func (r *ContainerRepository) UpdateState(container *model.ContainerImage, newState string) (error) {
+func (r *ImageRepository) UpdateState(container *model.ContainerImage, newState string) (error) {
 
 	return notTransaction(func(db *sql.DB) (error) {
 
@@ -102,7 +102,7 @@ func (r *ContainerRepository) UpdateState(container *model.ContainerImage, newSt
 	});
 }
 
-func (r *ContainerRepository) FindOne(_id int64) (*model.ContainerImage, error) {
+func (r *ImageRepository) FindOne(_id int64) (*model.ContainerImage, error) {
 
 	var (
 		id int64
@@ -174,7 +174,7 @@ func (r *ContainerRepository) FindOne(_id int64) (*model.ContainerImage, error) 
 }
 
 
-func (r *ContainerRepository) Find(pagination *Pagination) ([]*model.ContainerImage, error) {
+func (r *ImageRepository) Find(pagination *Pagination) ([]*model.ContainerImage, error) {
 
 	return r.find(func(db *sql.DB) (*sql.Rows, error) {
 
@@ -183,7 +183,7 @@ func (r *ContainerRepository) Find(pagination *Pagination) ([]*model.ContainerIm
 	})
 }
 
-func (r *ContainerRepository) FindByRegistry(pagination *Pagination, registryId int64) ([]*model.ContainerImage, error) {
+func (r *ImageRepository) FindByRegistry(pagination *Pagination, registryId int64) ([]*model.ContainerImage, error) {
 
 	return r.find(func(db *sql.DB) (*sql.Rows, error) {
 
@@ -196,7 +196,7 @@ func (r *ContainerRepository) FindByRegistry(pagination *Pagination, registryId 
 
 type sqlQuery func(*sql.DB) (*sql.Rows, error)
 
-func (r *ContainerRepository) find(_func sqlQuery) ([]*model.ContainerImage, error) {
+func (r *ImageRepository) find(_func sqlQuery) ([]*model.ContainerImage, error) {
 
 	var (
 		id int64

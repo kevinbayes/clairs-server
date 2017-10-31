@@ -25,7 +25,7 @@ var analyzeContainerChannel = make(chan *model.ContainerImage)
 func init() {
 
 	log.Print("Initiating Services")
-	ContainerServiceSingleton().Init()
+	ImageServiceSingleton().Init()
 }
 
 
@@ -35,7 +35,7 @@ var _generalService *GeneralService
 
 func GeneralServiceSingleton() *GeneralService {
 
-	if(_containerService == nil) {
+	if(_generalService == nil) {
 
 		_generalService = &GeneralService{}
 	}
@@ -46,7 +46,7 @@ func GeneralServiceSingleton() *GeneralService {
 
 func (g *GeneralService) GenerateSummary() (*model.Summary, error) {
 
-	containerCount, _ := repository.InstanceContainerRepository().Count()
+	containerCount, _ := repository.InstanceImageRepository().Count()
 	registriesCount, _ := repository.InstanceRegistryRepository().Count()
 	reportsCount, _ := repository.ImageReportRepositoryInstance().Count()
 

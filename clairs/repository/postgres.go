@@ -58,17 +58,6 @@ var definitions = []string{
 		"image_tag varchar(1000) not null, " +
 		"created_on timestamp default now() not null " +
 	");",
-	"create table if not exists container_image_vulnerability_counts " +
-	"( " +
-		"id serial not null " +
-		"constraint container_image_vulnerability_counts_pkey " +
-		"primary key, " +
-		"vulnerability_level varchar(20) not null, " +
-		"count integer not null, " +
-		"image_report_id bigint not null " +
-		"constraint container_image_vulnerability_counts_container_image_report_id_ " +
-		"references container_image_report " +
-	");",
 	"CREATE TABLE if not exists container_image_tag " +
 	"( " +
 		"id SERIAL PRIMARY KEY NOT NULL, " +

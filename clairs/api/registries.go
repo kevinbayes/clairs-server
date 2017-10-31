@@ -195,7 +195,7 @@ func createRegistryContainerHandler(w http.ResponseWriter, r *http.Request, ps h
 
 	_body.Registry = id
 
-	res, err := containerService.CreateNewContainer(&_body)
+	res, err := imageService.CreateNewImage(&_body)
 
 	if (err != nil) {
 
@@ -215,7 +215,7 @@ func readRegistryContainersHandler(w http.ResponseWriter, r *http.Request, ps ht
 
 	pagination := middleware.MakePagination(r)
 
-	model, err := containerService.ReadContainersByRegistry(pagination, id)
+	model, err := imageService.ReadContainersByRegistry(pagination, id)
 
 	listRespond(model, len(model), pagination, err, w, r)
 

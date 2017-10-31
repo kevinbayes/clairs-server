@@ -25,32 +25,32 @@ import (
 	"strconv"
 )
 
-var containerService = service.ContainerServiceSingleton()
+var imageService = service.ImageServiceSingleton()
 
-func RegisterContainersHandlers(router *middleware.Middleware) {
+func RegisterImagesHandlers(router *middleware.Middleware) {
 
-	log.Printf("Registering containers handlers")
+	log.Printf("Registering container image handlers")
 
 	//Containers
-	router.POST("/api/containers", createContainerHandler)
-	router.GET("/api/containers", readContainersHandler)
+	router.POST("/api/images", createImageHandler)
+	router.GET("/api/images", readImagesHandler)
 
 	//Container
-	router.GET("/api/containers/:id", readContainerHandler)
-	router.PUT("/api/containers/:id", updateContainerHandler)
-	router.DELETE("/api/containers/:id", deleteContainerHandler)
+	router.GET("/api/images/:id", readImageHandler)
+	router.PUT("/api/images/:id", updateImageHandler)
+	router.DELETE("/api/images/:id", deleteImageHandler)
 
 	//Container Reports
-	router.GET("/api/containers/:id/reports", readContainerReportsHandler)
+	router.GET("/api/images/:id/reports", readImageReportsHandler)
 
 	//Container Report
-	router.GET("/api/containers/:id/reports/:reportId", readContainerReportHandler)
+	router.GET("/api/images/:id/reports/:reportId", readImageReportHandler)
 
 	//Container Re-evaluate
-	router.PUT("/api/containers/:id/_evaluate", evaluateContainerReportsHandler)
+	router.PUT("/api/images/:id/_evaluate", evaluateImageReportsHandler)
 }
 
-func createContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func createImageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	decoder := json.NewDecoder(r.Body)
 
@@ -61,7 +61,7 @@ func createContainerHandler(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 	defer r.Body.Close()
 
-	res, err := containerService.CreateNewContainer(&_body)
+	res, err := imageService.CreateNewImage(&_body)
 
 	if (err != nil) {
 
@@ -72,16 +72,16 @@ func createContainerHandler(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 }
 
-func readContainersHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func readImagesHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	pagination := middleware.MakePagination(r)
 
-	model, err := containerService.ReadContainers(pagination)
+	model, err := imageService.ReadImages(pagination)
 
 	listRespond(model, len(model), pagination, err, w, r)
 }
 
-func readContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func readImageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
 
@@ -90,37 +90,37 @@ func readContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	} else {
 
-		model, err := containerService.ReadContainer(id)
+		model, err := imageService.ReadContainer(id)
 
 		respond(model, err, w, r)
 	}
 }
 
-func updateContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func updateImageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("{\"status\":\"UP\"}"))
 }
 
-func deleteContainerHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func deleteImageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("{\"status\":\"UP\"}"))
 }
 
-func readContainerReportsHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func readImageReportsHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("{\"status\":\"UP\"}"))
 }
 
-func readContainerReportHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func readImageReportHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("{\"status\":\"UP\"}"))
 }
 
-func evaluateContainerReportsHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func evaluateImageReportsHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
 
@@ -129,7 +129,7 @@ func evaluateContainerReportsHandler(w http.ResponseWriter, r *http.Request, ps 
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	} else {
 
-		model, err := containerService.EvaluateContainers(id)
+		model, err := imageService.EvaluateImages(id)
 
 		respond(model, err, w, r)
 	}

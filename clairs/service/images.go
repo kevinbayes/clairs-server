@@ -27,39 +27,39 @@ import (
 
 const DEFAULT_SHIELD = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"150\" height=\"20\"><g shape-rendering=\"crispEdges\"><rect width=\"37\" height=\"20\" fill=\"#555\"/><rect x=\"37\" width=\"113\" height=\"20\" fill=\"#f00\"/></g><g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\"><text x=\"18\" y=\"14\">clair</text><text x=\"92\" y=\"14\">not implemented</text></g></svg>"
 
-type ContainerService struct { }
+type ImageService struct { }
 
-var _containerService *ContainerService
+var _imageService *ImageService
 
-func ContainerServiceSingleton() *ContainerService {
+func ImageServiceSingleton() *ImageService {
 
-	if(_containerService == nil) {
+	if(_imageService == nil) {
 
-		_containerService = &ContainerService{}
-		_containerService.Init()
+		_imageService = &ImageService{}
+		_imageService.Init()
 	}
 
-	return _containerService;
+	return _imageService;
 }
 
-func (s *ContainerService) Init() {
+func (s *ImageService) Init() {
 
-	log.Print("Initializing ContainerService")
+	log.Print("Initializing ImageService")
 
 	registryService := RegistryServiceSingleton();
 	clairClient := gateway.ClairClientInstance();
 	dockerClient := gateway.DockerClientInstance();
 
-	go prepareContainer(registryService, dockerClient);
+	go prepareImage(registryService, dockerClient);
 	go runAnalysis(registryService, clairClient, dockerClient);
 }
 
-func prepareContainer(_registryService *RegistryService, dockerClient *gateway.DockerClient) {
+func prepareImage(_registryService *RegistryService, dockerClient *gateway.DockerClient) {
 
 	for {
 		_container := <-newContainerChannel // read from a channel
 
-		err := prepareContainerSync(_container, _registryService, dockerClient)
+		err := prepareImageSync(_container, _registryService, dockerClient)
 
 		if(err != nil) {
 
@@ -71,7 +71,7 @@ func prepareContainer(_registryService *RegistryService, dockerClient *gateway.D
 	}
 }
 
-func prepareContainerSync(_container *model.ContainerImage, _registryService *RegistryService, dockerClient *gateway.DockerClient) (error) {
+func prepareImageSync(_container *model.ContainerImage, _registryService *RegistryService, dockerClient *gateway.DockerClient) (error) {
 
 	log.Printf("Created container request %s.", _container.Image)
 
@@ -102,7 +102,7 @@ func runAnalysis(_registryService *RegistryService, clairClient *gateway.ClairCl
 			newState = "invalid"
 		}
 
-		repository.InstanceContainerRepository().UpdateState(container, newState)
+		repository.InstanceImageRepository().UpdateState(container, newState)
 	}
 }
 
@@ -144,13 +144,13 @@ func runAnalysisSync(_container *model.ContainerImage, _registryService *Registr
 		return nil, err;
 	}
 
-	clairClient.AnalyzeImage(_container)
-	return saveAnalysisResults(_container, layers[len(layers)-1], clairClient)
+	clairClient.AnalyzeImage(_container, layers)
+	return saveAnalysisResults(_container, clairClient)
 }
 
-func saveAnalysisResults(container *model.ContainerImage, layerId string, clairClient *gateway.ClairClient) (*model.ContainerImageReport, error) {
+func saveAnalysisResults(image *model.ContainerImage, clairClient *gateway.ClairClient) (*model.ContainerImageReport, error) {
 
-	/*layer*/_, err := clairClient.GetLayer(layerId)
+	/*layer*/_, err := clairClient.GetAnalysis(image)
 
 	if(err != nil) {
 
@@ -174,8 +174,7 @@ func saveAnalysisResults(container *model.ContainerImage, layerId string, clairC
 		} else {
 
 			report := &model.ContainerImageReport{
-				ImageId: container.Id,
-				Layer: layerId,
+				ImageId: image.Id,
 				Shield: buf.String(),
 			}
 
@@ -227,8 +226,7 @@ func saveAnalysisResults(container *model.ContainerImage, layerId string, clairC
 			}
 
 			report := &model.ContainerImageReport{
-				ImageId: container.Id,
-				Layer: layerId,
+				ImageId: image.Id,
 				Shield: buf.String(),
 				Counts: _summary,
 			}
@@ -240,7 +238,7 @@ func saveAnalysisResults(container *model.ContainerImage, layerId string, clairC
 
 }
 
-func (s *ContainerService) CreateNewContainer(req *dto.NewContainer) (*model.ContainerImage, error) {
+func (s *ImageService) CreateNewImage(req *dto.NewContainer) (*model.ContainerImage, error) {
 
 	log.Print("Creatng new container.")
 
@@ -262,27 +260,27 @@ func (s *ContainerService) CreateNewContainer(req *dto.NewContainer) (*model.Con
 
 	log.Print("Sent request to pull container.")
 
-	err = repository.InstanceContainerRepository().Save(_container)
+	err = repository.InstanceImageRepository().Save(_container)
 
 	return _container, err
 }
 
-func (s *ContainerService) ReadContainers(pagination *repository.Pagination) ([]*model.ContainerImage, error) {
+func (s *ImageService) ReadImages(pagination *repository.Pagination) ([]*model.ContainerImage, error) {
 
-	return repository.InstanceContainerRepository().Find(pagination)
+	return repository.InstanceImageRepository().Find(pagination)
 }
 
-func (s *ContainerService) ReadContainersByRegistry(pagination *repository.Pagination, id int64) ([]*model.ContainerImage, error) {
+func (s *ImageService) ReadContainersByRegistry(pagination *repository.Pagination, id int64) ([]*model.ContainerImage, error) {
 
-	return repository.InstanceContainerRepository().FindByRegistry(pagination, id)
+	return repository.InstanceImageRepository().FindByRegistry(pagination, id)
 }
 
-func (s *ContainerService) ReadContainer(id int64) (*model.ContainerImage, error) {
+func (s *ImageService) ReadContainer(id int64) (*model.ContainerImage, error) {
 
-	return repository.InstanceContainerRepository().FindOne(id)
+	return repository.InstanceImageRepository().FindOne(id)
 }
 
-func (s *ContainerService) convertRequest(req *dto.NewContainer) (*model.ContainerImage) {
+func (s *ImageService) convertRequest(req *dto.NewContainer) (*model.ContainerImage) {
 
 	image := req.Image
 	tag := "latest"
@@ -310,16 +308,16 @@ func (s *ContainerService) convertRequest(req *dto.NewContainer) (*model.Contain
 }
 
 
-func (s *ContainerService) EvaluateContainers(id int64) (*model.ContainerImageReport, error) {
+func (s *ImageService) EvaluateImages(id int64) (*model.ContainerImageReport, error) {
 
-	container, err := repository.InstanceContainerRepository().FindOne(id)
+	container, err := repository.InstanceImageRepository().FindOne(id)
 	if(container != nil) {
 
 		registryService := RegistryServiceSingleton();
 		clairClient := gateway.ClairClientInstance();
 		dockerClient := gateway.DockerClientInstance();
 
-		prepareContainerSync(container, registryService, dockerClient)
+		prepareImageSync(container, registryService, dockerClient)
 		report, err := runAnalysisSync(container, registryService, clairClient, dockerClient)
 
 		if(err != nil) {
@@ -327,7 +325,7 @@ func (s *ContainerService) EvaluateContainers(id int64) (*model.ContainerImageRe
 			log.Printf("Error with analysis")
 		} else if(container.State != "analyzed") {
 
-			repository.InstanceContainerRepository().UpdateState(container, "analyzed")
+			repository.InstanceImageRepository().UpdateState(container, "analyzed")
 		}
 
 		return report, err

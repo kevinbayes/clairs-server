@@ -113,7 +113,7 @@ func (s *RegistryService) CompileRegistryDashboard(id int64) (*model.RegistryDas
 
 	registry.Credentials.Password = "";
 
-	containerCount, _ := repository.InstanceContainerRepository().RegistryCount(registry.Id)
+	containerCount, _ := repository.InstanceImageRepository().RegistryCount(registry.Id)
 	reportsCount, _ := repository.ImageReportRepositoryInstance().RegistryCount(registry.Id)
 
 	dashboard := &model.RegistryDashboard{
