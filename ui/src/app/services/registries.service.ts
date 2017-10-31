@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@angular/core';
 import {Http, Response} from "@angular/http";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs/Rx";
 import {Registries} from "../../store/data/registries/registry.model";
 import BaseRegistry = Registries.BaseRegistry;
 

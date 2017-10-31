@@ -9,7 +9,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../shared/material.module';
 import {BrowserModule} from "@angular/platform-browser";
-import {MdDataTableModule} from "ng2-md-datatable";
 import {NgxChartsModule} from "@swimlane/ngx-charts";
 import { NewRegistryModalComponent } from "./new/new.registry.modal.component";
 import {ReactiveFormsModule} from "@angular/forms";
@@ -21,7 +20,6 @@ import {ReactiveFormsModule} from "@angular/forms";
       MaterialModule,
       BrowserModule,
       ReactiveFormsModule,
-      MdDataTableModule,
       NgxChartsModule,
     ],
     exports: [

@@ -15,11 +15,11 @@ package main
 
 import (
 	"net/http"
-	middleware "./http"
-	"./api"
-	"./web"
-	"./config"
-	"./repository"
+	middleware "./clairs/http"
+	"./clairs/api"
+	"./clairs/web"
+	"./clairs/config"
+	"./clairs/repository"
 	"fmt"
 )
 

@@ -1,41 +1,17 @@
-<md-toolbar color="accent">
+<mat-toolbar color="accent">
   <span>Containers</span>
-</md-toolbar>
-<md-tab-group>
-  <md-tab label="All" color="accent">
+</mat-toolbar>
+<mat-tab-group>
+  <mat-tab label="All" color="accent">
 
     <div class="clair__tab-content">
-      <md-card>
+      <mat-card>
         <div class="clair__tab-card-toolbar">
-          <button color="primary" (click)="openDialog()" md-raised-button>New</button>
+          <button color="primary" (click)="openDialog()" mat-raised-button>New</button>
         </div>
-      <ng2-md-datatable>
-        <ng2-md-datatable-header>
-          <ng2-md-datatable-column sortValue="Image">Image</ng2-md-datatable-column>
-          <ng2-md-datatable-column sortValue="Repository">Repository</ng2-md-datatable-column>
-          <ng2-md-datatable-column sortValue="State">State</ng2-md-datatable-column>
-          <ng2-md-datatable-column sortValue="Tags" numeric>Tags</ng2-md-datatable-column>
-        </ng2-md-datatable-header>
-        <tbody>
-        <ng2-md-datatable-row class="selectable" [routerLink]="[container.Id]" *ngFor="let container of containers;" selectableValue="{{container.Id}}">
-          <td>{{container.Image}}</td>
-          <td>{{container.Registry}}</td>
-          <td>{{container.State}}</td>
-          <td class="numeric">1</td>
-        </ng2-md-datatable-row>
-        </tbody>
-      </ng2-md-datatable>
-      <ng2-md-datatable-pagination
-        [currentPage]="pagination.Page"
-        [itemsPerPage]="pagination.Size"
-        [itemsCount]="pagination.Total"
-        [itemsPerPageChoices]="[10,20,50]"
-        [itemsPerPageFirstChoice]="10"
-      >
-      </ng2-md-datatable-pagination>
-      </md-card>
+      </mat-card>
     </div>
-  </md-tab>
-</md-tab-group>
+  </mat-tab>
+</mat-tab-group>
 
 

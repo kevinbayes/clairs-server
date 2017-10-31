@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators }    from '@angular/forms';
-import {MdDialogRef} from "@angular/material";
+import {MatDialogRef} from "@angular/material";
 import {ContainersService} from "../../../../services/containers.service";
 import {RegistriesService} from "../../../../services/registries.service";
 import {Containers} from "../../../../../store/data/containers/container.model";
@@ -20,7 +20,7 @@ export class RegistryNewContainerModalComponent implements OnInit {
   ];
 
   constructor(
-    private dialogRef: MdDialogRef<RegistryNewContainerModalComponent>,
+    private dialogRef: MatDialogRef<RegistryNewContainerModalComponent>,
     private containersService: ContainersService,
     private registriesService: RegistriesService,
     private builder: FormBuilder) {

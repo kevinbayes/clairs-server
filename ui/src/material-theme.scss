@@ -1,5 +1,4 @@
 @import '~@angular/material/theming';
-@import '~ng2-md-datatable/datatable-theme';
 
 // docs: https://material.angular.io/guide/theming
 
@@ -16,7 +15,6 @@ $app-warn:    mat-palette($mat-red);
 $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 
 @include angular-material-theme($app-theme);
-@include mat-datatable-theme($app-theme);
 
 .secondary-theme {
     $second-primary: mat-palette($mat-blue);

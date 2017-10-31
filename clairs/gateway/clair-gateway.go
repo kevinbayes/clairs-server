@@ -17,13 +17,12 @@ import (
 	"net/http"
 	"../config"
 	"../model"
-	clairDto "github.com/coreos/clair/api/v3"
+	clairDto "../clairpb"
 	"fmt"
-	"bytes"
 	"time"
 	"log"
-	"encoding/json"
-	"io/ioutil"
+	grpc "google.golang.org/grpc"
+	"context"
 )
 
 var clairHttp = &http.Client{
@@ -39,89 +38,88 @@ func ClairClientInstance() *ClairClient {
 
 
 
-func (c * ClairClient) AnalyzeImage(path string, container *model.ContainerImage, image string, layerIds []string) {
+func (c * ClairClient) AnalyzeImage(container *model.ContainerImage, _layers []string) {
 
-	size := len(layerIds)
+	conf := config.GetConfig()
 
-	log.Printf("Analyzing %d layers... \n", size)
+	serverAddr := fmt.Sprintf("%s:%s", conf.Clair.Host, conf.Clair.Port)
 
-	for i := 0; i < size; i++ {
+	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithInsecure())
 
-		log.Printf("Analyzing %s\n", layerIds[i])
-
-		if i > 0 {
-			analyzeLayer(layerIds[i], layerIds[i-1], path)
-		} else {
-			analyzeLayer(layerIds[i], "", path)
-		}
-	}
-}
-
-func analyzeLayer(layerId string, parentId string, path string) {
-
-	_config := config.GetConfig()
-
-	dto := clairDto.LayerEnvelope{
-		Layer: &clairDto.Layer{
-			Name: layerId,
-			ParentName: parentId,
-			Format: "Docker",
-			Path: fmt.Sprintf("%s/%s/layer.tar", path, layerId),
-		},
-	}
-
-	_req, _ := json.Marshal(dto)
-
-	buf := bytes.NewBuffer(_req)
-
-	response, err := clairHttp.Post(
-		fmt.Sprintf("%s://%s:%s/%s",
-			_config.Clair.Protocol,
-			_config.Clair.Host,
-			_config.Clair.Port,
-			"v1/layers"),
-		"application/json",
-		buf)
-
+	grpc.WithInsecure()
+	cc, err := grpc.Dial(serverAddr, opts...)
 	if err != nil {
 
-		log.Printf("Error calling clair: %s", err.Error())
-		return;
+		log.Printf("Error connecting to gRPC [%s]", err)
+	}
+	defer cc.Close()
+	
+	client := clairDto.NewAncestryServiceClient(cc)
+
+	var layers []*clairDto.PostAncestryRequest_PostLayer
+
+	for _, item := range _layers {
+
+		postLayer := &clairDto.PostAncestryRequest_PostLayer {
+			Hash: item,
+			Path: fmt.Sprintf("%s/tmp/0/%s/layer.tar", conf.Clair.Share, item),
+		}
+
+		layers = append(layers, postLayer)
 	}
 
-	defer response.Body.Close()
-
-	if response.StatusCode != 201 {
-		body, _ := ioutil.ReadAll(response.Body)
-		log.Printf("Got invalid response: %s", body)
+	req := &clairDto.PostAncestryRequest{
+		AncestryName: container.Image,
+		Format: "docker",
+		Layers: layers,
 	}
 
-	log.Printf("Completed analyzing %s", layerId)
+	res, err := client.PostAncestry(context.Background(), req)
+
+	log.Printf("Response: %s", res)
+	log.Printf("Error: %s", err)
+
+	log.Printf("Completed analyzing %s", container.Image)
 }
 
+func (c * ClairClient) GetAnalysis(container *model.ContainerImage) (*clairDto.Layer, error) {
 
-func (c * ClairClient) GetLayer(layerId string) (*clairDto.Layer, error) {
+	serverAddr := "localhost:6060"
 
-	_config := config.GetConfig().Clair
+	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithInsecure())
 
-	_res, err := clairHttp.Get(
-		fmt.Sprintf("%s://%s:%s/%s/%s?vulnerabilities",
-			_config.Protocol,
-			_config.Host,
-			_config.Port,
-			"v1/layers",
-			layerId,
-		))
-	defer _res.Body.Close()
+	cc, err := grpc.Dial(serverAddr, opts...)
+	if err != nil {
 
-	if(err != nil) {
-		return &clairDto.Layer{}, err;
+		log.Printf("Error connecting to gRPC [%s]", err)
+	}
+	defer cc.Close()
+
+	client := clairDto.NewAncestryServiceClient(cc)
+
+	req := &clairDto.GetAncestryRequest {
+		AncestryName: container.Image,
+		WithFeatures: true,
+		WithVulnerabilities: true,
 	}
 
-	var apiResponse clairDto.LayerEnvelope
-	if err = json.NewDecoder(_res.Body).Decode(&apiResponse); err != nil {
-		return &clairDto.Layer{}, err
+	res, err := client.GetAncestry(context.Background(), req)
+	if err != nil {
+
+		log.Printf("Error connecting to gRPC [%s]", err)
 	}
 
-	return apiResponse.Layer, nil
+	log.Printf("Response [%s]", res)
+	log.Printf("Layers [%s]", res.GetAncestry().Layers)
+	log.Printf("Vuln [%s]", res.GetAncestry().Features[0].Vulnerabilities)
+
+	for _,item := range res.Ancestry.Features {
+
+		log.Printf("Vulns for [%s]: [%s]", item.Name, item.Vulnerabilities)
+	}
+
+
+	return nil, nil
 }

@@ -1,8 +1,8 @@
-<md-toolbar color="accent">
+<mat-toolbar color="accent">
   <span>{{registry.Name}}</span>
-</md-toolbar>
-<md-tab-group>
-  <md-tab label="Summary" color="primary">
+</mat-toolbar>
+<mat-tab-group>
+  <mat-tab label="Summary" color="primary">
     <div class="clair__tab-content">
       <ul>
         <li>Count of containers and reports.</li>
@@ -12,19 +12,19 @@
       </ul>
       <app-registry-dashboard></app-registry-dashboard>
     </div>
-  </md-tab>
-  <md-tab label="Containers" color="primary">
+  </mat-tab>
+  <mat-tab label="Containers" color="primary">
     <div class="clair__tab-content">
 
       <app-registry-containers></app-registry-containers>
 
     </div>
-  </md-tab>
-  <md-tab label="Information" color="primary">
+  </mat-tab>
+  <mat-tab label="Information" color="primary">
     <div class="clair__tab-content">
 
       <app-registry-detail></app-registry-detail>
 
     </div>
-  </md-tab>
-</md-tab-group>
+  </mat-tab>
+</mat-tab-group>

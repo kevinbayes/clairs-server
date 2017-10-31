@@ -1,42 +1,42 @@
-<md-card>
+<mat-card>
   <div class="clair__tab-card-toolbar">
-    <button color="primary" md-raised-button>Delete</button>
+    <button color="primary" mat-raised-button>Delete</button>
   </div>
-</md-card>
+</mat-card>
 
-<md-card>
-  <md-card-content>
+<mat-card>
+  <mat-card-content>
 <form (submit)="onSubmit()" [formGroup]="registryForm" novalidate>
   <p>
-    <md-input-container>
-      <input mdInput placeholder="Name" formControlName="name">
-    </md-input-container>
+    <mat-input-container>
+      <input matInput placeholder="Name" formControlName="name">
+    </mat-input-container>
   </p>
   <p>
-    <md-input-container>
-      <input mdInput placeholder="Description" formControlName="description">
-    </md-input-container>
+    <mat-input-container>
+      <input matInput placeholder="Description" formControlName="description">
+    </mat-input-container>
   </p>
   <p>
-    <md-input-container>
-      <input mdInput placeholder="Uri" formControlName="uri">
-    </md-input-container>
+    <mat-input-container>
+      <input matInput placeholder="Uri" formControlName="uri">
+    </mat-input-container>
   </p>
   <p>
-    <md-input-container>
-      <input mdInput placeholder="Username" formControlName="username">
-    </md-input-container>
+    <mat-input-container>
+      <input matInput placeholder="Username" formControlName="username">
+    </mat-input-container>
   </p>
   <p>
-    <md-input-container>
-      <input mdInput placeholder="Password" formControlName="password">
-    </md-input-container>
+    <mat-input-container>
+      <input matInput placeholder="Password" formControlName="password">
+    </mat-input-container>
   </p>
 </form>
-  </md-card-content>
-  <md-card-actions>
+  </mat-card-content>
+  <mat-card-actions>
     <p class="clair__modal-buttons">
-      <button type="submit" color="primary" md-raised-button>Save</button>
+      <button type="submit" color="primary" mat-raised-button>Save</button>
     </p>
-  </md-card-actions>
-</md-card>
+  </mat-card-actions>
+</mat-card>

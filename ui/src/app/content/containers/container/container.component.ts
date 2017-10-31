@@ -2,10 +2,6 @@ import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/c
 import {ContainersService} from "../../../services/containers.service";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
-import {
-  IDatatablePaginationEvent, IDatatableSelectionEvent, IDatatableSortEvent,
-  MdDataTableComponent, MdDataTablePaginationComponent
-} from "ng2-md-datatable";
 import {ActivatedRoute} from "@angular/router";
 
 @Component({
@@ -14,9 +10,6 @@ import {ActivatedRoute} from "@angular/router";
   styleUrls: ['./container.component.less']
 })
 export class ContainerComponent implements OnInit, AfterViewInit, OnDestroy {
-
-  @ViewChild(MdDataTableComponent) datatable: MdDataTableComponent;
-  @ViewChild(MdDataTablePaginationComponent) pager: MdDataTablePaginationComponent;
 
   private id: number;
   public pagination: any = {
@@ -47,21 +40,7 @@ export class ContainerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    if (this.datatable) {
-      Observable.from(this.datatable.selectionChange)
-        .takeUntil(this.unmount$)
-        .subscribe((e: IDatatableSelectionEvent) => console.log("Data selected"));
 
-      Observable.from(this.datatable.sortChange)
-        .takeUntil(this.unmount$)
-        .subscribe((e: IDatatableSortEvent) =>
-          console.log("Sort order"));
-
-      Observable.from(this.pager.paginationChange)
-        .takeUntil(this.unmount$)
-        .subscribe((e: IDatatablePaginationEvent) =>
-          console.log("Pager changed"));
-    }
   }
 
   ngOnDestroy() {

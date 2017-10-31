@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators }    from '@angular/forms';
 import { RegistriesService } from "../../../services/registries.service";
-import {MdDialogRef} from "@angular/material";
+import {MatDialogRef} from "@angular/material";
 
 @Component({
   selector: 'app-new-registry-modal',
@@ -14,7 +14,7 @@ export class NewRegistryModalComponent implements OnInit {
   errorMessage: string;
 
   constructor(
-    private dialogRef: MdDialogRef<NewRegistryModalComponent>,
+    private dialogRef: MatDialogRef<NewRegistryModalComponent>,
     private registriesService: RegistriesService,
     private builder: FormBuilder) {
 

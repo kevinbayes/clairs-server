@@ -8,7 +8,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../shared/material.module';
 import {BrowserModule} from "@angular/platform-browser";
-import {MdDataTableModule} from "ng2-md-datatable";
 import { RegistryComponent } from './registry.component';
 import {SidemenuComponent} from "../shared/sidemenu/sidemenu.component";
 import {RegistryContainersComponent} from "./containers/registry.containers.component";
@@ -22,8 +21,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
       RouterModule,
       MaterialModule,
       BrowserModule,
-      ReactiveFormsModule,
-      MdDataTableModule,
+      ReactiveFormsModule
     ],
     exports: [
       RegistryRootComponent,

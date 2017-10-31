@@ -10,7 +10,6 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../shared/material.module';
 import {BrowserModule} from "@angular/platform-browser";
 
-import { MdDataTableModule } from 'ng2-md-datatable';
 import { ReportsComponent } from './reports/reports.component';
 import { ContainerComponent } from './container/container.component';
 import {NewContainerModalComponent} from "./new/new.container.modal.component";
@@ -23,7 +22,6 @@ import {ReactiveFormsModule} from "@angular/forms";
         MaterialModule,
         BrowserModule,
         ReactiveFormsModule,
-        MdDataTableModule,
     ],
     exports: [
 

@@ -1,19 +1,21 @@
 <h2>Add Container</h2>
 <form (submit)="onSubmit()" [formGroup]="newContainerForm" novalidate>
   <p>
-    <md-input-container>
-      <input mdInput placeholder="Image" formControlName="image">
-    </md-input-container>
+    <mat-input-container>
+      <input matInput placeholder="Image" formControlName="image">
+    </mat-input-container>
   </p>
   <p>
-    <md-select placeholder="Registry" formControlName="registry">
-      <md-option *ngFor="let registry of registries" [value]="registry.id">
-        {{ registry.name }}
-      </md-option>
-    </md-select>
+    <mat-form-field>
+      <mat-select  placeholder="Registry" formControlName="registry">
+        <mat-option *ngFor="let registry of registries" [value]="registry.id">
+          {{ registry.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </p>
   <p class="clair__modal-buttons">
-  <button type="button" (click)="close()" md-raised-button>Cancel</button>
-  <button type="submit" color="primary" md-raised-button>Save</button>
+  <button type="button" (click)="close()" mat-raised-button>Cancel</button>
+  <button type="submit" color="primary" mat-raised-button>Save</button>
   </p>
 </form>

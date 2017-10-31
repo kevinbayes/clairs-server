@@ -118,7 +118,7 @@ func runAnalysisSync(_container *model.ContainerImage, _registryService *Registr
 		return nil, err;
 	}
 
-	imageId, err := dockerClient.ImageId(_container)
+	_, err = dockerClient.ImageId(_container)
 
 	if(err != nil) {
 
@@ -144,13 +144,13 @@ func runAnalysisSync(_container *model.ContainerImage, _registryService *Registr
 		return nil, err;
 	}
 
-	clairClient.AnalyzeImage(path, _container, imageId, layers)
+	clairClient.AnalyzeImage(_container)
 	return saveAnalysisResults(_container, layers[len(layers)-1], clairClient)
 }
 
 func saveAnalysisResults(container *model.ContainerImage, layerId string, clairClient *gateway.ClairClient) (*model.ContainerImageReport, error) {
 
-	layer, err := clairClient.GetLayer(layerId)
+	/*layer*/_, err := clairClient.GetLayer(layerId)
 
 	if(err != nil) {
 
@@ -187,7 +187,7 @@ func saveAnalysisResults(container *model.ContainerImage, layerId string, clairC
 		total := 0
 		_counts := make(map[string]int)
 
-		for _, feature := range layer.Features {
+		/*for _, feature := range layer.Features {
 
 			total += len(feature.Vulnerabilities)
 
@@ -195,7 +195,7 @@ func saveAnalysisResults(container *model.ContainerImage, layerId string, clairC
 
 				_counts[vulnerability.Severity]++
 			}
-		}
+		}*/
 
 		shield := &model.Shield{
 			Subject: model.Text{

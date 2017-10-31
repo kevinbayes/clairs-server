@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {SummariesService} from "../../services/summaries.service";
 import {RegistriesService} from "../../services/registries.service";
-import {MdDialog} from "@angular/material";
+import {MatDialog} from "@angular/material";
 import {NewRegistryModalComponent} from "./new/new.registry.modal.component";
 
 @Component({
@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(private summariesService: SummariesService,
               private registriesService: RegistriesService,
-              private dialog: MdDialog,
+              private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
